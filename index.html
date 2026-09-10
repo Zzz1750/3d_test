@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AI-Powered Compliance Solution | 3D Interactive</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- A-Frame Library -->
+  <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+
+  <style>
+    /* =========================================================
+       CSS VARIABLES & RESET
+       ========================================================= */
+    :root {
+      --primary-blue: #007CEF;
+      --primary-blue-hover: #0066c7;
+      --primary-blue-glow: rgba(0, 124, 239, 0.25);
+      --text-dark: #111111;
+      --text-muted: #555555;
+      --text-subtle: #888888;
+      --bg-white: #ffffff;
+      --glass-bg: rgba(255, 255, 255, 0.85);
+      --glass-border: rgba(0, 0, 0, 0.07);
+      --glass-blur: blur(16px);
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg-white);
+      font-family: var(--font-family);
+      color: var(--text-dark);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* =========================================================
+       DEVICE SIMULATOR / SMART PREVIEW FRAMEWORK
+       ========================================================= */
+    #simulator-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0d1117;
+      transition: background 0.3s ease;
+    }
+
+    #simulator-container.mode-native {
+      background: var(--bg-white);
+    }
+
+    #app-viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-white);
+      overflow: hidden;
+      container-type: inline-size;
+      container-name: app-viewport;
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                  height 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-radius 0.3s ease, 
+                  box-shadow 0.3s ease;
+    }
+
+    /* Simulated Device Frame Styling */
+    #simulator-container:not(.mode-native) #app-viewport {
+      box-shadow: 0 25px 70px -15px rgba(0, 0, 0, 0.8), 0 0 0 10px #1c2128, 0 0 0 12px #30363d;
+      border-radius: 40px;
+    }
+
+    .device-notch {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 124px;
+      height: 24px;
+      background: #1c2128;
+      border-bottom-left-radius: 14px;
+      border-bottom-right-radius: 14px;
+      z-index: 5000;
+    }
+
+    #simulator-container.mode-mobile-p .device-notch {
+      display: block;
+    }
+
+    /* =========================================================
+       DEVICE PREVIEW FLOATING TOOLBAR
+       ========================================================= */
+    #device-toolbar {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13, 17, 23, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 6px 10px;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      color: #fff;
+      font-size: 12px;
+      transition: var(--transition-smooth);
+    }
+
+    #device-toolbar.collapsed {
+      padding: 6px;
+      border-radius: 50%;
+    }
+
+    #device-toolbar.collapsed .toolbar-content {
+      display: none;
+    }
+
+    .toolbar-toggle-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      transition: var(--transition-smooth);
+    }
+
+    .toolbar-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .toolbar-content {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .device-pill-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: var(--transition-smooth);
+      white-space: nowrap;
+    }
+
+    .device-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .device-pill-btn.active {
+      background: var(--primary-blue);
+      border-color: var(--primary-blue);
+      color: #fff;
+      box-shadow: 0 0 14px var(--primary-blue-glow);
+    }
+
+    .model-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      font-size: 11px;
+      color: #94a3b8;
+      font-family: monospace;
+      margin-left: 4px;
+    }
+
+    .model-badge .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    /* =========================================================
+       RESPONSIVE HEADER & NAVBAR
+       ========================================================= */
+    #header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(16px, 3.5vw, 40px);
+      z-index: 2000;
+      pointer-events: none;
+      transition: var(--transition-smooth);
+    }
+
+    /* Logo Container */
+    .logo-container {
+      display: flex;
+      align-items: center;
+      pointer-events: auto;
+      z-index: 2005;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    #logo {
+      height: 38px;
+      width: auto;
+      max-width: 200px;
+      object-fit: contain;
+      user-select: none;
+      transition: transform 0.25s ease, height 0.25s ease;
+    }
+
+    #logo:hover {
+      transform: scale(1.02);
+    }
+
+    /* Center Navigation (Desktop) */
+    #navigation {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      padding: 8px 24px;
+      border-radius: 40px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      pointer-events: auto;
+      transition: var(--transition-smooth);
+      white-space: nowrap;
+    }
+
+    #navigation a, #navigation span {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-dark);
+      text-decoration: none;
+      line-height: 1;
+      cursor: pointer;
+      position: relative;
+      padding: 4px 2px;
+      transition: color 0.2s ease;
+    }
+
+    #navigation a::after, #navigation span::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: 80%;
+      height: 2px;
+      background: var(--primary-blue);
+      border-radius: 2px;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #navigation a:hover, #navigation span:hover {
+      color: var(--primary-blue);
+    }
+
+    #navigation a:hover::after, #navigation span:hover::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    /* Right Header Actions */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      z-index: 2005;
+      flex-shrink: 0;
+    }
+
+    /* Demo Button */
+    #demo-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 42px;
+      padding: 0 20px;
+      background: var(--primary-blue);
+      border-radius: 8px;
+      color: #ffffff;
+      font-family: var(--font-family);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 14px var(--primary-blue-glow);
+      transition: var(--transition-smooth);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    #demo-button img {
+      width: 17px;
+      height: 17px;
+      object-fit: contain;
+      display: block;
+      transition: transform 0.2s ease;
+    }
+
+    #demo-button:hover {
+      background: var(--primary-blue-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 124, 239, 0.35);
+    }
+
+    #demo-button:active {
+      transform: translateY(0);
+    }
+
+    /* Mobile Menu Hamburger Button */
+    #mobile-menu-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      cursor: pointer;
+      gap: 5px;
+      padding: 0;
+      transition: var(--transition-smooth);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    #mobile-menu-toggle span {
+      display: block;
+      width: 19px;
+      height: 2px;
+      background: var(--text-dark);
+      border-radius: 2px;
+      transition: var(--transition-smooth);
+    }
+
+    #mobile-menu-toggle.open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    #mobile-menu-toggle.open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    #mobile-menu-toggle.open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* =========================================================
+       CONTAINER-AWARE NAVBAR RESPONSIVENESS
+       ========================================================= */
+    .viewport-mobile #navigation,
+    .viewport-tablet #navigation {
+      display: none !important;
+    }
+
+    .viewport-mobile #mobile-menu-toggle,
+    .viewport-tablet #mobile-menu-toggle {
+      display: flex !important;
+    }
+
+    .viewport-mobile #header {
+      height: 68px;
+      padding: 0 16px;
+    }
+
+    .viewport-mobile #logo {
+      height: 30px;
+      max-width: 140px;
+    }
+
+    .viewport-mobile #demo-button {
+      height: 36px;
+      padding: 0 12px;
+      font-size: 13px;
+      gap: 6px;
+    }
+
+    .viewport-mobile #demo-button img {
+      width: 15px;
+      height: 15px;
+    }
+
+    .viewport-mobile-narrow #demo-button span {
+      display: none;
+    }
+    .viewport-mobile-narrow #demo-button {
+      padding: 0 10px;
+    }
+
+    @container app-viewport (max-width: 860px) {
+      #navigation {
+        display: none !important;
+      }
+      #mobile-menu-toggle {
+        display: flex !important;
+      }
+      #header {
+        height: 68px;
+        padding: 0 16px;
+      }
+      #logo {
+        height: 30px;
+        max-width: 150px;
+      }
+    }
+
+    @container app-viewport (max-width: 500px) {
+      #demo-button {
+        height: 36px;
+        padding: 0 12px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 860px) {
+      #navigation {
+        display: none !important;
+      }
+      #mobile-menu-toggle {
+        display: flex !important;
+      }
+    }
+
+    /* =========================================================
+       MOBILE NAVIGATION DRAWER
+       ========================================================= */
+    #mobile-drawer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      z-index: 1990;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 90px 24px 36px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #mobile-drawer.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 16px;
+      margin-bottom: 28px;
+    }
+
+    .mobile-nav-links a, .mobile-nav-links span {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-dark);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .mobile-nav-links a:hover, .mobile-nav-links span:hover {
+      color: var(--primary-blue);
+      transform: translateX(4px);
+    }
+
+    .mobile-drawer-footer {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* =========================================================
+       HERO TEXT CONTENT
+       ========================================================= */
+    #hero-text {
+      position: absolute;
+      left: clamp(20px, 5cqw, 80px);
+      bottom: clamp(24px, 5cqw, 75px);
+      z-index: 1500;
+      max-width: min(780px, 86%);
+      pointer-events: none;
+      transition: var(--transition-smooth);
+    }
+
+    .break-desktop {
+      display: inline;
+    }
+
+    #hero-text h1 {
+      margin: 0;
+      font-family: var(--font-family);
+      font-size: clamp(28px, 4.5cqw, 54px);
+      line-height: 1.1;
+      font-weight: 300;
+      letter-spacing: -0.035em;
+      color: var(--text-dark);
+      text-wrap: balance;
+    }
+
+    #hero-text h1 strong {
+      font-weight: 600;
+      color: #000000;
+    }
+
+    #hero-text p.hero-sub {
+      margin-top: clamp(8px, 1.2cqw, 16px);
+      font-size: clamp(13px, 1.4cqw, 17px);
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 520px;
+      text-wrap: pretty;
+    }
+
+    /* Mobile Portrait Typography & Layout */
+    .viewport-mobile #hero-text,
+    .mode-mobile-p #hero-text {
+      left: 20px;
+      right: 20px;
+      bottom: clamp(90px, 14vh, 140px);
+      max-width: none;
+    }
+
+    .viewport-mobile #hero-text h1,
+    .mode-mobile-p #hero-text h1 {
+      font-size: 32px !important;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      font-weight: 300;
+    }
+
+    .viewport-mobile #hero-text h1 strong,
+    .mode-mobile-p #hero-text h1 strong {
+      font-weight: 600;
+    }
+
+    .viewport-mobile #hero-text p.hero-sub,
+    .mode-mobile-p #hero-text p.hero-sub {
+      font-size: 14.5px !important;
+      line-height: 1.45;
+      margin-top: 10px;
+      max-width: 90%;
+      color: #555555;
+    }
+
+    .viewport-mobile #avatar-container,
+    .mode-mobile-p #avatar-container {
+      right: 20px;
+      bottom: 24px;
+    }
+
+    .viewport-mobile #avatar,
+    .mode-mobile-p #avatar {
+      width: 52px;
+      height: 52px;
+    }
+
+    /* Narrow Phone (<380px) */
+    .viewport-mobile-narrow #hero-text {
+      bottom: clamp(75px, 12vh, 110px);
+    }
+
+    .viewport-mobile-narrow #hero-text h1 {
+      font-size: 26px !important;
+      line-height: 1.1;
+    }
+
+    .viewport-mobile-narrow #hero-text p.hero-sub {
+      font-size: 13px !important;
+      line-height: 1.42;
+      max-width: 92%;
+    }
+
+    /* Phone Landscape (Preserved clean bottom layout) */
+    .viewport-mobile-landscape #hero-text,
+    .mode-mobile-l #hero-text {
+      left: 24px !important;
+      right: auto !important;
+      bottom: 24px !important;
+      max-width: 440px !important;
+    }
+
+    .viewport-mobile-landscape #hero-text h1,
+    .mode-mobile-l #hero-text h1 {
+      font-size: 24px !important;
+      line-height: 1.12 !important;
+      letter-spacing: -0.025em !important;
+    }
+
+    .viewport-mobile-landscape #hero-text p.hero-sub,
+    .mode-mobile-l #hero-text p.hero-sub {
+      font-size: 13px !important;
+      line-height: 1.4 !important;
+      margin-top: 6px !important;
+      max-width: 380px !important;
+    }
+
+    /* Tablet Typography & Content Width Control */
+    .viewport-tablet #hero-text,
+    .mode-tablet #hero-text {
+      left: 36px !important;
+      right: auto !important;
+      bottom: 90px !important;
+      width: 100% !important;
+      max-width: 500px !important; /* Strict tablet content width control */
+    }
+
+    .viewport-tablet #hero-text h1,
+    .mode-tablet #hero-text h1 {
+      font-size: 48px !important;
+      line-height: 1.05 !important;
+      letter-spacing: -0.035em !important;
+    }
+
+    .viewport-tablet #hero-text p.hero-sub,
+    .mode-tablet #hero-text p.hero-sub {
+      font-size: 17px !important;
+      line-height: 1.48 !important;
+      margin-top: 12px !important;
+      max-width: 460px !important;
+      color: #555555 !important;
+    }
+
+    /* Desktop Typography (Untouched) */
+    .viewport-desktop #hero-text h1 {
+      font-size: 56px !important;
+      line-height: 1.04;
+    }
+
+    /* =========================================================
+       BOTTOM RIGHT AVATAR
+       ========================================================= */
+    #avatar-container {
+      position: absolute;
+      right: clamp(16px, 3.5vw, 36px);
+      bottom: clamp(16px, 3.5vw, 30px);
+      z-index: 2000;
+      pointer-events: auto;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+
+    #avatar {
+      width: clamp(52px, 6.5vw, 80px);
+      height: clamp(52px, 6.5vw, 80px);
+      object-fit: contain;
+      user-select: none;
+      filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.12));
+      animation: float-avatar 4s ease-in-out infinite;
+      transition: transform 0.25s ease;
+    }
+
+    #avatar-container:hover #avatar {
+      transform: scale(1.08) translateY(-4px);
+    }
+
+    .avatar-indicator {
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #10b981;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes float-avatar {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
+
+    /* =========================================================
+       VIGNETTE & CANVAS OVERLAY
+       ========================================================= */
+    #gradient-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0) 45%,
+        rgba(0, 0, 0, 0.012) 58%,
+        rgba(0, 0, 0, 0.03) 70%,
+        rgba(0, 0, 0, 0.055) 82%,
+        rgba(0, 0, 0, 0.085) 92%,
+        rgba(0, 0, 0, 0.12) 100%
+      );
+    }
+
+    /* Loading Screen for 3D Assets */
+    #scene-loader {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-white);
+      z-index: 1800;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+    }
+
+    #scene-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(0, 124, 239, 0.15);
+      border-top-color: var(--primary-blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loader-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    /* A-FRAME VR UI HIDE */
+    .a-enter-vr, .a-enter-ar, .a-orientation-modal {
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================================================
+       DEVICE SIMULATOR CONTAINER
+       ========================================================= -->
+  <div id="simulator-container" class="mode-desktop">
+
+    <!-- FLOATING DEVICE SWITCHER CONTROLS -->
+    <div id="device-toolbar">
+      <button class="toolbar-toggle-btn" id="toolbar-toggle" title="Toggle device switcher">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+      </button>
+
+      <div class="toolbar-content">
+        <button class="device-pill-btn active" data-mode="desktop" title="Desktop view (1360x820)">
+          Desktop
+        </button>
+
+        <button class="device-pill-btn" data-mode="tablet" title="Tablet view (768x1024)">
+          Tablet
+        </button>
+
+        <button class="device-pill-btn" data-mode="mobile-p" title="Mobile portrait (390x844)">
+          Phone
+        </button>
+
+        <button class="device-pill-btn" data-mode="mobile-l" title="Mobile landscape (844x390)">
+          Phone (L)
+        </button>
+
+        <div class="model-badge" title="Active 3D Asset">
+          <span class="status-dot"></span>
+          <span id="model-name-label">forpc.glb</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN APP VIEWPORT -->
+    <div id="app-viewport" style="width: 1360px; height: 820px;">
+      <div class="device-notch"></div>
+
+      <!-- 3D LOADER OVERLAY -->
+      <div id="scene-loader">
+        <div class="spinner"></div>
+        <div class="loader-text">Loading 3D Scene...</div>
+      </div>
+
+      <!-- =========================================================
+           HEADER
+           ========================================================= -->
+      <header id="header">
+        <!-- Logo -->
+        <a href="#" class="logo-container" aria-label="Home">
+          <img id="logo" src="images/logo.png" alt="Company Logo">
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav id="navigation" aria-label="Main Navigation">
+          <a href="#solutions">Solutions</a>
+          <a href="#fintech">Fintech</a>
+          <a href="#resource">Resource</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#about">About us</a>
+        </nav>
+
+        <!-- Right Header Actions -->
+        <div class="header-actions">
+          <!-- Demo Button -->
+          <a href="#demo" id="demo-button" role="button" aria-label="Request Demo">
+            <img src="images/icon.png" alt="" aria-hidden="true">
+            <span>Demo</span>
+          </a>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button id="mobile-menu-toggle" aria-label="Open Navigation Menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- =========================================================
+           MOBILE NAVIGATION DRAWER
+           ========================================================= -->
+      <div id="mobile-drawer" aria-hidden="true">
+        <div class="mobile-nav-links">
+          <a href="#solutions" class="mobile-nav-link">
+            <span>Solutions</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="#fintech" class="mobile-nav-link">
+            <span>Fintech</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="#resource" class="mobile-nav-link">
+            <span>Resource</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="#pricing" class="mobile-nav-link">
+            <span>Pricing</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="#about" class="mobile-nav-link">
+            <span>About us</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+        </div>
+
+        <div class="mobile-drawer-footer">
+          <a href="#demo" id="mobile-demo-btn" class="device-pill-btn active" style="justify-content: center; height: 46px; font-size: 15px; border-radius: 10px;">
+            <img src="images/icon.png" alt="" style="width: 17px; height: 17px;">
+            <span>Request Demo</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- =========================================================
+           HERO TEXT CONTENT
+           ========================================================= -->
+      <div id="hero-text">
+        <h1>
+          AI-Powered Compliance<br>
+          <strong>Solution</strong>
+        </h1>
+        <p class="hero-sub">
+          Automate regulatory workflows with intelligent 3D spatial analytics and real-time oversight.
+        </p>
+      </div>
+
+      <!-- =========================================================
+           BOTTOM RIGHT AVATAR
+           ========================================================= -->
+      <div id="avatar-container" title="AI Compliance Assistant">
+        <img id="avatar" src="images/avatar.png" alt="AI Compliance Assistant Avatar">
+        <div class="avatar-indicator"></div>
+      </div>
+
+      <!-- VIGNETTE OVERLAY -->
+      <div id="gradient-overlay"></div>
+
+      <!-- =========================================================
+           A-FRAME SCENE
+           ========================================================= -->
+      <a-scene
+        embedded
+        vr-mode-ui="enabled: false"
+        wasd-controls="enabled: false"
+        keyboard-shortcuts="enterVR: false; exitVR: false"
+        renderer="colorManagement: true; physicallyCorrectLights: true; antialias: true; powerPreference: high-performance;"
+        background="color: #ffffff">
+
+        <!-- LIGHTING -->
+        <a-light
+          type="ambient"
+          intensity="1.6"
+          color="#ffffff">
+        </a-light>
+
+        <a-light
+          type="directional"
+          position="6 12 7"
+          intensity="2.8"
+          color="#ffffff">
+        </a-light>
+
+        <a-light
+          type="directional"
+          position="-6 6 -5"
+          intensity="1.2"
+          color="#dbeafe">
+        </a-light>
+
+        <a-light
+          type="directional"
+          position="0 -4 4"
+          intensity="0.5"
+          color="#ffffff">
+        </a-light>
+
+        <!-- 3D MODEL CONTAINER -->
+        <a-entity id="model-container" position="0 0 0" rotation="0 0 0">
+          <a-entity
+            id="model"
+            gltf-model="url(models/forpc.glb)"
+            position="0 0 0"
+            rotation="0 0 0"
+            scale="1 1 1">
+          </a-entity>
+        </a-entity>
+
+        <!-- ADAPTIVE ORTHOGRAPHIC CAMERA -->
+        <a-entity
+          id="ortho-camera"
+          smart-orthographic-camera>
+        </a-entity>
+
+      </a-scene>
+
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SCRIPTS & THREE.JS LOGIC
+       ========================================================= -->
+  <script>
+    (function () {
+      'use strict';
+
+      // --- CONFIGURATION & PATHS ---
+      const MOBILE_BREAKPOINT = 768;
+      const MODEL_DESKTOP = 'models/forpc.glb';
+      const MODEL_MOBILE = 'models/forphone.glb';
+
+      let currentModelType = 'desktop';
+      let cameraComponent = null;
+
+      const viewportEl = document.getElementById('app-viewport');
+      const simulatorContainer = document.getElementById('simulator-container');
+      const modelEl = document.getElementById('model');
+      const modelContainerEl = document.getElementById('model-container');
+      const modelLabelEl = document.getElementById('model-name-label');
+      const sceneLoaderEl = document.getElementById('scene-loader');
+      const menuToggleBtn = document.getElementById('mobile-menu-toggle');
+      const mobileDrawer = document.getElementById('mobile-drawer');
+
+      // --- MOBILE NAVIGATION DRAWER TOGGLE ---
+      if (menuToggleBtn && mobileDrawer) {
+        menuToggleBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const isOpen = mobileDrawer.classList.toggle('open');
+          menuToggleBtn.classList.toggle('open', isOpen);
+          menuToggleBtn.setAttribute('aria-expanded', isOpen);
+          mobileDrawer.setAttribute('aria-hidden', !isOpen);
+        });
+
+        // Close drawer when link clicked
+        document.querySelectorAll('.mobile-nav-link, #mobile-demo-btn').forEach(link => {
+          link.addEventListener('click', () => {
+            mobileDrawer.classList.remove('open');
+            menuToggleBtn.classList.remove('open');
+            menuToggleBtn.setAttribute('aria-expanded', 'false');
+            mobileDrawer.setAttribute('aria-hidden', 'true');
+          });
+        });
+      }
+
+      // --- DEVICE PREVIEW SWITCHER LOGIC ---
+      const devicePresets = {
+        'desktop': { width: '1360px', height: '820px' },
+        'tablet': { width: '768px', height: '1024px' },
+        'mobile-p': { width: '390px', height: '844px' },
+        'mobile-l': { width: '844px', height: '390px' }
+      };
+
+      const pillButtons = document.querySelectorAll('.device-pill-btn[data-mode]');
+      pillButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+          const mode = this.getAttribute('data-mode');
+          pillButtons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+
+          simulatorContainer.className = 'mode-' + mode;
+          const preset = devicePresets[mode];
+          if (preset) {
+            viewportEl.style.width = preset.width;
+            viewportEl.style.height = preset.height;
+          }
+
+          // Trigger smooth transition & layout update
+          setTimeout(updateViewportResponsiveClasses, 50);
+          setTimeout(checkDeviceAndModel, 350);
+        });
+      });
+
+      // Toolbar collapse toggle
+      const toolbarToggle = document.getElementById('toolbar-toggle');
+      const deviceToolbar = document.getElementById('device-toolbar');
+      if (toolbarToggle && deviceToolbar) {
+        toolbarToggle.addEventListener('click', () => {
+          deviceToolbar.classList.toggle('collapsed');
+        });
+      }
+
+      // --- VIEWPORT RESPONSIVE CLASS SYNCHRONIZATION ---
+      function updateViewportResponsiveClasses() {
+        const width = viewportEl.clientWidth || window.innerWidth;
+        const height = viewportEl.clientHeight || window.innerHeight;
+
+        viewportEl.classList.remove(
+          'viewport-mobile', 
+          'viewport-tablet', 
+          'viewport-desktop', 
+          'viewport-mobile-narrow',
+          'viewport-mobile-landscape'
+        );
+
+        if (height < 520 && width > height) {
+          // Phone Landscape
+          viewportEl.classList.add('viewport-mobile', 'viewport-mobile-landscape');
+        } else if (width < 600) {
+          // Phone Portrait
+          viewportEl.classList.add('viewport-mobile');
+          if (width < 380) viewportEl.classList.add('viewport-mobile-narrow');
+        } else if (width < 1100) {
+          // Tablet
+          viewportEl.classList.add('viewport-tablet');
+        } else {
+          // Desktop
+          viewportEl.classList.add('viewport-desktop');
+        }
+      }
+
+      // --- SMART MODEL SWITCHER ---
+      function isMobileMode() {
+        const width = viewportEl.clientWidth || window.innerWidth;
+        const height = viewportEl.clientHeight || window.innerHeight;
+        // Mobile if width < breakpoint or vertical smartphone ratio
+        return width < MOBILE_BREAKPOINT || (width < 900 && height > width * 1.25);
+      }
+
+      function updateModelIfNeeded() {
+        const isMob = isMobileMode();
+        const targetType = isMob ? 'mobile' : 'desktop';
+        const targetModelUrl = isMob ? MODEL_MOBILE : MODEL_DESKTOP;
+
+        if (currentModelType !== targetType) {
+          currentModelType = targetType;
+          if (modelLabelEl) {
+            modelLabelEl.textContent = isMob ? 'forphone.glb' : 'forpc.glb';
+          }
+
+          if (sceneLoaderEl) {
+            sceneLoaderEl.classList.remove('hidden');
+          }
+
+          modelEl.setAttribute('gltf-model', `url(${targetModelUrl})`);
+        }
+      }
+
+      // --- AFRAME COMPONENT: SMART ADAPTIVE ORTHOGRAPHIC CAMERA ---
+      AFRAME.registerComponent('smart-orthographic-camera', {
+        init: function () {
+          cameraComponent = this;
+          this.scene = this.el.sceneEl;
+          this.targetModel = document.querySelector('#model');
+          this.camera = null;
+          this.loadedObject = null;
+
+          // Listen for model load events
+          this.targetModel.addEventListener('model-loaded', (e) => {
+            this.onModelLoaded(e);
+          });
+
+          // Resize handler
+          window.addEventListener('resize', () => {
+            this.handleResize();
+          });
+        },
+
+        onModelLoaded: function (e) {
+          const model3D = this.targetModel.object3D;
+          if (!model3D) return;
+
+          this.loadedObject = model3D;
+
+          // Reset any prior local positioning
+          model3D.position.set(0, 0, 0);
+          model3D.updateMatrixWorld(true);
+
+          // Compute accurate bounding box & sphere from loaded geometry
+          const box = new THREE.Box3().setFromObject(model3D);
+          const size = new THREE.Vector3();
+          const center = new THREE.Vector3();
+          box.getSize(size);
+          box.getCenter(center);
+
+          // Store dimensions
+          this.modelBox = box;
+          this.modelSize = size;
+          this.modelCenter = center;
+          this.modelRadius = box.getBoundingSphere(new THREE.Sphere()).radius || (Math.max(size.x, size.y, size.z) * 0.7);
+
+          // Center the model at local (0, 0, 0)
+          model3D.position.set(-center.x, -center.y, -center.z);
+          model3D.updateMatrixWorld(true);
+
+          this.setupCamera();
+
+          // Smoothly hide loader
+          if (sceneLoaderEl) {
+            setTimeout(() => {
+              sceneLoaderEl.classList.add('hidden');
+            }, 120);
+          }
+        },
+
+        setupCamera: function () {
+          if (!this.loadedObject || !this.modelRadius) return;
+
+          const width = viewportEl.clientWidth || window.innerWidth;
+          const height = viewportEl.clientHeight || window.innerHeight;
+          const aspect = width / height;
+          const isMob = isMobileMode();
+
+          const radius = this.modelRadius;
+          const maxDim = Math.max(this.modelSize.x, this.modelSize.y, this.modelSize.z);
+          const distance = maxDim * 4;
+
+          // Camera isometric angle position
+          const camPos = new THREE.Vector3(
+            distance * 0.45,
+            distance * 0.40,
+            distance * 1.0
+          );
+
+          // Framing calculation: closer zoom for prominent view
+          let halfW, halfH;
+
+          if (aspect >= 1.0) {
+            // Landscape / Desktop View: prominent zoom
+            const baseViewSize = maxDim * 0.32;
+            halfH = baseViewSize;
+            halfW = baseViewSize * aspect;
+          } else {
+            // Portrait / Mobile View: zoom in 2x closer so forphone.glb fills the upper screen!
+            const baseViewWidth = maxDim * (isMob ? 0.36 : 0.48);
+            halfW = baseViewWidth;
+            halfH = baseViewWidth / aspect;
+          }
+
+          // Camera LookAt Target:
+          // In portrait, offset target DOWN so model sits in upper half leaving space for raised hero text
+          const targetYOffset = aspect < 1.0 ? -halfH * 0.20 : 0;
+          const lookTarget = new THREE.Vector3(0, targetYOffset, 0);
+
+          if (!this.camera) {
+            this.camera = new THREE.OrthographicCamera(
+              -halfW,
+              halfW,
+              halfH,
+              -halfH,
+              0.01,
+              distance * 15
+            );
+            this.el.setObject3D('camera', this.camera);
+            this.scene.camera = this.camera;
+          } else {
+            this.camera.left = -halfW;
+            this.camera.right = halfW;
+            this.camera.top = halfH;
+            this.camera.bottom = -halfH;
+          }
+
+          this.camera.position.set(
+            camPos.x,
+            camPos.y + targetYOffset,
+            camPos.z
+          );
+          this.camera.lookAt(lookTarget);
+          this.camera.updateProjectionMatrix();
+        },
+
+        handleResize: function () {
+          if (!this.camera || !this.loadedObject) return;
+          this.setupCamera();
+        }
+      });
+
+      // --- MOUSE HOVER PARALLAX (DESKTOP ONLY - DISABLED FOR TAB & MOBILE) ---
+      let mouseX = 0, mouseY = 0;
+      let targetRotY = 0, targetRotX = 0;
+      let currentRotY = 0, currentRotX = 0;
+
+      // Mouse hover tracking
+      window.addEventListener('mousemove', (e) => {
+        const width = viewportEl.clientWidth || window.innerWidth;
+        // Disable hover effect for tablet and mobile
+        if (width <= 960 || isMobileMode()) {
+          targetRotY = 0;
+          targetRotX = 0;
+          return;
+        }
+
+        const rect = viewportEl.getBoundingClientRect();
+        mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouseY = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+        
+        // Subtle tilt angles on hover for desktop
+        targetRotY = mouseX * 0.09;
+        targetRotX = -mouseY * 0.06;
+      });
+
+      // Reset hover tilt when mouse leaves window
+      document.addEventListener('mouseleave', () => {
+        targetRotY = 0;
+        targetRotX = 0;
+      });
+
+      // Smooth Animation Loop
+      function animate() {
+        requestAnimationFrame(animate);
+
+        if (modelContainerEl && modelContainerEl.object3D) {
+          // Smooth spring damping for hover parallax
+          currentRotY += (targetRotY - currentRotY) * 0.06;
+          currentRotX += (targetRotX - currentRotX) * 0.06;
+
+          modelContainerEl.object3D.rotation.y = currentRotY;
+          modelContainerEl.object3D.rotation.x = currentRotX;
+        }
+      }
+      animate();
+
+      // --- RESIZE & LAYOUT SYNC ---
+      let resizeTimeout;
+      function checkDeviceAndModel() {
+        updateViewportResponsiveClasses();
+        updateModelIfNeeded();
+        if (cameraComponent) {
+          cameraComponent.handleResize();
+        }
+      }
+
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(checkDeviceAndModel, 100);
+      });
+
+      // Initial execution
+      updateViewportResponsiveClasses();
+      document.addEventListener('DOMContentLoaded', () => {
+        updateViewportResponsiveClasses();
+        updateModelIfNeeded();
+      });
+
+    })();
+  </script>
+
+</body>
+</html>
