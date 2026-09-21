@@ -446,7 +446,7 @@ export default function App() {
       <header className="app-navbar">
         {/* Left: Brand Logo */}
         <div className="navbar-logo">
-          <img src="/images/logo.png" alt="Comply2Reg Logo" />
+          <img src={`${import.meta.env.BASE_URL}images/logo.png`} alt="Comply2Reg Logo" />
         </div>
 
         {/* Center: Navigation Links */}
@@ -461,7 +461,7 @@ export default function App() {
         {/* Right: Demo Action Button */}
         <div className="navbar-actions">
           <button className="btn-demo" type="button">
-            <img src="/images/icon.png" alt="" className="demo-icon" />
+            <img src={`${import.meta.env.BASE_URL}images/icon.png`} alt="" className="demo-icon" />
             <span>Demo</span>
           </button>
         </div>
@@ -483,7 +483,7 @@ export default function App() {
 
       {/* Bottom Right Avatar */}
       <div className="app-footer-avatar">
-        <img src="/images/avatar.png" alt="Avatar" />
+        <img src={`${import.meta.env.BASE_URL}images/avatar.png`} alt="Avatar" />
       </div>
 
       {/* Black Edge Vignette */}
@@ -506,7 +506,7 @@ export default function App() {
 
         {/* Centered 3D Model with 1000-frame master animation */}
         <a-entity
-          gltf-model="/models/animation.glb"
+          gltf-model={`${import.meta.env.BASE_URL}models/animation.glb`}
           position="0 0 0"
           world-brightness
           glb-animation-player="totalFrames: 1000"
