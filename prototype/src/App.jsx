@@ -206,7 +206,7 @@ if (typeof window !== 'undefined' && window.AFRAME) {
   if (!window.AFRAME.components['camera-animator']) {
     window.AFRAME.registerComponent('camera-animator', {
       schema: {
-        enabled: { type: 'boolean', default: true }
+        enabled: { type: 'boolean', default: false }
       },
       init: function () {
         this.elapsedTime = 0
@@ -224,8 +224,20 @@ if (typeof window !== 'undefined' && window.AFRAME) {
           THREE.MathUtils.degToRad(this.initialRot.z)
         )
       },
+      update: function (oldData) {
+        if (this.data.enabled && (!oldData || !oldData.enabled)) {
+          this.elapsedTime = 0
+          this.applyTransform(CAMERA_KEYFRAMES[0].pos, CAMERA_KEYFRAMES[0].rot, CAMERA_KEYFRAMES[0].frustum)
+        }
+      },
       tick: function (t, dt) {
-        if (!dt || !this.data.enabled) return
+        if (!dt) return
+
+        if (!this.data.enabled) {
+          // Keep static at frame 0 until loaded
+          this.applyTransform(this.initialPos, this.initialRot, this.initialFrustum)
+          return
+        }
 
         this.elapsedTime += dt / 1000
         const time = this.elapsedTime
@@ -342,12 +354,13 @@ if (typeof window !== 'undefined' && window.AFRAME) {
       }
     })
   }
-  // Component to play GLTF animations as authored and track the 1000 frames
+  // Component to play GLTF animations as authored and track the 1100 frames
   if (!window.AFRAME.components['glb-animation-player']) {
     window.AFRAME.registerComponent('glb-animation-player', {
       schema: {
+        enabled: { type: 'boolean', default: false },
         timeScale: { type: 'number', default: 1.0 },
-        totalFrames: { type: 'number', default: 1000 }
+        totalFrames: { type: 'number', default: 1100 }
       },
       init: function () {
         this.mixer = null
@@ -373,30 +386,41 @@ if (typeof window !== 'undefined' && window.AFRAME) {
             this.maxDuration = maxDuration
 
             // Synchronize all clips to the full master duration
-            // This prevents shorter/delayed tracks from looping early on their own
             animations.forEach((clip) => {
               clip.duration = maxDuration
             })
 
-            // Play all synchronized tracks
+            // Prepare synchronized tracks
             this.actions = animations.map((clip) => {
               const action = this.mixer.clipAction(clip)
-              action.play()
+              if (this.data.enabled) {
+                action.play()
+              }
               return action
             })
-            console.log(`[glb-animation-player] Playing ${this.actions.length} synchronized animation tracks. Master duration: ${maxDuration}s`)
-          } else {
-            console.warn('[glb-animation-player] No animations found in model.')
+            console.log(`[glb-animation-player] Initialized ${this.actions.length} tracks. Master duration: ${maxDuration}s`)
           }
+
+          // Emit event for React loading manager
+          window.dispatchEvent(new CustomEvent('glb-model-ready'))
         })
       },
-      update: function () {
+      update: function (oldData) {
         if (this.mixer) {
           this.mixer.timeScale = this.data.timeScale
         }
+        if (this.data.enabled && (!oldData || !oldData.enabled)) {
+          if (this.mixer && this.actions && this.actions.length > 0) {
+            this.mixer.setTime(0)
+            this.actions.forEach((action) => {
+              action.reset()
+              action.play()
+            })
+          }
+        }
       },
       tick: function (t, dt) {
-        if (!dt) return
+        if (!dt || !this.data.enabled) return
 
         // Compute stable real-time FPS
         this.fpsFrames++
@@ -414,7 +438,7 @@ if (typeof window !== 'undefined' && window.AFRAME) {
             const duration = this.maxDuration || (this.actions[0].getClip().duration) || 1
             const currentTime = this.actions[0] ? (this.actions[0].time % duration) : 0
 
-            const totalFrames = this.data.totalFrames || 1000
+            const totalFrames = this.data.totalFrames || 1100
             const progress = currentTime / duration
             const currentFrame = Math.min(Math.floor(progress * totalFrames), totalFrames)
 
@@ -440,8 +464,85 @@ if (typeof window !== 'undefined' && window.AFRAME) {
 }
 
 export default function App() {
+  const [loadingProgress, setLoadingProgress] = React.useState(10)
+  const [isLoaded, setIsLoaded] = React.useState(false)
+  const [isOverlayMounted, setIsOverlayMounted] = React.useState(true)
+
+  React.useEffect(() => {
+    let progressTimer = null
+    let hasLoaded = false
+
+    // Smooth incremental progress ticker while waiting for assets
+    progressTimer = setInterval(() => {
+      setLoadingProgress((prev) => {
+        if (prev >= 90) return prev
+        const step = Math.random() * 8 + 4
+        return Math.min(Math.round(prev + step), 90)
+      })
+    }, 120)
+
+    const handleReady = () => {
+      if (hasLoaded) return
+      hasLoaded = true
+
+      if (progressTimer) clearInterval(progressTimer)
+      setLoadingProgress(100)
+
+      // Short delay to let the initial frame render and show 100%
+      setTimeout(() => {
+        setIsLoaded(true)
+
+        // Fade out and remove loading overlay
+        setTimeout(() => {
+          setIsOverlayMounted(false)
+        }, 700)
+      }, 400)
+    }
+
+    window.addEventListener('glb-model-ready', handleReady)
+
+    // Fallback safety timeout (in case model loads instantly or event already triggered)
+    const fallbackTimer = setTimeout(() => {
+      handleReady()
+    }, 6000)
+
+    return () => {
+      if (progressTimer) clearInterval(progressTimer)
+      clearTimeout(fallbackTimer)
+      window.removeEventListener('glb-model-ready', handleReady)
+    }
+  }, [])
+
   return (
     <div className="app-viewport">
+      {/* Minimal Clean Loading Screen */}
+      {isOverlayMounted && (
+        <div className={`loading-overlay ${isLoaded ? 'fade-out' : ''}`}>
+          <div className="loading-content">
+            <div className="loading-logo-wrap">
+              <img
+                src={`${import.meta.env.BASE_URL}images/logo.png`}
+                alt="Comply2Reg"
+                className="loading-logo"
+              />
+            </div>
+
+            <div className="loading-progress-container">
+              <div className="loading-bar-track">
+                <div
+                  className="loading-bar-fill"
+                  style={{ width: `${loadingProgress}%` }}
+                ></div>
+              </div>
+              <div className="loading-status-row">
+                <span className="loading-status-text">Prototype Version 0.1.12</span>
+                <span className="loading-percentage">{loadingProgress}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Top Navigation Bar */}
       <header className="app-navbar">
         {/* Left: Brand Logo */}
@@ -477,7 +578,8 @@ export default function App() {
       {/* Bottom Live Frame Counter Badge */}
       <div className="frame-overlay-bottom">
         <div className="frame-badge">
-          <span id="animation-frame-info">Frame: 0 / 1000 • 0.0s / 33.3s • 60 FPS</span>
+          <span className="live-dot"></span>
+          <span id="animation-frame-info">Frame: 0 / 1100 • 0.0s / 36.7s • 60 FPS</span>
         </div>
       </div>
 
@@ -504,12 +606,12 @@ export default function App() {
         <a-entity light="type: directional; intensity: 2.2; color: #ffffff; castShadow: false" position="5 12 8"></a-entity>
         <a-entity light="type: directional; intensity: 1.6; color: #ffffff; castShadow: false" position="-5 8 -4"></a-entity>
 
-        {/* Centered 3D Model with 1000-frame master animation */}
+        {/* Centered 3D Model with 1100-frame master animation */}
         <a-entity
           gltf-model={`${import.meta.env.BASE_URL}models/animation.glb`}
           position="0 0 0"
           world-brightness
-          glb-animation-player="totalFrames: 1000"
+          glb-animation-player={`enabled: ${isLoaded}; totalFrames: 1100`}
         ></a-entity>
 
         {/* Orthographic Camera Rig with Multi-Keyframe Animation Sequence */}
@@ -517,7 +619,7 @@ export default function App() {
           id="camera-rig"
           position="-0.15 0.35 5.688"
           rotation="-18.11 22.12 0"
-          camera-animator
+          camera-animator={`enabled: ${isLoaded}`}
         >
           <a-camera
             id="main-camera"
@@ -530,4 +632,5 @@ export default function App() {
     </div>
   )
 }
+
 
