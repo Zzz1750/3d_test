@@ -101,6 +101,39 @@ export const CAMERA_KEYFRAMES = [
     toPos: { x: -0.65, y: 0.2, z: 5.688 },
     toRot: { x: -18.11, y: 22.12, z: 0 },
     toFrustum: 0.8
+  },
+  // Stage 8: Hold after 4th animation for 0.5 seconds (32.5s to 33.0s)
+  {
+    type: 'hold',
+    startTime: 32.5,
+    endTime: 33.0,
+    pos: { x: -0.65, y: 0.2, z: 5.688 },
+    rot: { x: -18.11, y: 22.12, z: 0 },
+    frustum: 0.8
+  },
+  // Stage 9: 5th Animation - Rotate camera to left slowly (33.0s to 37.0s, duration 4.0s)
+  {
+    type: 'transition',
+    startTime: 33.0,
+    endTime: 37.0,
+    fromPos: { x: -0.65, y: 0.2, z: 5.688 },
+    fromRot: { x: -18.11, y: 22.12, z: 0 },
+    fromFrustum: 0.8,
+    toPos: { x: -0.65, y: 0.2, z: 5.688 },
+    toRot: { x: -18.11, y: 26.0, z: 0 },
+    toFrustum: 0.8
+  },
+  // Stage 10: 6th Animation - Subtle zoom out & gentle tilt upward to view top-left (37.0s to 39.8s, duration 2.8s)
+  {
+    type: 'transition',
+    startTime: 37.0,
+    endTime: 39.8,
+    fromPos: { x: -0.65, y: 0.2, z: 5.688 },
+    fromRot: { x: -18.11, y: 26.0, z: 0 },
+    fromFrustum: 0.8,
+    toPos: { x: -0.65, y: 0.2, z: 5.688 },
+    toRot: { x: -14.5, y: 26.0, z: 0 },
+    toFrustum: 1.2
   }
 ]
 
