@@ -134,6 +134,27 @@ export const CAMERA_KEYFRAMES = [
     toPos: { x: -0.65, y: 0.2, z: 5.688 },
     toRot: { x: -14.5, y: 26.0, z: 0 },
     toFrustum: 1.2
+  },
+  // Stage 11: Hold after 6th animation for 7 seconds (39.8s to 46.8s)
+  {
+    type: 'hold',
+    startTime: 39.8,
+    endTime: 46.8,
+    pos: { x: -0.65, y: 0.2, z: 5.688 },
+    rot: { x: -14.5, y: 26.0, z: 0 },
+    frustum: 1.2
+  },
+  // Stage 12: 7th Animation - Reset upward tilt back to normal (-18.11), pan further left towards bottom-left corner & moderate zoom (46.8s to 49.6s, duration 2.8s)
+  {
+    type: 'transition',
+    startTime: 46.8,
+    endTime: 49.6,
+    fromPos: { x: -0.65, y: 0.2, z: 5.688 },
+    fromRot: { x: -14.5, y: 26.0, z: 0 },
+    fromFrustum: 1.2,
+    toPos: { x: -1.65, y: -0.05, z: 5.688 },
+    toRot: { x: -18.11, y: 26.0, z: 0 },
+    toFrustum: 1.15
   }
 ]
 
