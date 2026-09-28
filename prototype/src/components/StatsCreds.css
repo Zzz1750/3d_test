@@ -1,0 +1,43 @@
+/* =========================================================
+   Bottom-Right Credentials & Stats Section
+   ========================================================= */
+.stats-creds-container {
+  position: absolute;
+  bottom: 44px;
+  right: 48px;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  gap: 44px;
+  padding: 0;
+  background: transparent;
+  pointer-events: auto;
+  user-select: none;
+  font-family: var(--font-sans);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+}
+
+.stat-value {
+  font-family: var(--font-sans);
+  font-size: var(--text-h1);
+  font-weight: var(--font-regular);
+  letter-spacing: -0.04em;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: var(--font-medium);
+  letter-spacing: -0.01em;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+  white-space: nowrap;
+}

@@ -1,0 +1,134 @@
+/* =========================================================
+   Bottom-Left Hero Headline & Action Zone
+   ========================================================= */
+.hero-headline-container {
+  position: absolute;
+  bottom: 40px;
+  left: 44px;
+  max-width: fit-content;
+  z-index: 60;
+  pointer-events: auto;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  font-family: var(--font-sans);
+}
+
+.hero-headline {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(32px, 3.2vw, 46px);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.hero-subtext {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 15.5px;
+  font-weight: var(--font-regular);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--color-text-secondary);
+  max-width: 460px;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-demo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 11px 26px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: var(--font-semibold);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 112, 243, 0.28);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-demo:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 4px 16px rgba(0, 112, 243, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-demo:active {
+  transform: translateY(1px);
+}
+
+.demo-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+/* "How it works" button exactly matching Header play button design */
+.btn-how-it-works {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 24px;
+  background-color: var(--color-text-primary);
+  color: #ffffff;
+  border: 1px solid var(--color-text-primary);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: var(--font-semibold);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-how-it-works:hover {
+  background-color: #000000;
+  border-color: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.btn-how-it-works:active {
+  transform: translateY(1px);
+}
+
+.btn-how-it-works .play-icon {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .hero-headline-container {
+    left: 20px;
+    right: 20px;
+    bottom: 24px;
+  }
+  .hero-headline {
+    white-space: normal;
+  }
+}

@@ -1,0 +1,67 @@
+/* =========================================================
+   Intro Statement — Centered Paragraph + Mascot on Left Edge
+   ========================================================= */
+
+.intro-statement-section {
+  position: relative;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 100px 48px;
+  box-sizing: border-box;
+  font-family: var(--font-sans);
+  text-align: center;
+  border-bottom: none;
+  overflow: hidden;
+}
+
+/* Mascot sticking to the far left edge of the screen */
+.intro-screen-left-img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
+  user-select: none;
+}
+
+.intro-mascot-img {
+  height: clamp(190px, 19vw, 250px);
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Centered Text exactly as before */
+.intro-statement-wrapper {
+  max-width: 1040px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+}
+
+.intro-paragraph {
+  font-size: var(--text-h2);
+  line-height: var(--leading-snug);
+  letter-spacing: -0.025em;
+  color: var(--color-text-muted);
+  font-weight: var(--font-regular);
+  margin: 0;
+  text-align: center;
+}
+
+.intro-bold {
+  color: var(--color-text-primary);
+  font-weight: var(--font-medium);
+}
+
+@media (max-width: 768px) {
+  .intro-statement-section {
+    padding: 70px 24px;
+  }
+
+  .intro-mascot-img {
+    height: 150px;
+  }
+}

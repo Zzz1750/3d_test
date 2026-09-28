@@ -1,3 +1,45 @@
+/* =========================================================
+   Global Design Tokens & Reset (Geist Typography Scale)
+   ========================================================= */
+
+:root {
+  /* Font Family */
+  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Typography Scale */
+  --text-display: clamp(38px, 3.8vw, 56px);
+  --text-h1: clamp(32px, 3.2vw, 46px);
+  --text-h2: clamp(24px, 2.4vw, 34px);
+  --text-h3: 20px;
+  --text-body-lg: 17.5px;
+  --text-body: 15px;
+  --text-sm: 13.5px;
+  --text-xs: 12px;
+
+  /* Line Heights */
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+
+  /* Font Weights */
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Neutral & Accent Color Palette */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-text-dim: #94a3b8;
+  --color-primary: #0070f3;
+  --color-primary-hover: #0060df;
+  --color-border: #e2e8f0;
+  --color-border-subtle: #f1f5f9;
+  --color-surface: #f8fafc;
+  --color-surface-hover: #ffffff;
+}
+
 *,
 *::before,
 *::after {
@@ -11,10 +53,13 @@ body,
 #root {
   width: 100%;
   min-height: 100vh;
-}
-
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: #ffffff;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }

@@ -1,0 +1,36 @@
+/* =========================================================
+   3D A-Frame Canvas
+   ========================================================= */
+a-scene {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  pointer-events: none;
+}
+
+.a-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none;
+}
+
+/* Remove all default A-Frame UI elements, buttons, and overlays */
+.a-enter-vr,
+.a-enter-ar,
+.a-enter-vr-button,
+.a-enter-ar-button,
+.a-enter-vr-modal,
+.a-orientation-modal,
+.a-dialog,
+.a-loader-title,
+.a-fullscreen {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Pristine Clean Canvas - No Dark Vignettes */
+.edge-gradient-overlay {
+  display: none;
+}

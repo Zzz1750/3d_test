@@ -1,0 +1,317 @@
+/* =========================================================
+   Problem Statement — Elevated Frosted Cloud Theme
+   (Translucent frosted glass canvas, cloud atmosphere, refined deliverables)
+   ========================================================= */
+
+.problem-section {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(248, 250, 252, 0.65) 30%, rgba(241, 245, 249, 0.5) 70%, #ffffff 100%);
+  padding: 120px 48px 140px;
+  box-sizing: border-box;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  user-select: text;
+  overflow: hidden;
+}
+
+/* Ambient Cloud Sky Glow */
+.problem-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1200px;
+  height: 500px;
+  background: radial-gradient(ellipse 70% 50% at 50% 20%, rgba(238, 246, 255, 0.7) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.problem-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------
+   Header Block
+   --------------------------------------------------------- */
+.problem-intro {
+  max-width: 840px;
+  margin-bottom: 68px;
+}
+
+.problem-lead-highlight {
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+.problem-title {
+  font-size: var(--text-h1);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.035em;
+  color: var(--color-text-primary);
+  margin: 0 0 20px 0;
+}
+
+.problem-title-accent {
+  display: block;
+  color: var(--color-primary);
+  font-weight: var(--font-medium);
+}
+
+.problem-desc {
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-normal);
+  color: var(--color-text-muted);
+  font-weight: var(--font-regular);
+  margin: 0;
+}
+
+/* ---------------------------------------------------------
+   Frosted Cloud Glass Columns Grid
+   --------------------------------------------------------- */
+.hairline-columns-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 16px 40px -8px rgba(15, 23, 42, 0.04), 
+              0 1px 2px rgba(15, 23, 42, 0.02),
+              inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+}
+
+/* Relaxed Mascot laying on top of 04 box towards right */
+.col-mascot-sleep-wrap {
+  position: absolute;
+  bottom: 100%;
+  right: 20px;
+  margin-bottom: -36px;
+  z-index: 25;
+  pointer-events: none;
+  user-select: none;
+  display: flex;
+  align-items: flex-end;
+}
+
+.col-mascot-sleep-img {
+  height: clamp(124px, 12vw, 168px);
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 6px 14px rgba(15, 23, 42, 0.05));
+}
+
+.hairline-col {
+  padding: 44px 32px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: transparent;
+}
+
+/* Subtle hairline divider between columns */
+.hairline-col:not(:last-child) {
+  border-right: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.hairline-col:first-child {
+  padding-left: 36px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.hairline-col:last-child {
+  padding-right: 36px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.col-top-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.col-index {
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--color-primary);
+}
+
+/* Cloud Pill Module Badge */
+.col-module-badge {
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: -0.01em;
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.7);
+  padding: 3px 10px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03), inset 0 1px 0 #ffffff;
+}
+
+.col-question {
+  font-size: clamp(22px, 1.8vw, 28px);
+  font-weight: var(--font-semibold);
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: var(--color-text-primary);
+  margin: 0 0 6px 0;
+}
+
+.col-tagline {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+}
+
+.col-desc {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  font-weight: var(--font-regular);
+  margin: 0;
+  flex-grow: 1;
+}
+
+/* ---------------------------------------------------------
+   Understated Bottom Impact Strip (Original Clean Layout Preserved)
+   --------------------------------------------------------- */
+.problem-impact-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 24px 0 0;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.impact-point {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.impact-lead {
+  font-size: 13px;
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.impact-text {
+  font-size: 14.5px;
+  color: var(--color-text-muted);
+  font-weight: var(--font-regular);
+}
+
+.impact-divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--color-border);
+}
+
+/* ---------------------------------------------------------
+   Responsive Breakpoints
+   --------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .hairline-columns-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hairline-col {
+    padding: 36px 28px;
+  }
+
+  .hairline-col:first-child {
+    padding-left: 28px;
+  }
+
+  .hairline-col:last-child {
+    padding-right: 28px;
+  }
+
+  .hairline-col:nth-child(2) {
+    border-right: none;
+  }
+
+  .hairline-col:nth-child(1),
+  .hairline-col:nth-child(2) {
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  }
+
+  .impact-divider {
+    display: none;
+  }
+
+  .problem-impact-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .problem-section {
+    padding: 80px 20px 100px;
+  }
+
+  .hairline-columns-grid {
+    grid-template-columns: 1fr;
+    border-radius: 16px;
+  }
+
+  .hairline-col {
+    padding: 28px 20px;
+    border-right: none !important;
+  }
+
+  .hairline-col:not(:last-child) {
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  }
+
+  .hairline-col:first-child {
+    padding-left: 20px;
+  }
+
+  .hairline-col:last-child {
+    padding-right: 20px;
+    border-bottom: none;
+  }
+
+  .col-mascot-sleep-wrap {
+    right: 12px;
+    margin-bottom: -20px;
+  }
+
+  .col-mascot-sleep-img {
+    height: clamp(75px, 15vw, 110px);
+  }
+}
