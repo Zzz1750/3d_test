@@ -200,9 +200,9 @@ export default function Scene3D({ isLoaded = false, frustumSize = 4.2 }) {
       <a-entity light="type: directional; intensity: 2.2; color: #ffffff; castShadow: false" position="5 12 8"></a-entity>
       <a-entity light="type: directional; intensity: 1.6; color: #ffffff; castShadow: false" position="-5 8 -4"></a-entity>
 
-      {/* Centered 3D Model with 1100-frame master animation */}
+      {/* Centered 3D Model */}
       <a-entity
-        gltf-model={`${import.meta.env.BASE_URL}models/animation.glb`}
+        gltf-model={`${import.meta.env.BASE_URL}models/default.glb`}
         position="0 0 0"
         world-brightness
         glb-animation-player={`enabled: ${isLoaded}; totalFrames: 1100`}
