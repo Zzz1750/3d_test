@@ -1,0 +1,235 @@
+/* =========================================================
+   Compliance Flow — Unified Mathematical Vector Canvas
+   Borderless Minimal · Geist Font · Comply2Reg Blue Accent
+   ========================================================= */
+
+.flow-section {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(248, 250, 252, 0.65) 30%, rgba(241, 245, 249, 0.5) 70%, #ffffff 100%);
+  padding: 40px 48px 120px;
+  box-sizing: border-box;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  user-select: text;
+  overflow: hidden;
+}
+
+.flow-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------
+   Contextual Flow Header (Centered & Balanced)
+   --------------------------------------------------------- */
+.flow-header {
+  max-width: 100%;
+  margin: 0 auto 36px;
+  text-align: center;
+}
+
+.flow-title {
+  font-size: clamp(30px, 3vw, 42px);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+  margin: 0 0 14px 0;
+  white-space: nowrap;
+}
+
+.flow-title-accent {
+  color: var(--color-primary);
+  font-weight: var(--font-medium);
+}
+
+.flow-subtitle {
+  font-size: 17.5px;
+  line-height: var(--leading-normal);
+  color: var(--color-text-muted);
+  font-weight: var(--font-regular);
+  margin: 0 auto;
+  max-width: 1020px;
+}
+
+/* ---------------------------------------------------------
+   Main Frosted Stage Card (Borderless Cloud Glass)
+   --------------------------------------------------------- */
+.flow-stage-card {
+  position: relative;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.05),
+              0 1px 3px rgba(15, 23, 42, 0.02);
+  padding: 28px 32px;
+  box-sizing: border-box;
+  overflow: visible;
+  transition: opacity 0.6s ease;
+}
+
+.flow-sit-mascot {
+  position: absolute;
+  top: -175px;
+  left: -10px;
+  width: 220px;
+  height: auto;
+  object-fit: contain;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.stage-blank {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.stage-live {
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------
+   Unified Flow SVG (Scales Perfectly on Any Screen)
+   --------------------------------------------------------- */
+.unified-flow-svg {
+  width: 100%;
+  height: auto;
+  min-height: 560px;
+  max-height: 720px;
+  display: block;
+}
+
+/* ---------------------------------------------------------
+   Vector Conduit Lines (Strictly Matching Sketch Legend)
+   --------------------------------------------------------- */
+.pipe-wire {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 1.8;
+  transition: all 0.5s ease;
+}
+
+.line-streaming {
+  stroke: #94a3b8;
+  stroke-width: 1.8;
+}
+
+.line-batch {
+  stroke: #94a3b8;
+  stroke-width: 1.6;
+  stroke-dasharray: 6 5;
+}
+
+.line-ondemand {
+  stroke: #94a3b8;
+  stroke-width: 1.6;
+  stroke-dasharray: 2 4;
+}
+
+.digital-line-surge {
+  stroke: var(--color-primary);
+  stroke-width: 2.2;
+  stroke-dasharray: 6 4;
+  animation: pipeWaveSurge 1.0s linear infinite;
+}
+
+.line-trunk {
+  stroke: #0070f3;
+  stroke-width: 2.2;
+}
+
+.c2r-intake {
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  animation: pipeWaveSurge 1.2s linear infinite;
+}
+
+.c2r-slow-flow {
+  stroke: #0070f3;
+  stroke-width: 2.5;
+  stroke-dasharray: 8 4;
+  animation: pipeWaveSurge 1.6s linear infinite;
+}
+
+@keyframes pipeWaveSurge {
+  from { stroke-dashoffset: 20; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* ---------------------------------------------------------
+   SVG Element Animations (Pure Opacity to Protect SVG Coordinates)
+   --------------------------------------------------------- */
+.spiral-spin {
+  animation: spiralRotate 3s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes spiralRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.arm-stamp-active {
+  animation: armStampDown 0.32s ease;
+}
+
+@keyframes armStampDown {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+  100% { transform: translateY(0); }
+}
+
+.stamp-pop-badge {
+  animation: stampPopFeedback 0.4s ease-out;
+}
+
+@keyframes stampPopFeedback {
+  0% { transform: translate(110px, 166px) scale(0.6); opacity: 0; }
+  50% { transform: translate(110px, 160px) scale(1.1); opacity: 1; }
+  100% { transform: translate(110px, 160px) scale(1); opacity: 1; }
+}
+
+.anim-fade-in,
+.anim-scale-in {
+  animation: nodeFadeIn 0.45s ease forwards;
+}
+
+@keyframes nodeFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.c2r-hero-group {
+  animation: c2rHeroEntrance 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes c2rHeroEntrance {
+  from { opacity: 0; transform: translate(625px, 285px) scale(0.7); }
+  to { opacity: 1; transform: translate(625px, 275px) scale(1); }
+}
+
+/* ---------------------------------------------------------
+   Responsive Adaptations
+   --------------------------------------------------------- */
+@media (max-width: 768px) {
+  .flow-section {
+    padding: 10px 16px 70px;
+  }
+
+  .flow-stage-card {
+    padding: 12px 10px;
+    border-radius: 16px;
+  }
+
+  .unified-flow-svg {
+    min-height: 420px;
+  }
+}

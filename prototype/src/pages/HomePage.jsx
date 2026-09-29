@@ -5,6 +5,7 @@ import StatsCreds from '../components/StatsCreds'
 import LoadingScreen from '../components/LoadingScreen'
 import IntroStatement from '../components/IntroStatement'
 import ProblemStatement from '../components/ProblemStatement'
+import BankNarrativeFlow from '../components/BankNarrativeFlow'
 import './HomePage.css'
 
 export default function HomePage() {
@@ -52,13 +53,6 @@ export default function HomePage() {
     }
   }, [])
 
-  const handleScrollToProblem = () => {
-    const el = document.getElementById('problem-statement')
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   return (
     <div className="app-viewport">
       {/* Loading Screen */}
@@ -80,8 +74,13 @@ export default function HomePage() {
       {/* Centered Intro Statement */}
       <IntroStatement />
 
-      {/* Problem Statement / Why Us Section */}
+      {/* Problem Statement Section */}
       <ProblemStatement />
+
+      {/* Centered Data Streams & Overloaded Banker Diagram (Directly Under Problem Statement) */}
+      <section className="banker-diagram-section-wrapper">
+        <BankNarrativeFlow />
+      </section>
     </div>
   )
 }
