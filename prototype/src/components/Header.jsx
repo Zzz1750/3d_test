@@ -75,19 +75,18 @@ export default function Header() {
         ))}
       </nav>
 
-      {/* Right: Black and White Play Action Button */}
+      {/* Right: Demo Action Button */}
       <div className="navbar-actions">
-        <button className="btn-play" type="button" aria-label="Play">
-          <svg
-            className="play-icon"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M8 5v14l11-7z" />
-          </svg>
-          <span>Play</span>
-        </button>
+        <Link to="/demo" style={{ textDecoration: 'none' }}>
+          <button className="btn-header-demo" type="button" aria-label="Book a Demo">
+            <img
+              src={`${import.meta.env.BASE_URL}images/icon.png`}
+              alt=""
+              className="header-demo-icon"
+            />
+            <span>Book a Demo</span>
+          </button>
+        </Link>
       </div>
     </header>
   )

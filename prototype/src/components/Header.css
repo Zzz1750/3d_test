@@ -149,7 +149,7 @@
   color: var(--color-primary);
 }
 
-/* Right Top Corner: Play Button */
+/* Right Top Corner: Demo Button */
 .navbar-actions {
   display: flex;
   align-items: center;
@@ -157,45 +157,46 @@
   z-index: 10;
 }
 
-.btn-play {
+.btn-header-demo {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 22px;
-  background-color: var(--color-text-primary);
+  padding: 10px 20px;
+  background-color: #0066cc;
   color: #ffffff;
-  border: 1px solid var(--color-text-primary);
+  border: 1px solid #0066cc;
   border-radius: 8px;
   font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: var(--font-semibold);
+  font-size: 14.5px;
+  font-weight: 600;
   letter-spacing: -0.01em;
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.22);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.app-navbar.scrolled .btn-play {
-  padding: 9px 20px;
+.app-navbar.scrolled .btn-header-demo {
+  padding: 8px 18px;
   font-size: 14px;
 }
 
-.btn-play:hover {
-  background-color: #000000;
-  border-color: #000000;
+.btn-header-demo:hover {
+  background-color: #0052a3;
+  border-color: #0052a3;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 102, 204, 0.32);
 }
 
-.btn-play:active {
+.btn-header-demo:active {
   transform: translateY(1px);
 }
 
-.play-icon {
+.header-demo-icon {
   width: 14px;
   height: 14px;
   display: block;
+  object-fit: contain;
 }
 
 /* Responsive */

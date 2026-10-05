@@ -338,15 +338,15 @@ export default function BankNarrativeFlow() {
             {/* PHASE 4: Trunk routes cleanly into Comply2Reg, then Comply2Reg feeds Banker */}
             {isComply2RegActive && (
               <g className="pipelines-c2r-layer">
-                {/* Feeder Lines from All 8 Sources into Trunk */}
-                <line x1="360" y1={streamY.node1} x2={trunkX} y2={streamY.node1} className="pipe-wire c2r-intake" />
-                <line x1="360" y1={streamY.node2} x2={trunkX} y2={streamY.node2} className="pipe-wire c2r-intake" />
-                <line x1="360" y1={streamY.node3} x2={trunkX} y2={streamY.node3} className="pipe-wire c2r-intake" />
-                <line x1="360" y1={streamY.node4} x2={trunkX} y2={streamY.node4} className="pipe-wire c2r-intake" />
-                <line x1="360" y1={streamY.node5} x2={trunkX} y2={streamY.node5} className="pipe-wire c2r-intake" />
-                <line x1="360" y1={streamY.node6} x2={trunkX} y2={streamY.node6} className="pipe-wire c2r-intake" />
-                <line x1="360" y1={streamY.digitalAssets} x2={trunkX} y2={streamY.digitalAssets} className="pipe-wire c2r-intake" />
-                <line x1="360" y1={streamY.alternativeData} x2={trunkX} y2={streamY.alternativeData} className="pipe-wire c2r-intake" />
+                {/* Feeder Lines — keep original styles so they look the same as before C2R appears */}
+                <line x1="360" y1={streamY.node1} x2={trunkX} y2={streamY.node1} className="pipe-wire line-streaming" />
+                <line x1="360" y1={streamY.node2} x2={trunkX} y2={streamY.node2} className="pipe-wire line-streaming" />
+                <line x1="360" y1={streamY.node3} x2={trunkX} y2={streamY.node3} className="pipe-wire line-streaming" />
+                <line x1="360" y1={streamY.node4} x2={trunkX} y2={streamY.node4} className="pipe-wire line-streaming" />
+                <line x1="360" y1={streamY.node5} x2={trunkX} y2={streamY.node5} className="pipe-wire line-ondemand" />
+                <line x1="360" y1={streamY.node6} x2={trunkX} y2={streamY.node6} className="pipe-wire line-batch" />
+                <line x1="360" y1={streamY.digitalAssets} x2={trunkX} y2={streamY.digitalAssets} className="pipe-wire digital-line-surge" />
+                <line x1="360" y1={streamY.alternativeData} x2={trunkX} y2={streamY.alternativeData} className="pipe-wire digital-line-surge" />
 
                 {/* Vertical Trunk Line */}
                 <line x1={trunkX} y1={streamY.node1} x2={trunkX} y2={streamY.alternativeData} className="pipe-wire line-trunk" />
@@ -545,15 +545,21 @@ export default function BankNarrativeFlow() {
                 </g>
               )}
 
-              {/* Authentic Sketch Legend at Bottom */}
-              <g transform="translate(940, 774)">
-                <text x="0" y="10" fontFamily="var(--font-sans)" fontSize="12" fontWeight="600" fill="#94a3b8">how fast it arrives:</text>
-                <line x1="125" y1="7" x2="142" y2="7" stroke="#94a3b8" strokeWidth="2" />
-                <text x="148" y="10" fontFamily="var(--font-sans)" fontSize="12" fill="#64748b">streaming</text>
-                <line x1="218" y1="7" x2="235" y2="7" stroke="#94a3b8" strokeWidth="1.8" strokeDasharray="4 3" />
-                <text x="241" y="10" fontFamily="var(--font-sans)" fontSize="12" fill="#64748b">batch</text>
-                <line x1="288" y1="7" x2="305" y2="7" stroke="#94a3b8" strokeWidth="1.8" strokeDasharray="1 3" />
-                <text x="311" y="10" fontFamily="var(--font-sans)" fontSize="12" fill="#64748b">on consent</text>
+              {/* Authentic Sketch Legend — Bottom-Right Corner */}
+              <g transform="translate(1155, 680)">
+                <text x="0" y="0" fontFamily="var(--font-sans)" fontSize="16" fontWeight="700" fill="#94a3b8" letterSpacing="0.04em">how fast it arrives:</text>
+
+                {/* Row 1 — streaming */}
+                <line x1="0" y1="24" x2="36" y2="24" stroke="#94a3b8" strokeWidth="3" strokeLinecap="round" />
+                <text x="46" y="29" fontFamily="var(--font-sans)" fontSize="16" fontWeight="500" fill="#64748b">streaming</text>
+
+                {/* Row 2 — batch */}
+                <line x1="0" y1="56" x2="36" y2="56" stroke="#94a3b8" strokeWidth="2.8" strokeDasharray="6 4" strokeLinecap="round" />
+                <text x="46" y="61" fontFamily="var(--font-sans)" fontSize="16" fontWeight="500" fill="#64748b">batch</text>
+
+                {/* Row 3 — on consent */}
+                <line x1="0" y1="88" x2="36" y2="88" stroke="#94a3b8" strokeWidth="2.8" strokeDasharray="2 5" strokeLinecap="round" />
+                <text x="46" y="93" fontFamily="var(--font-sans)" fontSize="16" fontWeight="500" fill="#64748b">on consent</text>
               </g>
 
             </g>

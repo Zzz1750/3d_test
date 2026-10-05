@@ -5,13 +5,13 @@ a-scene {
   width: 100% !important;
   height: 100% !important;
   display: block;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .a-canvas {
   width: 100% !important;
   height: 100% !important;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 /* Remove all default A-Frame UI elements, buttons, and overlays */

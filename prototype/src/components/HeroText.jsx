@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 import './HeroText.css'
 
 export default function HeroText({
-  title = "AI-Powered Compliance Solution",
-  subtitle = "Turn regulatory chaos into continuous compliance. Automate audits and stay audit-ready in real time.",
+  title = "AI-Powered Compliance for Banks & Fintechs",
+  subtitle = "Eliminate manual regulatory tracking. Map circulars directly to internal controls and achieve complete audit readiness in 60–90 days.",
   demoLink = "/demo",
   onHowItWorks
 }) {
@@ -20,17 +20,25 @@ export default function HeroText({
 
   return (
     <div className="hero-headline-container">
-      <h1 className="hero-headline">{title}</h1>
+      {/* Original Headline */}
+      <h1 className="hero-headline">
+        AI-Powered Compliance<br />
+        <span className="hero-headline-sub">for Banks &amp; Fintechs</span>
+      </h1>
+
+      {/* Original Subtitle */}
       {subtitle && <p className="hero-subtext">{subtitle}</p>}
+
+      {/* Clean Buttons Only */}
       <div className="hero-actions">
         <Link to={demoLink} style={{ textDecoration: 'none' }}>
-          <button className="btn-demo" type="button">
+          <button className="btn-demo-primary" type="button">
             <img
               src={`${import.meta.env.BASE_URL}images/icon.png`}
               alt=""
               className="demo-icon"
             />
-            <span>Demo</span>
+            <span>Book a Demo</span>
           </button>
         </Link>
 
@@ -54,4 +62,3 @@ export default function HeroText({
     </div>
   )
 }
-

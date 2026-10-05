@@ -6,6 +6,10 @@ import LoadingScreen from '../components/LoadingScreen'
 import IntroStatement from '../components/IntroStatement'
 import ProblemStatement from '../components/ProblemStatement'
 import BankNarrativeFlow from '../components/BankNarrativeFlow'
+import ProductShowcase from '../components/ProductShowcase'
+import BlogStudiesShowcase from '../components/BlogStudiesShowcase'
+import CityCommandHUD from '../components/CityCommandHUD'
+import RegulatoryTicker from '../components/RegulatoryTicker'
 import './HomePage.css'
 
 export default function HomePage() {
@@ -63,12 +67,32 @@ export default function HomePage() {
         />
       )}
 
-      {/* Hero Section Container */}
+      {/* Hero Section Container: Split Layout with Ambient High-Tech Stage */}
       <section className="hero-viewport-section">
-        <HeroText />
-        <StatsCreds />
-        <div className="vignette-overlay" aria-hidden="true" />
-        <Scene3D isLoaded={isLoaded} />
+        {/* Ambient Stage Background: Subtle Blueprint Mesh & Soft Cyan Radiance */}
+        <div className="hero-ambient-blueprint" aria-hidden="true" />
+        <div className="hero-radiant-glow" aria-hidden="true" />
+
+        <div className="hero-split-layout">
+          {/* Left Column: Headline, Description, Interactive CTAs & Proof Cards */}
+          <div className="hero-content-col">
+            <HeroText />
+            <StatsCreds />
+          </div>
+
+          {/* Right Column: 3D Scene + Interactive Command HUD Overlay */}
+          <div className="hero-3d-col">
+            <div className="hero-3d-scene-wrap">
+              <Scene3D isLoaded={isLoaded} />
+            </div>
+
+            {/* Interactive City Command HUD */}
+            <CityCommandHUD isLoaded={isLoaded} />
+          </div>
+        </div>
+
+        {/* Live Horizon Regulatory Ticker (Base of Hero) */}
+        <RegulatoryTicker />
       </section>
 
       {/* Centered Intro Statement */}
@@ -81,6 +105,12 @@ export default function HomePage() {
       <section className="banker-diagram-section-wrapper">
         <BankNarrativeFlow />
       </section>
+
+      {/* Product Showcase Section (Video on left, details & CTA on right) */}
+      <ProductShowcase />
+
+      {/* Blog & Regulatory Case Studies 3D Coverflow Showcase */}
+      <BlogStudiesShowcase />
     </div>
   )
 }

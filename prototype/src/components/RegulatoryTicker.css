@@ -1,0 +1,131 @@
+/* =========================================================
+   Live Regulatory Horizon Ticker (Bigger, Cleaner, Minimal)
+   ========================================================= */
+.regulatory-ticker-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  z-index: 40;
+  overflow: hidden;
+  user-select: none;
+  font-family: var(--font-sans);
+}
+
+.ticker-badge {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding-left: clamp(28px, 3.5vw, 48px);
+  padding-right: 28px;
+  height: 100%;
+  background: #ffffff;
+  z-index: 5;
+  border-right: 1px solid #e2e8f0;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.03);
+}
+
+.ticker-badge-text {
+  font-size: var(--text-xs, 12px);
+  font-weight: var(--font-medium, 500);
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted, #64748b);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ticker-viewport {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  white-space: nowrap;
+  padding-left: 24px;
+  animation: ticker-slide 55s linear infinite;
+  will-change: transform;
+}
+
+.ticker-track.paused {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Minimal Clean Framework Items (No capsules) */
+.ticker-framework-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-xs, 12.5px);
+  color: var(--color-text-muted, #64748b);
+  font-weight: var(--font-regular, 400);
+  letter-spacing: 0.01em;
+  transition: color 0.18s ease;
+}
+
+.ticker-framework-pill:hover {
+  color: var(--color-primary, #0066cc);
+}
+
+.ticker-framework-name {
+  white-space: nowrap;
+}
+
+.ticker-edge-fade-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), transparent);
+}
+
+.ticker-edge-fade-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 70px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(-90deg, rgba(255, 255, 255, 0.95), transparent);
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .regulatory-ticker-bar {
+    height: 52px;
+  }
+  .ticker-badge {
+    padding: 0 16px;
+  }
+  .ticker-track {
+    gap: 24px;
+    padding-left: 16px;
+  }
+  .ticker-framework-pill {
+    font-size: 11.5px;
+    font-weight: var(--font-regular, 400);
+  }
+}

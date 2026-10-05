@@ -20,10 +20,18 @@ if (typeof window !== 'undefined' && window.AFRAME) {
         far: { type: 'number', default: INITIAL_CAMERA_CONFIG.far }
       },
 
+      getAspect: function () {
+        const sceneEl = this.el.sceneEl
+        const canvas = sceneEl && sceneEl.canvas
+        const w = (canvas && canvas.clientWidth) || (sceneEl && sceneEl.clientWidth) || window.innerWidth
+        const h = (canvas && canvas.clientHeight) || (sceneEl && sceneEl.clientHeight) || window.innerHeight
+        return (w && h) ? (w / h) : (window.innerWidth / window.innerHeight)
+      },
+
       init: function () {
         this.updateCamera = this.updateCamera.bind(this)
         const THREE = window.AFRAME.THREE
-        const aspect = window.innerWidth / window.innerHeight
+        const aspect = this.getAspect()
         const halfSize = this.data.frustumSize / 2
 
         this.orthoCamera = new THREE.OrthographicCamera(
@@ -42,9 +50,17 @@ if (typeof window !== 'undefined' && window.AFRAME) {
         // Ensure scene uses this camera
         if (this.el.sceneEl) {
           this.el.sceneEl.camera = this.orthoCamera
+          this.el.sceneEl.addEventListener('render-target-loaded', this.updateCamera)
         }
 
         window.addEventListener('resize', this.updateCamera)
+
+        if (typeof ResizeObserver !== 'undefined' && this.el.sceneEl) {
+          this.resizeObserver = new ResizeObserver(() => {
+            this.updateCamera()
+          })
+          this.resizeObserver.observe(this.el.sceneEl)
+        }
       },
 
       update: function () {
@@ -54,7 +70,7 @@ if (typeof window !== 'undefined' && window.AFRAME) {
 
       updateCamera: function () {
         if (!this.orthoCamera) return
-        const aspect = window.innerWidth / window.innerHeight
+        const aspect = this.getAspect()
         const halfSize = this.data.frustumSize / 2
         this.orthoCamera.left = -halfSize * aspect
         this.orthoCamera.right = halfSize * aspect
@@ -71,6 +87,12 @@ if (typeof window !== 'undefined' && window.AFRAME) {
 
       remove: function () {
         window.removeEventListener('resize', this.updateCamera)
+        if (this.el.sceneEl) {
+          this.el.sceneEl.removeEventListener('render-target-loaded', this.updateCamera)
+        }
+        if (this.resizeObserver) {
+          this.resizeObserver.disconnect()
+        }
       }
     })
   }
@@ -181,9 +203,253 @@ if (typeof window !== 'undefined' && window.AFRAME) {
       }
     })
   }
+
+  // Interactive Hover Tilt, Elevation & Animation Reactor
+  if (!window.AFRAME.components['hover-3d-reactor']) {
+    window.AFRAME.registerComponent('hover-3d-reactor', {
+      init: function () {
+        this.targetRotX = 0
+        this.targetRotY = 0
+        this.targetPosY = 0
+        this.targetScale = 1.0
+
+        this.currentRotX = 0
+        this.currentRotY = 0
+        this.currentPosY = 0
+        this.currentScale = 1.0
+
+        this.isZoomed = false
+        this.isInside = false
+        this.lastNx = 0
+        this.lastNy = 0
+
+        const sceneEl = this.el.sceneEl
+        const container = sceneEl
+          ? (sceneEl.closest('.hero-3d-col') || sceneEl.parentElement || sceneEl)
+          : null
+
+        this.onFocusStation = (e) => {
+          const id = e.detail && e.detail.stationId
+          this.isZoomed = Boolean(id)
+          // Keep tilt neutral on both zoom-in and zoom-out so the camera transition is completely calm
+          this.targetRotX = 0
+          this.targetRotY = 0
+        }
+
+        window.addEventListener('city-focus-station', this.onFocusStation)
+
+        this.onMouseMove = (e) => {
+          if (!container) return
+          const rect = container.getBoundingClientRect()
+          const nx = (e.clientX - rect.left) / rect.width - 0.5
+          const ny = (e.clientY - rect.top) / rect.height - 0.5
+          this.lastNx = nx
+          this.lastNy = ny
+          this.isInside = true
+
+          // While zoomed into any building, turn off cursor tilt completely
+          if (this.isZoomed) return
+
+          // Very subtle micro-tilt: ±0.3° pitch and ±0.9° yaw
+          this.targetRotY = nx * 1.8
+          this.targetRotX = -ny * 0.6
+        }
+
+        this.onMouseEnter = () => {
+          this.isInside = true
+          if (this.isZoomed) return
+          this.targetPosY = 0.04
+          this.targetScale = 1.015
+
+          // Gently elevate character animation tempo on hover
+          const childModel = this.el.querySelector('#hero-3d-model')
+          const animComp = childModel && childModel.components['glb-animation-player']
+          if (animComp && animComp.mixer) {
+            animComp.mixer.timeScale = 1.1
+          }
+        }
+
+        this.onMouseLeave = () => {
+          this.isInside = false
+          this.targetRotX = 0
+          this.targetRotY = 0
+          this.targetPosY = 0
+          this.targetScale = 1.0
+
+          // Restore normal playback speed
+          const childModel = this.el.querySelector('#hero-3d-model')
+          const animComp = childModel && childModel.components['glb-animation-player']
+          if (animComp && animComp.mixer) {
+            animComp.mixer.timeScale = 1.0
+          }
+        }
+
+        if (container) {
+          container.addEventListener('mousemove', this.onMouseMove)
+          container.addEventListener('mouseenter', this.onMouseEnter)
+          container.addEventListener('mouseleave', this.onMouseLeave)
+        }
+      },
+      tick: function () {
+        // Slow and luxurious cinematic lerp inertia
+        const lerpFactor = 0.028
+        this.currentRotX += (this.targetRotX - this.currentRotX) * lerpFactor
+        this.currentRotY += (this.targetRotY - this.currentRotY) * lerpFactor
+        this.currentPosY += (this.targetPosY - this.currentPosY) * lerpFactor
+        this.currentScale += (this.targetScale - this.currentScale) * lerpFactor
+
+        this.el.object3D.rotation.x = (this.currentRotX * Math.PI) / 180
+        this.el.object3D.rotation.y = (this.currentRotY * Math.PI) / 180
+        this.el.object3D.position.y = this.currentPosY
+        this.el.object3D.scale.set(this.currentScale, this.currentScale, this.currentScale)
+      },
+      remove: function () {
+        window.removeEventListener('city-focus-station', this.onFocusStation)
+        const sceneEl = this.el.sceneEl
+        const container = sceneEl
+          ? (sceneEl.closest('.hero-3d-col') || sceneEl.parentElement || sceneEl)
+          : null
+        if (container) {
+          container.removeEventListener('mousemove', this.onMouseMove)
+          container.removeEventListener('mouseenter', this.onMouseEnter)
+          container.removeEventListener('mouseleave', this.onMouseLeave)
+        }
+      }
+    })
+  }
+
+  // Interactive Building Camera Zoom & Pan Controller
+  const BASE_CAMERA_ROTATION = {
+    x: -18.11,
+    y: 22.12,
+    z: 0
+  }
+
+  const CAMERA_TARGETS = {
+    default: {
+      pos: { x: -0.15, y: 0.35, z: 5.688 },
+      frustum: 4.6
+    },
+    regpulse: {
+      pos: { x: -1.05, y: 0.65, z: 5.3 },
+      frustum: 1.55
+    },
+    regulens: {
+      pos: { x: -2.6, y: -0.48, z: 3.8 },
+      frustum: 1.6
+    },
+    gapanalyser: {
+      pos: { x: -0.12, y: 0.35, z: 5.7 },
+      frustum: 1.6
+    }
+  }
+
+  if (!window.AFRAME.components['camera-zoom-controller']) {
+    window.AFRAME.registerComponent('camera-zoom-controller', {
+      init: function () {
+        this.targetPos = { ...CAMERA_TARGETS.default.pos }
+        this.currentPos = { ...CAMERA_TARGETS.default.pos }
+        this.targetFrustum = CAMERA_TARGETS.default.frustum
+        this.currentFrustum = CAMERA_TARGETS.default.frustum
+
+        this.baseRot = { ...BASE_CAMERA_ROTATION }
+        this.targetRot = { ...BASE_CAMERA_ROTATION }
+        this.currentRot = { ...BASE_CAMERA_ROTATION }
+
+        this.activeStationId = null
+        this.cinematicStartTime = null
+        this.cinematicDuration = 8000 // 8 seconds inspection window
+
+        this.onFocusStation = (e) => {
+          const id = e.detail && e.detail.stationId
+          this.activeStationId = id || null
+          const target = (id && CAMERA_TARGETS[id]) || CAMERA_TARGETS.default
+          this.targetPos = { ...target.pos }
+          this.targetFrustum = target.frustum
+
+          if (id) {
+            this.cinematicStartTime = performance.now()
+          } else {
+            this.cinematicStartTime = null
+            this.targetRot = { ...BASE_CAMERA_ROTATION }
+          }
+        }
+
+        window.addEventListener('city-focus-station', this.onFocusStation)
+      },
+      tick: function () {
+        // Calibrated lerp rates: significantly slower and gentler on zoom-out
+        const isZoomed = Boolean(this.activeStationId)
+        const posLerp = isZoomed ? 0.020 : 0.013
+        const rotLerp = 0.007
+
+        // Calculate ultra-slow, micro-whisper cinematic camera drift during station inspection
+        if (isZoomed && this.cinematicStartTime) {
+          const elapsed = performance.now() - this.cinematicStartTime
+          const rawProgress = Math.min(1.0, Math.max(0, elapsed / this.cinematicDuration))
+
+          // Velvet-smooth S-curve progression across the full 8 seconds
+          const eased = (1 - Math.cos(rawProgress * Math.PI)) / 2
+          const sweepFactor = (eased - 0.5) * 2 // -1.0 to +1.0
+
+          // Gentle 3.5-second blend so zoom begins rock-solid centered
+          const blendIn = Math.min(1.0, elapsed / 3500)
+
+          // Micro-whisper yaw drift (barely ±0.15°, zero roll, zero pitch)
+          const sweepYaw = 0.15
+          const currentYawOffset = sweepFactor * sweepYaw * blendIn
+
+          this.targetRot = {
+            x: BASE_CAMERA_ROTATION.x,
+            y: BASE_CAMERA_ROTATION.y + currentYawOffset,
+            z: BASE_CAMERA_ROTATION.z
+          }
+
+          this.currentPos.x += (this.targetPos.x - this.currentPos.x) * posLerp
+        } else {
+          this.targetRot = { ...BASE_CAMERA_ROTATION }
+          this.currentPos.x += (this.targetPos.x - this.currentPos.x) * posLerp
+        }
+
+        this.currentPos.y += (this.targetPos.y - this.currentPos.y) * posLerp
+        this.currentPos.z += (this.targetPos.z - this.currentPos.z) * posLerp
+        this.currentFrustum += (this.targetFrustum - this.currentFrustum) * posLerp
+
+        this.currentRot.x += (this.targetRot.x - this.currentRot.x) * rotLerp
+        this.currentRot.y += (this.targetRot.y - this.currentRot.y) * rotLerp
+        this.currentRot.z += (this.targetRot.z - this.currentRot.z) * rotLerp
+
+        this.el.object3D.position.set(this.currentPos.x, this.currentPos.y, this.currentPos.z)
+        this.el.object3D.rotation.x = (this.currentRot.x * Math.PI) / 180
+        this.el.object3D.rotation.y = (this.currentRot.y * Math.PI) / 180
+        this.el.object3D.rotation.z = (this.currentRot.z * Math.PI) / 180
+
+        const cameraEl = this.el.querySelector('#main-camera')
+        const orthoComp = cameraEl && cameraEl.components['ortho-camera']
+        if (orthoComp && orthoComp.orthoCamera) {
+          const aspect = orthoComp.getAspect()
+          const halfSize = this.currentFrustum / 2
+          orthoComp.orthoCamera.left = -halfSize * aspect
+          orthoComp.orthoCamera.right = halfSize * aspect
+          orthoComp.orthoCamera.top = halfSize
+          orthoComp.orthoCamera.bottom = -halfSize
+          orthoComp.orthoCamera.updateProjectionMatrix()
+        }
+      },
+      remove: function () {
+        window.removeEventListener('city-focus-station', this.onFocusStation)
+      }
+    })
+  }
 }
 
-export default function Scene3D({ isLoaded = false, frustumSize = 4.2 }) {
+export default function Scene3D({
+  isLoaded = false,
+  frustumSize = 4.6,
+  modelScale = 1.0,
+  modelPosition = "0 0 0",
+  timeScale = 1.0
+}) {
   return (
     <a-scene
       embedded
@@ -200,19 +466,24 @@ export default function Scene3D({ isLoaded = false, frustumSize = 4.2 }) {
       <a-entity light="type: directional; intensity: 2.2; color: #ffffff; castShadow: false" position="5 12 8"></a-entity>
       <a-entity light="type: directional; intensity: 1.6; color: #ffffff; castShadow: false" position="-5 8 -4"></a-entity>
 
-      {/* Centered 3D Model */}
-      <a-entity
-        gltf-model={`${import.meta.env.BASE_URL}models/default.glb`}
-        position="0 0 0"
-        world-brightness
-        glb-animation-player={`enabled: ${isLoaded}; totalFrames: 1100`}
-      ></a-entity>
+      {/* Interactive Hover Reactor Rig */}
+      <a-entity id="interactive-3d-rig" hover-3d-reactor>
+        <a-entity
+          id="hero-3d-model"
+          gltf-model={`${import.meta.env.BASE_URL}models/default.glb`}
+          position={modelPosition}
+          scale={`${modelScale} ${modelScale} ${modelScale}`}
+          world-brightness
+          glb-animation-player={`enabled: ${isLoaded}; timeScale: ${timeScale}; totalFrames: 1100`}
+        ></a-entity>
+      </a-entity>
 
-      {/* Default Orthographic Camera Rig */}
+      {/* Default Orthographic Camera Rig with Zoom Controller */}
       <a-entity
         id="camera-rig"
         position="-0.15 0.35 5.688"
         rotation="-18.11 22.12 0"
+        camera-zoom-controller
       >
         <a-camera
           id="main-camera"

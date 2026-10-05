@@ -219,6 +219,12 @@
 /* ---------------------------------------------------------
    Responsive Adaptations
    --------------------------------------------------------- */
+@media (min-width: 1024px) {
+  .flow-section {
+    padding-top: 110px;
+  }
+}
+
 @media (max-width: 768px) {
   .flow-section {
     padding: 10px 16px 70px;

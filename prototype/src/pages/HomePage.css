@@ -8,29 +8,156 @@
   background-color: #ffffff;
 }
 
-/* Hero Viewport (Full Screen 3D Hero) */
+/* Hero Viewport (Split Hero: Left Content, Right Cropped 3D Scene) */
 .hero-viewport-section {
   position: relative;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
+  min-height: 680px;
   overflow: hidden;
-  pointer-events: none;
   background-color: #ffffff;
 }
 
-.vignette-overlay {
+/* Ambient Stage Elements: Subtle Blueprint Grid & Radiant Cerulean Aura */
+.hero-ambient-blueprint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(to right, rgba(226, 232, 240, 0.45) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(226, 232, 240, 0.45) 1px, transparent 1px);
+  background-size: 52px 52px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 70% 50%, #000 20%, transparent 85%);
+  mask-image: radial-gradient(ellipse 80% 70% at 70% 50%, #000 20%, transparent 85%);
+  z-index: 1;
+}
+
+.hero-radiant-glow {
+  position: absolute;
+  top: 15%;
+  right: 5%;
+  width: 720px;
+  height: 720px;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(0, 102, 204, 0.08) 0%, rgba(2, 132, 199, 0.03) 45%, transparent 70%);
+  filter: blur(40px);
+  z-index: 2;
+  border-radius: 50%;
+}
+
+.hero-split-layout {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+  padding-bottom: 60px; /* Offset for 60px live regulatory ticker */
+}
+
+/* Left Content Column: Title, Subtitle, CTAs, Credibility Stats */
+.hero-content-col {
+  flex: 0 0 46%;
+  max-width: 640px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: clamp(28px, 4.5vw, 68px);
+  padding-right: 20px;
+  padding-top: 40px;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+/* Right 3D Column: Cropped Scene kept strictly to the right side */
+.hero-3d-col {
+  flex: 1 1 54%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.hero-3d-scene-wrap {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  z-index: 50;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 255, 255, 0) 70%,
-    rgba(15, 23, 42, 0.03) 100%
-  );
-  box-shadow: inset 0 0 60px rgba(15, 23, 42, 0.03);
+  overflow: hidden;
+  cursor: default;
+  -webkit-mask-image: linear-gradient(to bottom, #000 86%, rgba(0, 0, 0, 0.3) 95%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 86%, rgba(0, 0, 0, 0.3) 95%, transparent 100%);
+}
+
+/* Bottom-Right "Connected Compliance" Tagline */
+.hero-bottom-right-tag {
+  position: absolute;
+  bottom: 28px;
+  right: 44px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: clamp(17px, 1.6vw, 21px);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  color: var(--color-primary, #0066cc);
+  background: transparent;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  user-select: none;
+  pointer-events: auto;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hero-bottom-right-tag strong {
+  font-weight: 700;
+  color: var(--color-primary, #0066cc);
+  margin-left: 5px;
+}
+
+.hero-bottom-right-tag:hover {
+  opacity: 0.82;
+}
+
+@media (max-width: 968px) {
+  .hero-viewport-section {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .hero-split-layout {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .hero-content-col {
+    flex: 0 0 auto;
+    max-width: 100%;
+    width: 100%;
+    padding: 100px 24px 32px 24px;
+  }
+
+  .hero-3d-col {
+    flex: 0 0 auto;
+    width: 100%;
+    height: 52vh;
+    min-height: 360px;
+  }
+
+  .hero-bottom-right-tag {
+    bottom: 20px;
+    right: 24px;
+    font-size: clamp(20px, 4vw, 24px);
+    padding: 0;
+  }
 }
 
 /* Subtle Scroll Hint */
