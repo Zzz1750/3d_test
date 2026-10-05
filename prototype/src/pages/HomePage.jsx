@@ -5,6 +5,7 @@ import StatsCreds from '../components/StatsCreds'
 import LoadingScreen from '../components/LoadingScreen'
 import IntroStatement from '../components/IntroStatement'
 import ProblemStatement from '../components/ProblemStatement'
+import ThinkMascotBanner from '../components/ThinkMascotBanner'
 import BankNarrativeFlow from '../components/BankNarrativeFlow'
 import ProductShowcase from '../components/ProductShowcase'
 import WorkflowIntegrations from '../components/WorkflowIntegrations'
@@ -102,6 +103,9 @@ export default function HomePage() {
       {/* Problem Statement Section */}
       <ProblemStatement />
 
+      {/* Epiphany Think Mascot: Between Problem Statement & Bank Narrative Flow */}
+      <ThinkMascotBanner />
+
       {/* Centered Data Streams & Overloaded Banker Diagram (Directly Under Problem Statement) */}
       <section className="banker-diagram-section-wrapper">
         <BankNarrativeFlow />
@@ -110,11 +114,11 @@ export default function HomePage() {
       {/* Product Showcase Section (Video on left, details & CTA on right) */}
       <ProductShowcase />
 
-      {/* Workflow Integrations: ServiceNow, Teams, Confluence, Slack, SharePoint, Archer */}
-      <WorkflowIntegrations />
-
       {/* Blog & Regulatory Case Studies 3D Coverflow Showcase */}
       <BlogStudiesShowcase />
+
+      {/* Workflow Integrations: ServiceNow, Teams, Confluence, Slack, SharePoint, Archer */}
+      <WorkflowIntegrations />
     </div>
   )
 }

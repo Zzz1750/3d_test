@@ -1,54 +1,73 @@
 /* =========================================================
-   Intro Statement — Centered Paragraph + Mascot on Left Edge
+   Intro Statement — Centered Paragraph + AskLia on Left Side
    ========================================================= */
 
 .intro-statement-section {
   position: relative;
   width: 100%;
   background-color: #ffffff;
-  padding: 100px 48px;
+  padding: 90px 48px;
   box-sizing: border-box;
   font-family: var(--font-sans);
-  text-align: center;
   border-bottom: none;
   overflow: hidden;
 }
 
-/* Mascot sticking to the far left edge of the screen */
-.intro-screen-left-img {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  z-index: 10;
+/* Centered container grouping AskLia and the text together in the middle */
+.intro-statement-container {
+  max-width: 1240px;
+  margin: 0 auto;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(36px, 4.5vw, 68px);
+  position: relative;
+  z-index: 5;
+}
+
+/* Mascot on the left side of the text */
+.intro-screen-left-img {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
   user-select: none;
 }
 
 .intro-mascot-img {
-  height: clamp(190px, 19vw, 250px);
-  width: auto;
+  width: clamp(220px, 20vw, 300px);
+  height: auto;
   object-fit: contain;
   display: block;
+  filter: drop-shadow(0 16px 36px rgba(0, 112, 243, 0.16));
+  animation: floatAskLia 4s ease-in-out infinite alternate;
 }
 
-/* Centered Text exactly as before */
+@keyframes floatAskLia {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+}
+
+/* Text Wrapper */
 .intro-statement-wrapper {
-  max-width: 1040px;
-  margin: 0 auto;
+  max-width: 820px;
   position: relative;
   z-index: 5;
 }
 
 .intro-paragraph {
-  font-size: var(--text-h2);
+  font-size: clamp(24px, 2.3vw, 34px);
   line-height: var(--leading-snug);
   letter-spacing: -0.025em;
   color: var(--color-text-muted);
   font-weight: var(--font-regular);
   margin: 0;
-  text-align: center;
+  text-align: left;
 }
 
 .intro-bold {
@@ -56,12 +75,23 @@
   font-weight: var(--font-medium);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .intro-statement-section {
-    padding: 70px 24px;
+    padding: 60px 24px;
+  }
+
+  .intro-statement-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 28px;
   }
 
   .intro-mascot-img {
-    height: 150px;
+    width: clamp(150px, 38vw, 210px);
+  }
+
+  .intro-paragraph {
+    text-align: center;
+    font-size: 22px;
   }
 }

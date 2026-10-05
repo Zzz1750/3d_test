@@ -27,9 +27,16 @@ function getOrthogonalPoint(p, x0, y0, xMid, x1, y1) {
 }
 
 export default function BankNarrativeFlow() {
-  // Clock starts ONLY when the user scrolls and reaches the section
+  // Timeline Constants:
+  // 14.5s: Comply2Reg logo materializes at center
+  // + 30.0s: play verified delivery and stamping with the logo
+  // 44.5s: restart the narrative loop from the beginning
+  const LOGO_APPEAR_TIME = 14.5
+  const POST_LOGO_DURATION = 30.0
+  const TOTAL_CYCLE_DURATION = LOGO_APPEAR_TIME + POST_LOGO_DURATION // 44.5s
+
   const [time, setTime] = useState(0)
-  const [hasStarted, setHasStarted] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
   const sectionRef = useRef(null)
   const reqRef = useRef(null)
   const lastTimeRef = useRef(null)
@@ -40,29 +47,54 @@ export default function BankNarrativeFlow() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setHasStarted(true)
+        // ONLY when this component is completely out of the screen:
+        // pause it, reset to the beginning
+        if (!entry.isIntersecting || entry.intersectionRatio === 0) {
+          setIsPlaying(false)
+          setTime(0)
+          lastTimeRef.current = null
+        } else if (entry.isIntersecting) {
+          // Starts immediately when user scrolls to the component
+          setIsPlaying(true)
         }
       },
       {
-        threshold: 0.2, // Starts when 20% of section enters viewport
-        rootMargin: '0px 0px -40px 0px'
+        threshold: [0, 0.01]
       }
     )
 
     observer.observe(el)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      if (reqRef.current) cancelAnimationFrame(reqRef.current)
+    }
   }, [])
 
   useEffect(() => {
-    if (!hasStarted) return
+    if (!isPlaying) {
+      if (reqRef.current) cancelAnimationFrame(reqRef.current)
+      lastTimeRef.current = null
+      return
+    }
+
+    lastTimeRef.current = null
 
     const loop = (timestamp) => {
-      if (!lastTimeRef.current) lastTimeRef.current = timestamp
+      if (!lastTimeRef.current) {
+        lastTimeRef.current = timestamp
+      }
       const delta = (timestamp - lastTimeRef.current) / 1000
       lastTimeRef.current = timestamp
 
-      setTime((prev) => prev + delta)
+      setTime((prev) => {
+        const nextTime = prev + delta
+        if (nextTime >= TOTAL_CYCLE_DURATION) {
+          // Loop back to beginning after 30 seconds of logo animation!
+          return 0
+        }
+        return nextTime
+      })
+
       reqRef.current = requestAnimationFrame(loop)
     }
 
@@ -70,31 +102,30 @@ export default function BankNarrativeFlow() {
     return () => {
       if (reqRef.current) cancelAnimationFrame(reqRef.current)
     }
-  }, [hasStarted])
+  }, [isPlaying])
 
   // -------------------------------------------------------------
   // STORY PHASES (Snappy, engaging, fast-paced for web visitors)
   // -------------------------------------------------------------
-  // 0.0s - 1.2s: Initial stage appearance
-  // 1.2s - 2.8s: Banker appears at desk in middle
-  // 2.8s - 9.5s: Traditional sources arrive, files move along 90° trunk, desk stack grows
+  // Stage is ALWAYS fully rendered and visible — zero blank delay!
+  // Banker is at desk ready from 0.0s
+  // 1.0s - 9.5s: Traditional sources arrive, files move along 90° trunk, desk stack grows
   // 9.5s - 14.5s: Digital sources arrive, stream files, stack piles high to 16 sheets
-  // 14.5s onwards FOREVER: Comply2Reg enters at center, clears mess, delivers verified docs with logo
-  const isBlank = time < 1.2
-  const isBankerVisible = time >= 1.2
-  const isTraditionalPhase = time >= 2.8 && time < 9.5
+  // 14.5s - 44.5s (30s): Comply2Reg enters at center, clears mess, delivers verified docs with logo
+  const isBankerVisible = true
+  const isTraditionalPhase = time >= 1.0 && time < 9.5
   const isDigitalOverload = time >= 9.5 && time < 14.5
-  const isComply2RegActive = time >= 14.5 // Reaches Comply2Reg in 14.5 seconds!
+  const isComply2RegActive = time >= 14.5
 
-  // Progressive appearance of stream nodes (fast, rhythmic succession)
-  const showNode1 = time >= 2.8 // Payment Rails
-  const showNode2 = time >= 3.6 // Markets
-  const showNode3 = time >= 4.4 // Customers
-  const showNode4 = time >= 5.2 // Devices & Channels
-  const showNode5 = time >= 6.0 // Open Banking & Credit
-  const showNode6 = time >= 6.8 // Watchlists & Regulators
+  // Core stream cards are already established and visible — no empty page!
+  const showNode1 = true
+  const showNode2 = true
+  const showNode3 = true
+  const showNode4 = true
+  const showNode5 = true
+  const showNode6 = true
 
-  // Digital additions (arrive in Phase 3)
+  // Digital additions (arrive dynamically in Phase 3)
   const showDigitalAssets = time >= 9.6   // Digital assets
   const showAlternativeData = time >= 10.2 // Alternative data
 
@@ -129,40 +160,47 @@ export default function BankNarrativeFlow() {
   const doc6Progress = -1
 
   // -------------------------------------------------------------
-  // PHYSICAL DESK STACK BEHAVIOR (Fast, dynamic, zero panic)
+  // PHYSICAL DESK STACK BEHAVIOR & BANKER FEEDBACK
   // -------------------------------------------------------------
   let deskStackCount = 0
   let isStamping = false
+  let bankerSymbol = 'tick' // 'tick' = Solved, 'neutral' = Doubtful, 'cross' = Missed
 
   if (isTraditionalPhase) {
-    if (time >= 4.6 && time < 5.5) {
+    if (time >= 4.6 && time < 6.0) {
       deskStackCount = 1
-    } else if (time >= 5.5 && time < 6.0) {
-      deskStackCount = 1
-      isStamping = true
-    } else if (time >= 6.0 && time < 7.0) {
-      deskStackCount = 1
-    } else if (time >= 7.0 && time < 7.6) {
+      isStamping = time >= 4.7 && time < 5.3
+      bankerSymbol = 'tick' // Doc 1: Solved
+    } else if (time >= 6.0 && time < 7.4) {
       deskStackCount = 2
-    } else if (time >= 7.6 && time < 8.1) {
-      deskStackCount = 2
-      isStamping = true
-    } else if (time >= 8.1 && time < 8.8) {
-      deskStackCount = 2
-    } else if (time >= 8.8 && time < 9.5) {
+      isStamping = time >= 6.1 && time < 6.7
+      bankerSymbol = 'neutral' // Doc 2: Doubtful
+    } else if (time >= 7.4 && time < 8.6) {
       deskStackCount = 3
+      isStamping = time >= 7.5 && time < 8.1
+      bankerSymbol = 'tick' // Doc 3: Solved
+    } else if (time >= 8.6 && time < 9.5) {
+      deskStackCount = 4
+      isStamping = time >= 8.7 && time < 9.3
+      bankerSymbol = 'cross' // Doc 4: Missed
     }
   } else if (isDigitalOverload) {
-    // Digital stuff sends more files! Stacks up to 16 sheets briskly over 5 seconds
+    // Digital flood: Stacks up to 16 sheets briskly over 5 seconds
     const progress = Math.min((time - 9.5) / 4.5, 1)
-    deskStackCount = Math.floor(3 + progress * 13) // Towers up to 16 sheets
+    deskStackCount = Math.floor(4 + progress * 12) // Towers up to 16 sheets
 
-    // Steady rhythmic stamping without panicking (every 1.4s)
-    const stampCycle = (time - 9.5) % 1.4
-    if (stampCycle >= 0.6 && stampCycle < 0.95) {
-      isStamping = true
-    }
+    // Rapid stamping under overload (every 1.0s)
+    const stampCycle = (time - 9.5) % 1.0
+    isStamping = stampCycle >= 0.25 && stampCycle < 0.75
+
+    // Overload misses increase heavily! (75% missed, 25% doubtful)
+    const cycleIndex = Math.floor((time - 9.5) / 1.0)
+    const overloadPattern = ['cross', 'cross', 'neutral', 'cross', 'cross']
+    bankerSymbol = overloadPattern[cycleIndex % overloadPattern.length]
   } else if (isComply2RegActive) {
+    // After logo: strictly ONLY ticks! (100% Solved)
+    bankerSymbol = 'tick'
+
     if (time < 16.5) {
       // Comply2Reg clears the old messy stack rapidly down to 0 in 2.0s
       const clearProgress = (time - 14.5) / 2.0
@@ -178,23 +216,12 @@ export default function BankNarrativeFlow() {
       if (elapsed < flightDuration) {
         deskStackCount = 0
         isStamping = false
-      } else if (elapsed < cycleTime + flightDuration) {
-        deskStackCount = 1
-        isStamping = (elapsed - flightDuration) >= 0.25 && (elapsed - flightDuration) < 0.65
-      } else if (elapsed < cycleTime * 2 + flightDuration) {
-        deskStackCount = 2
-        isStamping = (elapsed - cycleTime - flightDuration) >= 0.25 && (elapsed - cycleTime - flightDuration) < 0.65
-      } else if (elapsed < cycleTime * 3 + flightDuration) {
-        deskStackCount = 3
-        isStamping = (elapsed - cycleTime * 2 - flightDuration) >= 0.25 && (elapsed - cycleTime * 2 - flightDuration) < 0.65
-      } else if (elapsed < cycleTime * 4 + flightDuration) {
-        deskStackCount = 4
-        isStamping = (elapsed - cycleTime * 3 - flightDuration) >= 0.25 && (elapsed - cycleTime * 3 - flightDuration) < 0.65
       } else {
-        // Keeps stacking rhythmically
-        const cycle = (elapsed - cycleTime * 4 - flightDuration) % cycleTime
-        deskStackCount = cycle < (cycleTime / 2) ? 4 : 5
-        isStamping = cycle >= 0.3 && cycle < 0.7
+        const cycleIndex = Math.floor((elapsed - flightDuration) / cycleTime)
+        const cycleProgress = (elapsed - flightDuration) % cycleTime
+        deskStackCount = Math.min(cycleIndex + 1, 5)
+        // Banker stamps when verified file arrives (starts right after arrival, lasts 0.6s)
+        isStamping = cycleProgress >= 0.15 && cycleProgress < 0.75
       }
     }
   }
@@ -207,24 +234,90 @@ export default function BankNarrativeFlow() {
     ? slowTokenCycle / 1.8
     : -1
 
+  // High-contrast, prominent status badge shown on the Banker character
+  // Implying: 'tick' = Solved, 'neutral' = Doubtful, 'cross' = Missed
+  const renderBankerSymbol = (type) => {
+    // Post-logo rule: strictly only ticks!
+    const effectiveType = isComply2RegActive ? 'tick' : type
+
+    if (effectiveType === 'tick') {
+      return (
+        <g className="banker-badge-tick" filter="url(#badge-soft-shadow)">
+          {/* Bigger, bold emerald green verified badge (Solved) */}
+          <circle cx="0" cy="0" r="16.5" fill="#10b981" stroke="#ffffff" strokeWidth="2.8" />
+          <path
+            d="M -6.8 0.5 L -2 5.3 L 7.5 -4.8"
+            stroke="#ffffff"
+            strokeWidth="3.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+        </g>
+      )
+    }
+
+    if (effectiveType === 'neutral') {
+      return (
+        <g className="banker-badge-neutral" filter="url(#badge-soft-shadow)">
+          {/* Neutral symbol: question mark on white with sleek grey background (Doubtful) */}
+          <circle cx="0" cy="0" r="16.5" fill="#64748b" stroke="#ffffff" strokeWidth="2.8" />
+          <circle cx="0" cy="0" r="11.8" fill="#ffffff" />
+          <text
+            x="0"
+            y="5.8"
+            textAnchor="middle"
+            fontFamily="var(--font-sans), system-ui, sans-serif"
+            fontSize="16.5"
+            fontWeight="900"
+            fill="#475569"
+          >
+            ?
+          </text>
+        </g>
+      )
+    }
+
+    if (effectiveType === 'cross') {
+      return (
+        <g className="banker-badge-cross" filter="url(#badge-soft-shadow)">
+          {/* Cross symbol: crimson red alert badge (Missed) */}
+          <circle cx="0" cy="0" r="16.5" fill="#ef4444" stroke="#ffffff" strokeWidth="2.8" />
+          <path
+            d="M -5.8 -5.8 L 5.8 5.8 M 5.8 -5.8 L -5.8 5.8"
+            stroke="#ffffff"
+            strokeWidth="3.6"
+            strokeLinecap="round"
+          />
+        </g>
+      )
+    }
+
+    return null
+  }
+
   // Helper to render an interpolating document strictly along the 90-degree orthogonal line
+  // Clean, unannotated data documents/packets
   const renderMovingDoc = (progress, x0, y0, xMid, x1, y1, isDigital = false) => {
     if (progress < 0 || progress > 1) return null
     const { x, y } = getOrthogonalPoint(progress, x0, y0, xMid, x1, y1)
+
     return (
-      <g transform={`translate(${x}, ${y})`}>
+      <g transform={`translate(${x}, ${y})`} filter="url(#card-soft-shadow)">
         {isDigital ? (
           <g>
-            <rect x="-11" y="-13" width="22" height="26" rx="3.5" fill="#eff6ff" stroke="#0070f3" strokeWidth="2.2" />
-            <circle cx="0" cy="-4" r="3.5" fill="#0070f3" />
-            <path d="M -5 4 L 5 4 M -3 8 L 3 8" stroke="#0070f3" strokeWidth="1.8" />
+            <rect x="-12" y="-15" width="24" height="30" rx="3.5" fill="#eff6ff" stroke="#0070f3" strokeWidth="2" />
+            <circle cx="-4" cy="-6" r="3" fill="#0070f3" />
+            <line x1="-7" y1="2" x2="4" y2="2" stroke="#0070f3" strokeWidth="1.6" strokeLinecap="round" />
+            <line x1="-7" y1="7" x2="2" y2="7" stroke="#0070f3" strokeWidth="1.6" strokeLinecap="round" />
           </g>
         ) : (
           <g>
-            <rect x="-10" y="-12" width="20" height="24" rx="2.5" fill="#ffffff" stroke="#0070f3" strokeWidth="1.8" />
-            <line x1="-5" y1="-5" x2="5" y2="-5" stroke="#94a3b8" strokeWidth="1.4" />
-            <line x1="-5" y1="0" x2="5" y2="0" stroke="#94a3b8" strokeWidth="1.4" />
-            <line x1="-5" y1="5" x2="3" y2="5" stroke="#94a3b8" strokeWidth="1.4" />
+            <rect x="-11" y="-14" width="22" height="28" rx="3" fill="#ffffff" stroke="#0f172a" strokeWidth="1.8" />
+            <line x1="-6" y1="-6" x2="4" y2="-6" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
+            <line x1="-6" y1="-1" x2="6" y2="-1" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
+            <line x1="-6" y1="4" x2="3" y2="4" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
+            <line x1="-6" y1="9" x2="-1" y2="9" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
           </g>
         )}
       </g>
@@ -246,14 +339,7 @@ export default function BankNarrativeFlow() {
         </div>
 
         {/* Clean Borderless Frosted Stage Card */}
-        <div className={`flow-stage-card ${isBlank ? 'stage-blank' : 'stage-live'}`}>
-
-          {/* Sit mascot — top-left corner decoration */}
-          <img
-            src={`${import.meta.env.BASE_URL}images/sit.png`}
-            alt=""
-            className="flow-sit-mascot"
-          />
+        <div className="flow-stage-card">
 
           <svg
             className="unified-flow-svg"
@@ -268,6 +354,9 @@ export default function BankNarrativeFlow() {
               </filter>
               <filter id="c2r-glow-shadow" x="-20%" y="-20%" width="140%" height="140%">
                 <feDropShadow dx="0" dy="8" stdDeviation="16" floodColor="#0070f3" floodOpacity="0.22" />
+              </filter>
+              <filter id="badge-soft-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="1.5" stdDeviation="2" floodColor="#0f172a" floodOpacity="0.25" />
               </filter>
             </defs>
 
@@ -386,13 +475,15 @@ export default function BankNarrativeFlow() {
               </g>
             )}
 
-            {/* Phase 3: Digital streams (Files glide smoothly along 90° trunk, dynamic & visible) */}
+            {/* Phase 3: Digital streams (Files glide smoothly along 90° trunk into bank) */}
             {isDigitalOverload && (
               <g className="moving-docs-flood">
                 {/* Smooth stream from Node 1 (1.4s flight) */}
                 {renderMovingDoc(((time - 9.5) / 1.4) % 1, 360, streamY.node1, trunkX, deskCenterTarget.x, deskCenterTarget.y)}
                 {/* Smooth stream from Node 3 (1.5s flight) */}
                 {renderMovingDoc((((time - 9.5) + 0.7) / 1.5) % 1, 360, streamY.node3, trunkX, deskCenterTarget.x, deskCenterTarget.y)}
+                {/* Smooth stream from Node 5 (1.6s flight) */}
+                {renderMovingDoc((((time - 9.5) + 0.3) / 1.6) % 1, 360, streamY.node5, trunkX, deskCenterTarget.x, deskCenterTarget.y)}
                 {/* Smooth stream from Digital Assets (1.3s flight) */}
                 {showDigitalAssets &&
                   renderMovingDoc((((time - 9.6) + 0.3) / 1.3) % 1, 360, streamY.digitalAssets, trunkX, deskCenterTarget.x, deskCenterTarget.y, true)}
@@ -409,6 +500,7 @@ export default function BankNarrativeFlow() {
                 {renderMovingDoc(((time - 14.5) / 1.6) % 1, 360, streamY.node1, trunkX, c2rIntakeTarget.x, c2rIntakeTarget.y)}
                 {renderMovingDoc((((time - 14.5) + 0.6) / 1.7) % 1, 360, streamY.node5, trunkX, c2rIntakeTarget.x, c2rIntakeTarget.y)}
                 {renderMovingDoc((((time - 14.5) + 1.1) / 1.6) % 1, 360, streamY.digitalAssets, trunkX, c2rIntakeTarget.x, c2rIntakeTarget.y, true)}
+                {renderMovingDoc((((time - 14.5) + 0.3) / 1.5) % 1, 360, streamY.alternativeData, trunkX, c2rIntakeTarget.x, c2rIntakeTarget.y, true)}
 
                 {/* Verified document with official Comply2Reg logo delivered to Banker on right (1.8s flight) */}
                 {slowTokenProgress >= 0 && slowTokenProgress <= 1 && (
@@ -420,21 +512,20 @@ export default function BankNarrativeFlow() {
                           d="M -18 -26 L 10 -26 L 18 -18 L 18 26 L -18 26 Z"
                           fill="#ffffff"
                           stroke="#0070f3"
-                          strokeWidth="1.8"
+                          strokeWidth="2"
                         />
-                        <path d="M 10 -26 L 10 -18 L 18 -18 Z" fill="#eff6ff" stroke="#0070f3" strokeWidth="1.4" />
-                        {/* ONLY Comply2Reg logo - NO tick! */}
+                        <path d="M 10 -26 L 10 -18 L 18 -18 Z" fill="#eff6ff" stroke="#0070f3" strokeWidth="1.5" />
+                        {/* Official Comply2Reg logo */}
                         <image
                           href={`${import.meta.env.BASE_URL}images/logo2.svg`}
-                          x="-11"
-                          y="-21"
-                          width="22"
-                          height="22"
+                          x="-12"
+                          y="-20"
+                          width="24"
+                          height="24"
                         />
-                        <line x1="-12" y1="5" x2="12" y2="5" stroke="#0070f3" strokeWidth="1.8" strokeLinecap="round" />
-                        <line x1="-12" y1="11" x2="10" y2="11" stroke="#94a3b8" strokeWidth="1.3" strokeLinecap="round" />
-                        <line x1="-12" y1="17" x2="6" y2="17" stroke="#94a3b8" strokeWidth="1.3" strokeLinecap="round" />
-                        <line x1="-12" y1="22" x2="11" y2="22" stroke="#94a3b8" strokeWidth="1.3" strokeLinecap="round" />
+                        <line x1="-12" y1="7" x2="12" y2="7" stroke="#0070f3" strokeWidth="2" strokeLinecap="round" />
+                        <line x1="-12" y1="13" x2="8" y2="13" stroke="#94a3b8" strokeWidth="1.4" strokeLinecap="round" />
+                        <line x1="-12" y1="18" x2="4" y2="18" stroke="#94a3b8" strokeWidth="1.4" strokeLinecap="round" />
                       </g>
                     )
                   })()
@@ -609,61 +700,37 @@ export default function BankNarrativeFlow() {
                   <text x="0" y="4" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="12.5" fontWeight="700" fill="#ffffff" letterSpacing="0.08em">THE BANK</text>
                 </g>
 
-                {/* Robot Banker Character (Steady, Calm, Zero Panic!) */}
-                <g className="banker-character" transform="translate(-20, 0)">
-                  <rect x="172" y="105" width="16" height="10" rx="3" fill="#ffffff" stroke="#0f172a" strokeWidth="2.5" />
-
-                  <path
-                    d="M 152 115 C 147 138, 147 168, 153 185 L 207 185 C 213 168, 213 138, 208 115 Z"
-                    fill="#ffffff"
-                    stroke="#0f172a"
-                    strokeWidth="2.5"
+                {/* AskLia Official Banker Character (Subtle overwhelmed face in Phase 3, calm face in Phase 4) */}
+                <g
+                  className="banker-character asklia-banker-sticker"
+                  style={{
+                    transform: isStamping ? 'translateY(3px)' : 'translateY(0)',
+                    transition: 'transform 0.14s ease'
+                  }}
+                >
+                  <image
+                    href={`${import.meta.env.BASE_URL}images/${isDigitalOverload ? 'banker_asklia_overload.png' : 'banker_asklia.png'}`}
+                    x="75"
+                    y="24"
+                    width="175"
+                    height="161"
+                    preserveAspectRatio="xMidYMid meet"
                   />
-
-                  <circle cx="170" cy="142" r="2.5" fill="#0f172a" />
-                  <circle cx="180" cy="142" r="2.5" fill="#0f172a" />
-                  <circle cx="190" cy="142" r="2.5" fill="#0f172a" />
-
-                  <line x1="180" y1="45" x2="180" y2="22" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" />
-                  <circle cx="180" cy="18" r="5" fill="#ffffff" stroke="#0f172a" strokeWidth="2.5" />
-
-                  <path d="M 145 65 C 137 65, 137 85, 145 85" fill="#ffffff" stroke="#0f172a" strokeWidth="2.5" />
-                  <path d="M 215 65 C 223 65, 223 85, 215 85" fill="#ffffff" stroke="#0f172a" strokeWidth="2.5" />
-
-                  <rect x="145" y="45" width="70" height="60" rx="22" fill="#ffffff" stroke="#0f172a" strokeWidth="3" />
-                  <rect x="153" y="53" width="54" height="44" rx="14" fill="#0f172a" />
-
-                  {/* Eyes Expression: Always Calm & Focused! */}
-                  <g className="eyes-calm">
-                    <rect x="166" y="65" width="5.5" height="15" rx="2.75" fill="#ffffff" />
-                    <rect x="188.5" y="65" width="5.5" height="15" rx="2.75" fill="#ffffff" />
-                  </g>
-
-                  {/* Arms Expression: Always Steady, working & stamping diligently */}
-                  <g className="arms-steady">
-                    <path d="M 152 122 Q 130 152 142 182" stroke="#0f172a" strokeWidth="3" strokeLinecap="round" fill="none" />
-                    <path
-                      d="M 208 122 Q 225 152 210 180"
-                      stroke="#0f172a"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      fill="none"
-                      className={isStamping ? 'arm-stamp-active' : ''}
-                    />
-                    <rect x="206" y={isStamping ? "178" : "174"} width="9" height="7" rx="1.5" fill="#0070f3" stroke="#0f172a" strokeWidth="1.5" />
-                  </g>
                 </g>
 
-                {/* Laptop on desk */}
-                <g className="laptop-desk" transform="translate(-20, 0)">
-                  <path d="M 160 185 L 170 170 L 190 170 L 200 185 Z" fill="#ffffff" stroke="#0f172a" strokeWidth="1.8" />
-                  <path d="M 170 170 L 172 150 L 188 150 L 190 170 Z" fill="#0f172a" />
-                </g>
 
-                {/* Coffee Mug: Always Upright and Calm! */}
-                <g className="coffee-upright" transform="translate(-20, 0)">
-                  <rect x="245" y="170" width="14" height="15" rx="2" fill="#ffffff" stroke="#0f172a" strokeWidth="1.8" />
-                  <path d="M 259 173 C 263 173, 263 181, 259 181" fill="none" stroke="#0f172a" strokeWidth="1.6" />
+
+                {/* Coffee Mug: Prominent, Upright & Steaming */}
+                <g className="coffee-upright">
+                  {/* Subtle Gentle Steam */}
+                  <path d="M 254 150 Q 251 144 255 138" stroke="#94a3b8" strokeWidth="1.6" fill="none" strokeLinecap="round" opacity="0.7" />
+                  <path d="M 263 151 Q 266 145 262 139" stroke="#94a3b8" strokeWidth="1.6" fill="none" strokeLinecap="round" opacity="0.7" />
+                  {/* Mug Handle */}
+                  <path d="M 272 163 C 283 163, 283 180, 272 180" fill="none" stroke="#0f172a" strokeWidth="2.4" strokeLinecap="round" />
+                  {/* Mug Body */}
+                  <rect x="246" y="156" width="26" height="29" rx="4" fill="#ffffff" stroke="#0f172a" strokeWidth="2.4" />
+                  {/* Accent Brand Line on Mug */}
+                  <line x1="248" y1="170" x2="270" y2="170" stroke="#0070f3" strokeWidth="2" strokeLinecap="round" />
                 </g>
 
                 {/* Dynamic Visible Paper Stack on Desk */}
@@ -703,7 +770,7 @@ export default function BankNarrativeFlow() {
                               stroke="#0070f3"
                               strokeWidth="1.6"
                             />
-                            {/* ONLY our logo on top sheet, NO tick! */}
+                            {/* Comply2Reg clean logo on top sheet */}
                             {isTop && (
                               <image
                                 href={`${import.meta.env.BASE_URL}images/logo2.svg`}
@@ -722,11 +789,11 @@ export default function BankNarrativeFlow() {
                   )}
                 </g>
 
-                {/* Stamp Pop Feedback */}
+                {/* Stamp Pop Feedback on the Banker character:
+                    Tick (Solved), Neutral ? on white with background (Doubtful), Cross (Missed) */}
                 {isStamping && (
-                  <g className="stamp-pop-badge" transform="translate(110, 160)">
-                    <rect x="-9" y="-9" width="18" height="18" rx="9" fill="#0070f3" />
-                    <path d="M -4 0 L -1 3 L 4 -3" stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" />
+                  <g className="stamp-pop-badge">
+                    {renderBankerSymbol(bankerSymbol)}
                   </g>
                 )}
 

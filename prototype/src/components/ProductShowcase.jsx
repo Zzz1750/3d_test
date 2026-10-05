@@ -147,6 +147,21 @@ export default function ProductShowcase({ standalone = false }) {
       <div className="toolkit-container">
         {/* Clean Header: No eyebrows, no dashes */}
         <header className="toolkit-header">
+          {/* AskLia Astronaut Overlaying Above & Moving Over the Heading */}
+          <div className="toolkit-astronaut-overlay" aria-hidden="true">
+            <div className="toolkit-astronaut-mover">
+              <div className="toolkit-astronaut-rotator">
+                <div className="toolkit-astronaut-bobber">
+                  <img
+                    src={`${import.meta.env.BASE_URL}images/astronaut.png`}
+                    alt="AskLia Astronaut"
+                    className="toolkit-astronaut-img"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
           <h2 className="toolkit-title">
             Comply2Reg <span className="toolkit-title-accent">Toolkit</span>
           </h2>

@@ -1,0 +1,59 @@
+/* =========================================================
+   Think Mascot Transition Banner
+   Bridges ProblemStatement and BankNarrativeFlow
+   Left-anchored, prominent, zero-intrusion
+   ========================================================= */
+
+.think-mascot-transition-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  margin-top: -60px;
+  margin-bottom: -40px;
+  z-index: 20;
+  pointer-events: none;
+  user-select: none;
+  overflow: visible;
+}
+
+.think-mascot-container {
+  width: 100%;
+  max-width: 100%;
+  padding-left: clamp(24px, 4vw, 72px);
+  padding-right: 24px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.think-mascot-badge-wrap {
+  display: inline-flex;
+  align-items: flex-end;
+  position: relative;
+}
+
+.think-mascot-img {
+  height: clamp(170px, 16vw, 240px);
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 14px 34px rgba(0, 112, 243, 0.16));
+  transform-origin: bottom center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .think-mascot-transition-wrapper {
+    margin-top: -30px;
+    margin-bottom: -20px;
+  }
+
+  .think-mascot-container {
+    padding-left: 16px;
+  }
+
+  .think-mascot-img {
+    height: clamp(120px, 26vw, 160px);
+  }
+}

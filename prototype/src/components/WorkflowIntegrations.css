@@ -1,21 +1,36 @@
 /* =========================================================
-   Workflow Integrations — Fits into your workflow
-   Supported Platforms: Teams, Slack, Confluence, ServiceNow, Archer, SharePoint
+   Workflow Integrations — Clean Minimal 3D White Cards
+   - Pure white section background
+   - Original clean left-side content & CTA
+   - 3D tilted rotating cards
+   - White cards with ONLY centered logos (no other content)
+   - Double-sided so logos are never inverted
+   - Slow, smooth 3D rotation, no hover effects
    ========================================================= */
 
+:root {
+  --fan-offset: 18px;
+  --card-w: 196px;
+  --card-h: 276px;
+}
+
+/* ---------------------------------------------------------
+   Section Wrapper — Clean White Background
+   --------------------------------------------------------- */
 .workflow-section {
   position: relative;
   width: 100%;
   padding: 120px 48px;
   background: #ffffff;
   border-top: 1px solid #f1f5f9;
-  font-family: var(--font-sans);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif);
   color: var(--color-text-primary, #0f172a);
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .workflow-container {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
   width: 100%;
 }
@@ -24,16 +39,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 72px;
+  gap: 60px;
   width: 100%;
 }
 
 /* ---------------------------------------------------------
-   Left Column: Copy & Action
+   Left Column: Original Minimal Text & CTA
    --------------------------------------------------------- */
 .workflow-content {
-  flex: 1;
-  max-width: 540px;
+  flex: 0 0 46%;
+  max-width: 520px;
 }
 
 .workflow-title {
@@ -96,123 +111,180 @@
 }
 
 /* ---------------------------------------------------------
-   Right Column: 2 Rows of Logos (Matching Reference Screenshot)
+   Right Column: 3D Stage & Radial Fan Rotor
    --------------------------------------------------------- */
-.workflow-logos-wrapper {
+.workflow-showcase-wrap {
   flex: 1;
-  max-width: 520px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
-}
-
-.workflow-logo-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.workflow-logo-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  position: relative;
+  min-height: 520px;
+  pointer-events: none; /* Plain component, no hover effects */
 }
 
-.workflow-logo-item:hover {
-  transform: translateY(-2px) scale(1.04);
+/* 3D Perspective Stage */
+.workflow-3d-stage {
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  width: 100%;
+  height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  user-select: none;
 }
 
-/* Row 1 specific alignment */
-.item-teams {
-  justify-content: flex-start;
-  min-width: 60px;
-}
-
-.item-slack {
+/* 3D Tilted Rig (Pitch X: 24deg, Roll Z: -24deg directly from user screenshot) */
+.workflow-3d-tilt {
+  position: relative;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(24deg) rotateZ(-24deg);
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
 
-.item-confluence {
-  justify-content: flex-end;
+/* 3D Rotating Rotor — Smooth Slow Rotation */
+.workflow-3d-rotor {
+  position: relative;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  animation: spinRadialFan 36s linear infinite;
+  will-change: transform;
 }
 
-/* Row 2 specific alignment */
-.item-servicenow {
-  justify-content: flex-start;
-}
-
-.item-archer {
-  justify-content: center;
-}
-
-.item-sharepoint {
-  justify-content: flex-end;
-  min-width: 60px;
+@keyframes spinRadialFan {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-360deg);
+  }
 }
 
 /* ---------------------------------------------------------
-   Logo Optical Heights & Sizing
+   Radial Fan Card Slot
    --------------------------------------------------------- */
-.workflow-logo-img {
+.workflow-3d-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--card-w, 196px);
+  height: var(--card-h, 276px);
+  margin-top: calc(var(--card-h, 276px) / -2);
+  margin-left: 0;
+  transform-origin: 0% 50% 0;
+  transform-style: preserve-3d;
+}
+
+/* ---------------------------------------------------------
+   Pure White Card Faces with Centered Logo Only
+   --------------------------------------------------------- */
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08), 0 2px 8px rgba(15, 23, 42, 0.03);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Front Face */
+.card-face-front {
+  transform: rotateY(0deg);
+}
+
+/* Back Face: Pre-rotated 180deg so logo is right-side-reading from behind */
+.card-face-back {
+  transform: rotateY(180deg);
+}
+
+/* ---------------------------------------------------------
+   Centered Logo Optical Heights & Sizing
+   --------------------------------------------------------- */
+.card-center-logo {
   display: block;
   object-fit: contain;
   user-select: none;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 .logo-teams {
-  height: 48px;
+  height: 52px;
   width: auto;
-  max-width: 56px;
+  max-width: 60px;
 }
 
-.logo-slack {
-  height: 31px;
+.logo-servicenow {
+  height: 28px;
+  width: auto;
+  max-width: 145px;
+}
+
+.logo-archer {
+  height: 22px;
   width: auto;
   max-width: 130px;
 }
 
 .logo-confluence {
-  height: 24px;
+  height: 26px;
   width: auto;
-  max-width: 190px;
+  max-width: 145px;
 }
 
-.logo-servicenow {
-  height: 25px;
+.logo-slack {
+  height: 32px;
   width: auto;
-  max-width: 175px;
-}
-
-.logo-archer {
-  height: 20px;
-  width: auto;
-  max-width: 140px;
+  max-width: 125px;
 }
 
 .logo-sharepoint {
-  height: 52px;
+  height: 54px;
   width: auto;
-  max-width: 58px;
+  max-width: 60px;
 }
 
 /* ---------------------------------------------------------
    Responsive Design Breakpoints
    --------------------------------------------------------- */
 @media (max-width: 1024px) {
+  :root {
+    --fan-offset: 16px;
+    --card-w: 175px;
+    --card-h: 245px;
+  }
+
   .workflow-section {
     padding: 100px 36px;
   }
 
   .workflow-layout {
-    gap: 48px;
+    gap: 40px;
   }
 }
 
 @media (max-width: 860px) {
+  :root {
+    --fan-offset: 14px;
+    --card-w: 160px;
+    --card-h: 225px;
+  }
+
   .workflow-section {
     padding: 80px 24px;
   }
@@ -220,7 +292,7 @@
   .workflow-layout {
     flex-direction: column;
     align-items: flex-start;
-    gap: 56px;
+    gap: 50px;
   }
 
   .workflow-content {
@@ -231,15 +303,23 @@
     max-width: 100%;
   }
 
-  .workflow-logos-wrapper {
-    max-width: 520px;
-    margin: 0 auto;
+  .workflow-showcase-wrap {
     width: 100%;
-    gap: 44px;
+    min-height: 440px;
+  }
+
+  .workflow-3d-stage {
+    height: 440px;
   }
 }
 
 @media (max-width: 540px) {
+  :root {
+    --fan-offset: 12px;
+    --card-w: 135px;
+    --card-h: 195px;
+  }
+
   .workflow-section {
     padding: 64px 20px;
   }
@@ -252,31 +332,11 @@
     font-size: 14.5px;
   }
 
-  .workflow-logos-wrapper {
-    gap: 36px;
+  .workflow-showcase-wrap {
+    min-height: 360px;
   }
 
-  .logo-teams {
-    height: 38px;
-  }
-
-  .logo-slack {
-    height: 24px;
-  }
-
-  .logo-confluence {
-    height: 19px;
-  }
-
-  .logo-servicenow {
-    height: 20px;
-  }
-
-  .logo-archer {
-    height: 16px;
-  }
-
-  .logo-sharepoint {
-    height: 40px;
+  .workflow-3d-stage {
+    height: 360px;
   }
 }

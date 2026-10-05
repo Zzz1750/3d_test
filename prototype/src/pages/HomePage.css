@@ -208,3 +208,10 @@
     transform: translateY(3px);
   }
 }
+
+.banker-diagram-section-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+

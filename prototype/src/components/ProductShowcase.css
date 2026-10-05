@@ -6,6 +6,7 @@
 
 .toolkit-section {
   position: relative;
+  z-index: 80;
   width: 100%;
   padding: 110px 32px 140px;
   background-color: #ffffff;
@@ -29,9 +30,85 @@
    Section Header (Clean & Minimal, No eyebrows, No dashes)
    --------------------------------------------------------- */
 .toolkit-header {
+  position: relative;
+  z-index: 150;
   max-width: 760px;
   margin: 0 auto 90px;
   text-align: center;
+}
+
+/* =========================================================
+   AskLia Astronaut Overlay (Moving Over "Comply2Reg Toolkit")
+   ========================================================= */
+.toolkit-astronaut-overlay {
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  max-width: 100vw;
+  height: 520px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.toolkit-astronaut-mover {
+  position: absolute;
+  top: 155px;
+  left: -280px;
+  animation: toolkitAstronautDrift 11s linear infinite;
+  will-change: transform;
+}
+
+@keyframes toolkitAstronautDrift {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(100vw + 360px));
+  }
+}
+
+.toolkit-astronaut-rotator {
+  display: inline-block;
+  transform-origin: 50% 50%;
+  animation: toolkitAstronautSingle360 11s linear infinite;
+  will-change: transform;
+}
+
+/* Exactly one complete 360-degree rotation across the heading */
+@keyframes toolkitAstronautSingle360 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.toolkit-astronaut-bobber {
+  display: inline-block;
+  animation: toolkitAstronautBob 3.6s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes toolkitAstronautBob {
+  0% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(12px);
+  }
+}
+
+.toolkit-astronaut-img {
+  height: clamp(175px, 17vw, 240px);
+  width: auto;
+  object-fit: contain;
+  display: block;
+  filter: none;
 }
 
 .toolkit-title {
@@ -345,5 +422,34 @@
 
   .toolkit-title {
     font-size: 28px;
+  }
+
+  .toolkit-astronaut-overlay {
+    top: -140px;
+    height: 380px;
+  }
+
+  .toolkit-astronaut-mover {
+    top: 100px;
+    left: -200px;
+    animation: toolkitAstronautDrift 9.5s linear infinite;
+  }
+
+  @keyframes toolkitAstronautDrift {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(100vw + 260px));
+    }
+  }
+
+  .toolkit-astronaut-rotator {
+    animation: toolkitAstronautSingle360 9.5s linear infinite;
+  }
+
+  .toolkit-astronaut-img {
+    height: clamp(120px, 24vw, 160px);
+    filter: none;
   }
 }

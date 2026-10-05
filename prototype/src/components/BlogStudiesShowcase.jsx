@@ -155,9 +155,12 @@ export default function BlogStudiesShowcase() {
         {/* Section Header */}
         <div className="blog-studies-header">
           <div className="blog-header-content">
-            <h2 className="blog-studies-title">Regulatory Insights</h2>
+            <h2 className="blog-studies-title">
+              Regulatory insights.<br />
+              <span className="blog-studies-title-accent">Not just compliance theory.</span>
+            </h2>
             <p className="blog-studies-subtitle">
-              Expert analysis, supervisory updates, and practical compliance frameworks.
+              Expert analysis, enforcement breakdowns, and practical frameworks to turn complex circulars into operational certainty.
             </p>
           </div>
         </div>

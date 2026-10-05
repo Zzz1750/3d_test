@@ -49,14 +49,13 @@ export default function ProblemStatement() {
           </p>
         </div>
 
-        {/* Frosted Cloud Glass Columns Grid */}
         <div className="hairline-columns-grid">
-          {/* Relaxed Mascot laying on top of the 04 AuditGeniee box towards the right */}
-          <div className="col-mascot-sleep-wrap" aria-hidden="true">
+          {/* AskLia reading on laptop on the top right of the card */}
+          <div className="problem-reading-mascot-wrap" aria-hidden="true">
             <img
-              src={`${import.meta.env.BASE_URL}images/sleep.png`}
-              alt="Comply2Reg Mascot Relaxing"
-              className="col-mascot-sleep-img"
+              src={`${import.meta.env.BASE_URL}images/reading.png`}
+              alt="AskLia Reading"
+              className="problem-reading-mascot-img"
             />
           </div>
 
