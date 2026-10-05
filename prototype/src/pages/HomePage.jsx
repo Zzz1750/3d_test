@@ -7,6 +7,7 @@ import IntroStatement from '../components/IntroStatement'
 import ProblemStatement from '../components/ProblemStatement'
 import BankNarrativeFlow from '../components/BankNarrativeFlow'
 import ProductShowcase from '../components/ProductShowcase'
+import WorkflowIntegrations from '../components/WorkflowIntegrations'
 import BlogStudiesShowcase from '../components/BlogStudiesShowcase'
 import CityCommandHUD from '../components/CityCommandHUD'
 import RegulatoryTicker from '../components/RegulatoryTicker'
@@ -108,6 +109,9 @@ export default function HomePage() {
 
       {/* Product Showcase Section (Video on left, details & CTA on right) */}
       <ProductShowcase />
+
+      {/* Workflow Integrations: ServiceNow, Teams, Confluence, Slack, SharePoint, Archer */}
+      <WorkflowIntegrations />
 
       {/* Blog & Regulatory Case Studies 3D Coverflow Showcase */}
       <BlogStudiesShowcase />

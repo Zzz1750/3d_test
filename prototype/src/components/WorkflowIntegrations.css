@@ -1,0 +1,282 @@
+/* =========================================================
+   Workflow Integrations — Fits into your workflow
+   Supported Platforms: Teams, Slack, Confluence, ServiceNow, Archer, SharePoint
+   ========================================================= */
+
+.workflow-section {
+  position: relative;
+  width: 100%;
+  padding: 120px 48px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary, #0f172a);
+  box-sizing: border-box;
+}
+
+.workflow-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.workflow-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 72px;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------
+   Left Column: Copy & Action
+   --------------------------------------------------------- */
+.workflow-content {
+  flex: 1;
+  max-width: 540px;
+}
+
+.workflow-title {
+  font-size: clamp(32px, 3.4vw, 44px);
+  font-weight: var(--font-medium, 500);
+  line-height: var(--leading-tight, 1.15);
+  letter-spacing: -0.035em;
+  color: var(--color-text-primary, #0f172a);
+  margin: 0 0 20px;
+}
+
+.workflow-title-accent {
+  color: var(--color-primary, #0066cc);
+}
+
+.workflow-subtitle {
+  font-size: var(--text-body, 16px);
+  font-weight: var(--font-regular, 400);
+  line-height: var(--leading-normal, 1.6);
+  color: var(--color-text-secondary, #475569);
+  margin: 0 0 32px;
+  max-width: 500px;
+}
+
+.workflow-cta-box {
+  display: flex;
+  align-items: center;
+}
+
+.workflow-btn-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 30px;
+  background: #0066cc;
+  color: #ffffff;
+  border-radius: 999px;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  font-weight: var(--font-medium, 500);
+  transition: all 0.22s ease;
+  box-shadow: 0 4px 14px rgba(0, 102, 204, 0.28);
+}
+
+.workflow-btn-demo:hover {
+  background: #0052a3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.38);
+}
+
+.workflow-btn-arrow {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.workflow-btn-demo:hover .workflow-btn-arrow {
+  transform: translateX(3px);
+}
+
+/* ---------------------------------------------------------
+   Right Column: 2 Rows of Logos (Matching Reference Screenshot)
+   --------------------------------------------------------- */
+.workflow-logos-wrapper {
+  flex: 1;
+  max-width: 520px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.workflow-logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.workflow-logo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.workflow-logo-item:hover {
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Row 1 specific alignment */
+.item-teams {
+  justify-content: flex-start;
+  min-width: 60px;
+}
+
+.item-slack {
+  justify-content: center;
+}
+
+.item-confluence {
+  justify-content: flex-end;
+}
+
+/* Row 2 specific alignment */
+.item-servicenow {
+  justify-content: flex-start;
+}
+
+.item-archer {
+  justify-content: center;
+}
+
+.item-sharepoint {
+  justify-content: flex-end;
+  min-width: 60px;
+}
+
+/* ---------------------------------------------------------
+   Logo Optical Heights & Sizing
+   --------------------------------------------------------- */
+.workflow-logo-img {
+  display: block;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: auto;
+}
+
+.logo-teams {
+  height: 48px;
+  width: auto;
+  max-width: 56px;
+}
+
+.logo-slack {
+  height: 31px;
+  width: auto;
+  max-width: 130px;
+}
+
+.logo-confluence {
+  height: 24px;
+  width: auto;
+  max-width: 190px;
+}
+
+.logo-servicenow {
+  height: 25px;
+  width: auto;
+  max-width: 175px;
+}
+
+.logo-archer {
+  height: 20px;
+  width: auto;
+  max-width: 140px;
+}
+
+.logo-sharepoint {
+  height: 52px;
+  width: auto;
+  max-width: 58px;
+}
+
+/* ---------------------------------------------------------
+   Responsive Design Breakpoints
+   --------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .workflow-section {
+    padding: 100px 36px;
+  }
+
+  .workflow-layout {
+    gap: 48px;
+  }
+}
+
+@media (max-width: 860px) {
+  .workflow-section {
+    padding: 80px 24px;
+  }
+
+  .workflow-layout {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 56px;
+  }
+
+  .workflow-content {
+    max-width: 100%;
+  }
+
+  .workflow-subtitle {
+    max-width: 100%;
+  }
+
+  .workflow-logos-wrapper {
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+    gap: 44px;
+  }
+}
+
+@media (max-width: 540px) {
+  .workflow-section {
+    padding: 64px 20px;
+  }
+
+  .workflow-title {
+    font-size: 28px;
+  }
+
+  .workflow-subtitle {
+    font-size: 14.5px;
+  }
+
+  .workflow-logos-wrapper {
+    gap: 36px;
+  }
+
+  .logo-teams {
+    height: 38px;
+  }
+
+  .logo-slack {
+    height: 24px;
+  }
+
+  .logo-confluence {
+    height: 19px;
+  }
+
+  .logo-servicenow {
+    height: 20px;
+  }
+
+  .logo-archer {
+    height: 16px;
+  }
+
+  .logo-sharepoint {
+    height: 40px;
+  }
+}

@@ -1,636 +1,349 @@
 /* =========================================================
-   ToolKit Sticky Scroll Section — Comply2Reg
-   Each product tab glides in covering from right to left
+   Product Showcase — Vertical Alternating Flow (Apple/Stripe Style)
+   100% natural page scroll. Every product is seen sequentially.
+   macOS Window directly over the video, no eyebrows, no dashes.
    ========================================================= */
 
-.toolkit-scroll-track {
+.toolkit-section {
   position: relative;
   width: 100%;
-  height: 550vh; /* Smooth multi-step scroll distance for 5 products */
-  background: #ffffff;
+  padding: 110px 32px 140px;
+  background-color: #ffffff;
   font-family: var(--font-sans);
   color: var(--color-text-primary);
+  box-sizing: border-box;
 }
 
-.toolkit-scroll-track.standalone-mode {
-  padding-top: 0;
-}
-
-/* 100vh Sticky Viewport Stage */
-.toolkit-sticky-stage {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  background: #ffffff;
-  z-index: 10;
+.toolkit-section.standalone-mode {
+  padding-top: 60px;
 }
 
 .toolkit-container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-/* ---------------------------------------------------------
-   Floating Top Product Tabs Navigation
-   --------------------------------------------------------- */
-.toolkit-tabs-nav {
-  position: absolute;
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 80;
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  max-width: calc(100vw - 32px);
-}
-
-.toolkit-tabs-container {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 8px;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: 999px;
-  box-shadow: 0 6px 24px -4px rgba(15, 23, 42, 0.08);
-}
-
-.toolkit-tab-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: none;
-  background: transparent;
-  color: var(--color-text-muted);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  white-space: nowrap;
-}
-
-.toolkit-tab-btn:hover {
-  color: var(--color-text-primary);
-  background: rgba(241, 245, 249, 0.7);
-}
-
-.toolkit-tab-btn.active {
-  background: #0f172a;
-  color: #ffffff;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.2);
-}
-
-.toolkit-tab-num {
-  font-size: 11px;
-  opacity: 0.65;
-  font-weight: 600;
-}
-
-.toolkit-tab-btn.active .toolkit-tab-num {
-  color: #38bdf8;
-  opacity: 1;
-}
-
-/* ---------------------------------------------------------
-   Slide Presentation Layout
-   --------------------------------------------------------- */
-.toolkit-slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  padding: 60px 48px;
-  box-sizing: border-box;
-  will-change: transform;
-}
-
-/* Slide 0: Heading Presentation */
-.toolkit-slide-heading {
-  background: #ffffff;
-}
-
-.toolkit-header {
-  position: relative;
-  max-width: 860px;
+  max-width: 1260px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+}
+
+/* ---------------------------------------------------------
+   Section Header (Clean & Minimal, No eyebrows, No dashes)
+   --------------------------------------------------------- */
+.toolkit-header {
+  max-width: 760px;
+  margin: 0 auto 90px;
   text-align: center;
 }
 
 .toolkit-title {
   font-size: var(--text-h1);
-  font-weight: var(--font-medium);
-  line-height: var(--leading-tight);
+  font-weight: var(--font-medium, 500);
+  line-height: var(--leading-tight, 1.15);
   letter-spacing: -0.035em;
-  color: var(--color-text-primary);
-  margin: 0;
+  color: var(--color-text-primary, #0f172a);
+  margin: 0 0 14px;
 }
 
 .toolkit-title-accent {
-  color: var(--color-primary);
+  color: var(--color-primary, #0066cc);
 }
 
-/* Mascot drinking chai positioned towards the right corner next to the heading */
-.toolkit-header-mascot {
-  position: absolute;
-  right: -400px;
-  top: 24px;
-  z-index: 10;
-  pointer-events: none;
-  user-select: none;
-  display: flex;
-  align-items: flex-end;
-}
-
-.toolkit-mascot-img {
-  height: clamp(280px, 21vw, 380px);
-  width: auto;
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 12px 28px rgba(15, 23, 42, 0.1));
-}
-
-/* Scroll Hint at the bottom of the Heading Slide */
-.toolkit-scroll-hint {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: var(--color-text-muted);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  user-select: none;
-}
-
-.scroll-hint-arrow {
-  width: 15px;
-  height: 15px;
-  animation: scrollBounce 2s infinite;
-}
-
-@keyframes scrollBounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(5px);
-  }
-  60% {
-    transform: translateY(2.5px);
-  }
+.toolkit-subtitle {
+  font-size: var(--text-body, 15px);
+  font-weight: var(--font-regular, 400);
+  line-height: var(--leading-normal, 1.6);
+  color: var(--color-text-secondary, #475569);
+  margin: 0 auto;
 }
 
 /* ---------------------------------------------------------
-   Product Slides (Gliding Tabs covering from right to left)
+   Vertical Alternating Flow List
    --------------------------------------------------------- */
-.toolkit-slide-product {
-  box-shadow: -28px 0 70px rgba(15, 23, 42, 0.12);
-  border-left: 1px solid rgba(226, 232, 240, 0.9);
-}
-
-.feature-row {
-  display: grid;
-  grid-template-columns: 1.22fr 1fr;
-  align-items: center;
-  gap: 72px;
+.toolkit-flow-list {
+  display: flex;
+  flex-direction: column;
+  gap: 110px;
   width: 100%;
 }
 
-/* Alternating Row: Right Video / Left Content */
-.feature-row.is-reversed {
-  grid-template-columns: 1fr 1.22fr;
+.toolkit-row {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 64px;
+  align-items: center;
+  width: 100%;
 }
 
-.feature-row.is-reversed .feature-media-side {
+/* Alternating Row (Right-to-Left Layout) */
+.toolkit-row.row-reversed {
+  grid-template-columns: 0.85fr 1.15fr;
+}
+
+.toolkit-row.row-reversed .toolkit-media-col {
   order: 2;
 }
 
-.feature-row.is-reversed .feature-text-side {
+.toolkit-row.row-reversed .toolkit-info-col {
   order: 1;
 }
 
 /* ---------------------------------------------------------
-   Media Column: Authentic Apple MacBook Pro Mockup
+   macOS Window Over the Video & Previews
    --------------------------------------------------------- */
-.feature-media-side {
+.toolkit-media-col {
   width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.mac-video-window {
+  width: 100%;
+  max-width: 620px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 22px 50px -12px rgba(15, 23, 42, 0.1),
+    0 4px 12px rgba(15, 23, 42, 0.03);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.mac-video-window:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 28px 60px -15px rgba(0, 102, 204, 0.12),
+    0 6px 16px rgba(15, 23, 42, 0.04);
+}
+
+/* macOS Window Title Bar */
+.mac-titlebar {
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  box-sizing: border-box;
+}
+
+.mac-traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 52px;
+}
+
+.traffic-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+}
+
+.dot-red {
+  background: #ff5f56;
+}
+
+.dot-yellow {
+  background: #ffbd2e;
+}
+
+.dot-green {
+  background: #27c93f;
+}
+
+.mac-address-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: #64748b;
+  font-family: var(--font-sans);
+}
+
+.mac-lock-icon {
+  width: 10px;
+  height: 10px;
+  color: #94a3b8;
+}
+
+.mac-address-url {
+  letter-spacing: -0.01em;
+}
+
+.mac-titlebar-end {
+  width: 52px;
+}
+
+/* Window Canvas Area */
+.mac-window-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #0f172a;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 0 24px;
 }
 
-.macbook-device-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 720px;
-  margin: 0 auto;
-}
-
-/* 1. MacBook Display Lid (Anodized Space Gray with CNC-milled edge) */
-.macbook-lid {
-  position: relative;
-  width: 100%;
-  background: #11141a;
-  border: 1px solid #2b303c;
-  border-radius: 18px 18px 3px 3px;
-  padding: 10px 10px 12px;
-  box-sizing: border-box;
-  box-shadow: 
-    inset 0 1px 1px rgba(255, 255, 255, 0.14),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.8),
-    0 10px 30px -10px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.macbook-device-wrapper:hover .macbook-lid {
-  transform: translateY(-2px);
-}
-
-/* 2. FaceTime Camera Dot */
-.macbook-camera {
-  position: absolute;
-  top: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #1e3a5f 20%, #06090e 80%);
-  box-shadow: 0 0 1px rgba(255, 255, 255, 0.25);
-}
-
-.camera-lens {
-  display: block;
-  width: 1.5px;
-  height: 1.5px;
-  border-radius: 50%;
-  background: #38bdf8;
-  opacity: 0.7;
-  margin: 1px auto;
-}
-
-/* 3. True 16:9 Screen (Zero cropping) */
-.macbook-screen {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #000000;
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-}
-
-.macbook-video {
+.mac-window-video {
   width: 100%;
   height: 100%;
+  object-fit: cover;
   display: block;
-  object-fit: contain;
-  border: none;
-  outline: none;
-  background: #000000;
 }
 
-/* Blank Screen for modules awaiting video */
-.macbook-screen-blank {
+/* Clean Empty Screen for tools without video */
+.mac-screen-empty {
+  width: 100%;
+  height: 100%;
   background: #ffffff;
 }
 
-/* 4. MacBook Base / Bottom Chassis */
-.macbook-base {
-  position: relative;
-  width: calc(100% + 28px);
-  margin-left: -14px;
-  height: 13px;
-  background: linear-gradient(180deg, #444b58 0%, #22262f 35%, #16181e 100%);
-  border-radius: 1px 1px 12px 12px;
-  box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.6),
-    0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-/* Thumb Opening Notch */
-.macbook-notch {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 68px;
-  height: 4px;
-  background: #161920;
-  border-radius: 0 0 5px 5px;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-/* 5. Realistic Floor Drop Shadow */
-.macbook-shadow {
-  position: absolute;
-  bottom: -16px;
-  left: 5%;
-  right: 5%;
-  height: 24px;
-  background: radial-gradient(ellipse 65% 50% at 50% 50%, rgba(15, 23, 42, 0.28) 0%, rgba(15, 23, 42, 0) 75%);
-  pointer-events: none;
-  z-index: -1;
-}
-
 /* ---------------------------------------------------------
-   Content Column: Refined Typography & Bullet Points
+   Content Column
    --------------------------------------------------------- */
-.feature-text-side {
+.toolkit-info-col {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  text-align: left;
-  max-width: 500px;
 }
 
-/* Feature Header Meta Pill */
-.feature-tab-indicator {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.feature-tab-tag {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--color-primary);
-  text-transform: uppercase;
-}
-
-.feature-tab-badge {
-  font-size: 11px;
-  font-weight: 600;
-  color: #64748b;
-  background: #f1f5f9;
-  padding: 3px 9px;
-  border-radius: 999px;
-  border: 1px solid #e2e8f0;
-}
-
-.feature-title {
-  font-size: clamp(28px, 2.5vw, 36px);
-  font-weight: 600;
-  line-height: 1.2;
+.feature-name {
+  font-size: clamp(28px, 2.6vw, 36px);
+  font-weight: var(--font-semibold, 600);
   letter-spacing: -0.03em;
   color: #0f172a;
-  margin: 0 0 14px 0;
+  margin: 0 0 14px;
 }
 
-.feature-desc {
-  font-size: 15px;
-  line-height: 1.65;
+.feature-description {
+  font-size: 15.5px;
+  line-height: 1.62;
   color: #475569;
-  font-weight: 400;
-  margin: 0 0 22px 0;
+  font-weight: var(--font-regular, 400);
+  margin: 0 0 24px;
 }
 
-/* Bullet Points */
-.feature-points {
+.feature-points-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 26px;
+  gap: 14px;
+  margin-bottom: 28px;
   width: 100%;
 }
 
-.feature-point {
+.feature-point-row {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
 }
 
-.feature-point-bullet {
+.feature-bullet-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--color-primary);
-  margin-top: 7px;
+  background: #0066cc;
+  margin-top: 8px;
   flex-shrink: 0;
-  box-shadow: 0 0 6px rgba(0, 112, 243, 0.4);
 }
 
-.feature-point-body {
-  font-size: 13.5px;
+.feature-point-content {
+  font-size: 14px;
   line-height: 1.55;
 }
 
-.feature-point-heading {
-  font-weight: 600;
+.feature-point-title {
+  font-weight: var(--font-semibold, 600);
   color: #0f172a;
 }
 
-.feature-point-text {
+.feature-point-desc {
   color: #64748b;
 }
 
-/* "Know more" Action Button */
-.feature-cta-wrap {
-  display: flex;
-  align-items: center;
+.feature-cta-box {
+  margin-top: 4px;
 }
 
 .feature-btn-know-more {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
-  background-color: var(--color-primary);
-  color: #ffffff;
-  border: 1px solid var(--color-primary);
-  border-radius: 999px;
   padding: 10px 22px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  font-family: inherit;
+  background: #0066cc;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: var(--font-medium, 500);
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 112, 243, 0.25);
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.feature-btn-arrow {
-  width: 13px;
-  height: 13px;
-  transition: transform 0.22s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.25);
 }
 
 .feature-btn-know-more:hover {
-  background-color: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
-  box-shadow: 0 6px 20px rgba(0, 112, 243, 0.35);
-  transform: translateY(-1.5px);
+  background: #0052a3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 102, 204, 0.35);
+}
+
+.feature-btn-arrow {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
 }
 
 .feature-btn-know-more:hover .feature-btn-arrow {
   transform: translateX(3px);
 }
 
-.feature-btn-know-more:active {
-  transform: translateY(0);
-}
-
 /* ---------------------------------------------------------
-   Responsive Adaptations
+   Responsive Design Breakpoints
    --------------------------------------------------------- */
-@media (max-width: 1550px) {
-  .toolkit-header-mascot {
-    right: -320px;
-    top: 22px;
-  }
-
-  .toolkit-mascot-img {
-    height: clamp(250px, 19vw, 330px);
-  }
-}
-
-@media (max-width: 1380px) {
-  .toolkit-header-mascot {
-    right: -220px;
-    top: 20px;
-  }
-
-  .toolkit-mascot-img {
-    height: clamp(220px, 17vw, 290px);
-  }
-}
-
-@media (max-width: 1200px) {
-  .toolkit-header-mascot {
-    right: -120px;
-    top: 18px;
-  }
-
-  .toolkit-mascot-img {
-    height: clamp(180px, 15vw, 240px);
-  }
-
-  .feature-row {
-    gap: 48px;
-  }
-}
-
-@media (max-width: 1050px) {
-  .toolkit-header-mascot {
-    right: -20px;
-    top: 15px;
-  }
-
-  .toolkit-mascot-img {
-    height: clamp(150px, 13vw, 190px);
-  }
-}
-
 @media (max-width: 960px) {
-  .feature-row,
-  .feature-row.is-reversed {
-    grid-template-columns: 1fr;
-    gap: 28px;
+  .toolkit-section {
+    padding: 70px 20px 80px;
   }
 
-  .feature-row.is-reversed .feature-media-side {
+  .toolkit-header {
+    margin-bottom: 50px;
+  }
+
+  .toolkit-flow-list {
+    gap: 70px;
+  }
+
+  .toolkit-row,
+  .toolkit-row.row-reversed {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .toolkit-row.row-reversed .toolkit-media-col {
+    order: 0;
+  }
+
+  .toolkit-row.row-reversed .toolkit-info-col {
     order: 1;
   }
 
-  .feature-row.is-reversed .feature-text-side {
-    order: 2;
-  }
-
-  .toolkit-slide {
-    padding: 70px 24px 30px;
-    overflow-y: auto;
-  }
-
-  .macbook-device-wrapper {
-    max-width: 520px;
-  }
-
-  .feature-desc {
-    margin-bottom: 16px;
-  }
-
-  .feature-points {
-    margin-bottom: 18px;
-    gap: 8px;
-  }
-}
-
-@media (max-width: 860px) {
-  .toolkit-title {
-    font-size: clamp(28px, 6.5vw, 36px);
-  }
-
-  .toolkit-header-mascot {
-    right: 0;
-    top: 10px;
-  }
-
-  .toolkit-mascot-img {
-    height: clamp(130px, 14vw, 160px);
-  }
-
-  .toolkit-tab-label {
-    display: none; /* Compact tab pills on mobile */
-  }
-
-  .toolkit-tab-btn {
-    padding: 6px 12px;
-  }
-}
-
-@media (max-width: 600px) {
-  .toolkit-header-mascot {
-    position: static;
-    margin-top: 22px;
-    align-self: center;
-  }
-
-  .toolkit-mascot-img {
-    height: 180px;
-  }
-
-  .macbook-device-wrapper {
+  .mac-video-window {
     max-width: 100%;
   }
 
-  .macbook-base {
-    width: calc(100% + 16px);
-    margin-left: -8px;
-    height: 10px;
+  .feature-name {
+    font-size: 26px;
   }
 
-  .macbook-notch {
-    width: 50px;
-    height: 3px;
+  .toolkit-title {
+    font-size: 28px;
   }
 }
