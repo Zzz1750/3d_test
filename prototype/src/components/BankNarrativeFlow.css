@@ -33,10 +33,10 @@
 }
 
 .flow-title {
-  font-size: clamp(30px, 3vw, 42px);
-  font-weight: var(--font-medium);
-  line-height: var(--leading-tight);
-  letter-spacing: -0.03em;
+  font-size: var(--site-heading);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.025em;
   color: var(--color-text-primary);
   margin: 0 0 14px 0;
   white-space: nowrap;
@@ -44,16 +44,16 @@
 
 .flow-title-accent {
   color: var(--color-primary);
-  font-weight: var(--font-medium);
+  font-weight: 600;
 }
 
 .flow-subtitle {
-  font-size: 17.5px;
-  line-height: var(--leading-normal);
-  color: var(--color-text-muted);
+  font-size: var(--site-content);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
   font-weight: var(--font-regular);
   margin: 0 auto;
-  max-width: 1020px;
+  max-width: 900px;
 }
 
 /* ---------------------------------------------------------

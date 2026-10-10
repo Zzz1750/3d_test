@@ -5,13 +5,13 @@ import StatsCreds from '../components/StatsCreds'
 import LoadingScreen from '../components/LoadingScreen'
 import IntroStatement from '../components/IntroStatement'
 import ProblemStatement from '../components/ProblemStatement'
-import ThinkMascotBanner from '../components/ThinkMascotBanner'
 import BankNarrativeFlow from '../components/BankNarrativeFlow'
 import ProductShowcase from '../components/ProductShowcase'
 import WorkflowIntegrations from '../components/WorkflowIntegrations'
 import BlogStudiesShowcase from '../components/BlogStudiesShowcase'
 import CityCommandHUD from '../components/CityCommandHUD'
 import RegulatoryTicker from '../components/RegulatoryTicker'
+import NewFooter from '../components/New_Footer'
 import './HomePage.css'
 
 export default function HomePage() {
@@ -103,15 +103,12 @@ export default function HomePage() {
       {/* Problem Statement Section */}
       <ProblemStatement />
 
-      {/* Epiphany Think Mascot: Between Problem Statement & Bank Narrative Flow */}
-      <ThinkMascotBanner />
-
       {/* Centered Data Streams & Overloaded Banker Diagram (Directly Under Problem Statement) */}
       <section className="banker-diagram-section-wrapper">
         <BankNarrativeFlow />
       </section>
 
-      {/* Product Showcase Section (Video on left, details & CTA on right) */}
+      {/* New Toolkit (Bento Grid cards with screenshots) */}
       <ProductShowcase />
 
       {/* Blog & Regulatory Case Studies 3D Coverflow Showcase */}
@@ -119,6 +116,9 @@ export default function HomePage() {
 
       {/* Workflow Integrations: ServiceNow, Teams, Confluence, Slack, SharePoint, Archer */}
       <WorkflowIntegrations />
+
+      {/* Footer */}
+      <NewFooter />
     </div>
   )
 }

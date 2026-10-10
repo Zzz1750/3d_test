@@ -4,42 +4,56 @@ import './CityCommandHUD.css'
 export const CITY_STATIONS = [
   {
     id: 'regpulse',
-    label: 'RegPulse',
     code: '01',
-    role: 'Horizon Scanning',
-    coords: { x: '41%', y: '37%' },
-    headline: 'Real-Time Horizon Scanning',
-    summary: 'Continuously monitors 50+ global regulators, instantly deconstructing dense circulars into atomic compliance obligations.',
-    points: [
-      'Surfaces urgent circulars across RBI, SEBI, MAS & FCA within minutes',
-      'Classifies statutory mandates vs advisory notices in under 90 seconds'
-    ]
+    label: 'RegPulse',
+    role: 'Monitor Regulatory Change',
+    coords: { x: '39%', y: '36%' },
+    explanation: 'Monitor Regulatory Change',
+    input: 'Regulatory updates across jurisdictions and regulators',
+    output: 'Relevant changes, classified and prioritised'
   },
   {
     id: 'regulens',
-    label: 'ReguLens',
     code: '02',
-    role: 'Applicability Engine',
+    label: 'ReguLens',
+    role: 'Assess Regulatory Impact',
     coords: { x: '24%', y: '50%' },
-    headline: 'Entity Applicability Engine',
-    summary: 'Directly evaluates incoming circulars against your institution’s licenses, product verticals, and core banking technology.',
-    points: [
-      'Eliminates 80%+ of non-applicable circulars to remove false-positive noise',
-      'Pinpoints exact exposure across affected entities, APIs, and payment rails'
-    ]
+    explanation: 'Assess Regulatory Impact',
+    input: 'Regulations + internal policies + business context',
+    output: 'Applicable requirements across entities, products and business units'
   },
   {
     id: 'gapanalyser',
-    label: 'Gap Analyser',
     code: '03',
-    role: 'Task Orchestration',
-    coords: { x: '63%', y: '47%' },
-    headline: 'Task Orchestration & Audit',
-    summary: 'Transforms legal compliance mandates into trackable operational work items and instant supervisory examination proof.',
-    points: [
-      'Auto-generates structured Jira and ServiceNow tickets with clear RACI ownership',
-      'Compiles 1-click immutable audit dossiers connecting code directly to regulation'
-    ]
+    label: 'Gap Analyser',
+    role: 'Identify Compliance Gaps',
+    coords: { x: '58%', y: '46%' },
+    explanation: 'Identify Compliance Gaps',
+    input: 'Applicable requirements + internal policies and controls',
+    output: 'Policy, process and control gaps requiring remediation'
+  },
+  {
+    id: 'auditgeniee',
+    code: '04',
+    label: 'AuditGeniee',
+    role: 'Evidence Compliance',
+    coords: { x: '67%', y: '60%' },
+    zoomedCoords: { x: '42%', y: '54%' },
+    explanation: 'Evidence Compliance',
+    input: 'Requirements + actions + supporting evidence',
+    output: 'Audit-ready reports and a complete evidence trail',
+    flow: ['Requirements', 'Actions', 'Evidence', 'Reports', 'Audit Trail']
+  },
+  {
+    id: 'asklia',
+    code: '05',
+    label: 'AskLia',
+    role: 'Orchestrate Compliance',
+    coords: { x: '56%', y: '30%' },
+    explanation: 'Orchestrate Compliance',
+    input: 'Regulations + policies + controls + compliance context',
+    output: 'Contextual insights, decisions and actions across the platform',
+    flow: ['Ask', 'Analyse', 'Recommend', 'Act']
   }
 ]
 
@@ -70,30 +84,36 @@ export default function CityCommandHUD({
   isLoaded = true
 }) {
   const [activeStationId, setActiveStationId] = useState(null)
-  const autoCloseTimerRef = useRef(null)
+  const [isZoomingOut, setIsZoomingOut] = useState(false)
 
-  // Auto-close station telemetry and zoom out after 8 seconds
+  // Listen for zoom-out complete event from 3D camera controller
   useEffect(() => {
-    if (activeStationId) {
-      if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current)
-      autoCloseTimerRef.current = setTimeout(() => {
-        setActiveStationId(null)
-        window.dispatchEvent(new CustomEvent('city-focus-station', { detail: { stationId: null } }))
-      }, 8000)
-    } else {
-      if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current)
+    const handleZoomOutComplete = () => {
+      setIsZoomingOut(false)
     }
+    window.addEventListener('city-zoom-out-complete', handleZoomOutComplete)
+    return () => window.removeEventListener('city-zoom-out-complete', handleZoomOutComplete)
+  }, [])
 
-    return () => {
-      if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current)
+  // Safety fallback timer for zoom-out transition
+  useEffect(() => {
+    let timer = null
+    if (isZoomingOut) {
+      timer = setTimeout(() => {
+        setIsZoomingOut(false)
+      }, 1200)
     }
-  }, [activeStationId])
+    return () => {
+      if (timer) clearTimeout(timer)
+    }
+  }, [isZoomingOut])
 
   // Listen for Escape key to close the station HUD and reset camera
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && activeStationId) {
         setActiveStationId(null)
+        setIsZoomingOut(true)
         window.dispatchEvent(new CustomEvent('city-focus-station', { detail: { stationId: null } }))
       }
     }
@@ -102,9 +122,14 @@ export default function CityCommandHUD({
   }, [activeStationId])
 
   const handleStationClick = (id) => {
-    playTactileFeedback(480, 'sine', 0.06)
+    playTactileFeedback(480, 'sine', 0.05)
     setActiveStationId((prev) => {
       const nextId = prev === id ? null : id
+      if (!nextId) {
+        setIsZoomingOut(true)
+      } else {
+        setIsZoomingOut(false)
+      }
       window.dispatchEvent(new CustomEvent('city-focus-station', { detail: { stationId: nextId } }))
       return nextId
     })
@@ -112,6 +137,7 @@ export default function CityCommandHUD({
 
   const handleClose = () => {
     setActiveStationId(null)
+    setIsZoomingOut(true)
     window.dispatchEvent(new CustomEvent('city-focus-station', { detail: { stationId: null } }))
   }
 
@@ -120,66 +146,90 @@ export default function CityCommandHUD({
   return (
     <div className="city-command-hud-root" aria-label="3D Interactive Ecosystem Controller">
 
-      {/* Interactive 3D Landmark Beacons placed over the scene */}
-      <div className="hud-beacons-plane" aria-hidden="false">
-        {CITY_STATIONS.map((station) => {
+      {/* Calm & Minimal 3D Landmark Tags (Hidden while zooming out until camera settles) */}
+      <div className={`hud-beacons-plane ${isZoomingOut ? 'zooming-out' : ''}`} aria-hidden={isZoomingOut}>
+        {!isZoomingOut && CITY_STATIONS.map((station) => {
           const isActive = activeStationId === station.id
 
           // When zoomed in, ONLY show that particular active station tag!
           if (activeStationId && !isActive) return null
 
+          const coords = (isActive && station.zoomedCoords) ? station.zoomedCoords : station.coords
+
           return (
             <div
               key={station.id}
               className={`hud-beacon ${isActive ? 'active' : ''}`}
-              style={{ left: station.coords?.x || '50%', top: station.coords?.y || '50%' }}
+              style={{ left: coords?.x || '50%', top: coords?.y || '50%' }}
               onClick={() => handleStationClick(station.id)}
+              role="button"
+              tabIndex={0}
+              aria-label={`Select ${station.label}`}
             >
-              <div className="beacon-radar-ring" />
-              <div className="beacon-pin">
+              <div className="beacon-header-row">
                 <span className="beacon-num">{station.code}</span>
+                <span className="beacon-title">{station.label}</span>
               </div>
-              <div className="beacon-label-tag">
-                <span className="beacon-name">{station.label}</span>
-                {station.role && <span className="beacon-role">{station.role}</span>}
-              </div>
+              {station.role && (
+                <span className="beacon-role">{station.role}</span>
+              )}
             </div>
           )
         })}
       </div>
 
-      {/* Floating Glass Detail HUD Card (When Station is Selected) */}
+      {/* Calm, Minimal Station Detail Card */}
       {activeStation && (
-        <div className="hud-telemetry-card" role="dialog" aria-label={`${activeStation.label} Feature Details`}>
-          {/* 8-Second Animated Border Timer Line (visual only, no text) */}
-          <div className="telemetry-card-border-timer" key={activeStationId} aria-hidden="true" />
-
-          <div className="telemetry-card-header">
-            <div className="telemetry-station-titles">
-              <span className="telemetry-station-badge">{activeStation.code}</span>
-              <h4 className="telemetry-station-name">{activeStation.label}</h4>
+        <div className="hud-detail-card" role="dialog" aria-label={`${activeStation.label} Details`}>
+          <div className="detail-card-header">
+            <div className="detail-header-left">
+              <span className="detail-badge">{activeStation.code}</span>
+              <div>
+                <h4 className="detail-title">{activeStation.label}</h4>
+                <p className="detail-subtitle">{activeStation.role || activeStation.explanation}</p>
+              </div>
             </div>
             <button
               type="button"
-              className="telemetry-close-btn"
+              className="detail-close-btn"
               onClick={handleClose}
-              aria-label="Close feature details"
+              aria-label="Close details"
               title="Close (Esc)"
             >
               ✕
             </button>
           </div>
 
-          <h5 className="telemetry-card-headline">{activeStation.headline}</h5>
-          <p className="telemetry-card-desc">{activeStation.summary}</p>
+          <div className="detail-card-body">
+            <div className="detail-section">
+              <span className="detail-section-label">Input</span>
+              <p className="detail-section-text">{activeStation.input}</p>
+            </div>
 
-          <ul className="telemetry-bullets">
-            {activeStation.points.map((pt, idx) => (
-              <li key={idx} className="telemetry-bullet-item">
-                {pt}
-              </li>
-            ))}
-          </ul>
+            <div className="detail-section">
+              <span className="detail-section-label">Output</span>
+              <p className="detail-section-text">{activeStation.output}</p>
+            </div>
+
+            {activeStation.flow && (
+              <div className="detail-section">
+                <span className="detail-section-label">Flow</span>
+                <div className="detail-flow-chain">
+                  {(Array.isArray(activeStation.flow)
+                    ? activeStation.flow
+                    : activeStation.flow.split('→').map((s) => s.trim())
+                  ).map((step, idx, arr) => (
+                    <span key={idx} className="detail-flow-item">
+                      <span className="detail-flow-step">{step}</span>
+                      {idx < arr.length - 1 && (
+                        <span className="detail-flow-sep" aria-hidden="true">→</span>
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

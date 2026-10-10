@@ -1,48 +1,14 @@
 import { Link } from 'react-router-dom'
 import './WorkflowIntegrations.css'
 
-export const INTEGRATION_CARDS = [
-  {
-    id: 'teams',
-    name: 'Microsoft Teams',
-    logo: 'images/integration/int1.png',
-  },
-  {
-    id: 'servicenow',
-    name: 'ServiceNow',
-    logo: 'images/integration/int2.png',
-  },
-  {
-    id: 'archer',
-    name: 'Archer GRC',
-    logo: 'images/integration/int3.png',
-  },
-  {
-    id: 'confluence',
-    name: 'Confluence',
-    logo: 'images/integration/int6.png',
-  },
-  {
-    id: 'slack',
-    name: 'Slack',
-    logo: 'images/integration/int5.png',
-  },
-  {
-    id: 'sharepoint',
-    name: 'SharePoint',
-    logo: 'images/integration/int4.png',
-  }
-]
-
 export default function WorkflowIntegrations() {
   const base = import.meta.env.BASE_URL
-  const step = 360 / INTEGRATION_CARDS.length
 
   return (
     <section className="workflow-section" id="integrations" aria-label="Workflow Integrations">
       <div className="workflow-container">
         <div className="workflow-layout">
-          {/* Left Column: Original Clean Text & CTA */}
+          {/* Left Column: Copy & CTA */}
           <div className="workflow-content">
             <h2 className="workflow-title">
               Fits into your workflow.<br />
@@ -67,42 +33,56 @@ export default function WorkflowIntegrations() {
             </div>
           </div>
 
-          {/* Right Column: Clean White 3D Cards with Centered Logos Only */}
-          <div className="workflow-showcase-wrap" aria-label="Supported Integrations">
-            <div className="workflow-3d-stage">
-              <div className="workflow-3d-tilt">
-                <div className="workflow-3d-rotor">
-                  {INTEGRATION_CARDS.map((card, idx) => (
-                    <div
-                      key={card.id}
-                      className="workflow-3d-card"
-                      style={{
-                        transform: `rotateY(${idx * step}deg) translateX(var(--fan-offset, 20px))`
-                      }}
-                    >
-                      {/* Front Face: White card with centered logo */}
-                      <div className="card-face card-face-front">
-                        <img
-                          src={`${base}${card.logo}`}
-                          alt={card.name}
-                          className={`card-center-logo logo-${card.id}`}
-                          loading="lazy"
-                        />
-                      </div>
+          {/* Right Column: 3x2 Grid of Partner Logos */}
+          <div className="workflow-logos-grid" aria-label="Supported Integrations">
+            <div className="workflow-logo-cell item-teams">
+              <img
+                src={`${base}images/integration/int1.png`}
+                alt="Microsoft Teams"
+                className="workflow-logo-img logo-teams"
+                loading="lazy"
+              />
+            </div>
+            <div className="workflow-logo-cell item-slack">
+              <img
+                src={`${base}images/integration/int5.png`}
+                alt="Slack"
+                className="workflow-logo-img logo-slack"
+                loading="lazy"
+              />
+            </div>
+            <div className="workflow-logo-cell item-confluence">
+              <img
+                src={`${base}images/integration/int6.png`}
+                alt="Confluence"
+                className="workflow-logo-img logo-confluence"
+                loading="lazy"
+              />
+            </div>
 
-                      {/* Back Face: White card with centered logo (never inverted) */}
-                      <div className="card-face card-face-back">
-                        <img
-                          src={`${base}${card.logo}`}
-                          alt={card.name}
-                          className={`card-center-logo logo-${card.id}`}
-                          loading="lazy"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <div className="workflow-logo-cell item-servicenow">
+              <img
+                src={`${base}images/integration/int2.png`}
+                alt="ServiceNow"
+                className="workflow-logo-img logo-servicenow"
+                loading="lazy"
+              />
+            </div>
+            <div className="workflow-logo-cell item-archer">
+              <img
+                src={`${base}images/integration/int3.png`}
+                alt="Archer"
+                className="workflow-logo-img logo-archer"
+                loading="lazy"
+              />
+            </div>
+            <div className="workflow-logo-cell item-sharepoint">
+              <img
+                src={`${base}images/integration/int4.png`}
+                alt="SharePoint"
+                className="workflow-logo-img logo-sharepoint"
+                loading="lazy"
+              />
             </div>
           </div>
         </div>

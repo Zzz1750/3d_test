@@ -26,7 +26,7 @@
 
 .stat-minimal-value {
   font-family: var(--font-sans);
-  font-size: clamp(20px, 1.7vw, 24px);
+  font-size: clamp(24px, 2.2vw, 29px);
   font-weight: 700;
   letter-spacing: -0.03em;
   color: #0f172a;
@@ -35,11 +35,11 @@
 
 .stat-minimal-label {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 500;
   letter-spacing: -0.01em;
   color: #64748b;
-  margin-top: 3px;
+  margin-top: 4px;
   white-space: nowrap;
 }
 

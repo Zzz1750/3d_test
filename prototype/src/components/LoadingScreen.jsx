@@ -20,7 +20,7 @@ export default function LoadingScreen({ progress, isLoaded }) {
             ></div>
           </div>
           <div className="loading-status-row">
-            <span className="loading-status-text">Prototype Version 0.1.12</span>
+            <span className="loading-status-text">Prototype Version 0.3.9</span>
             <span className="loading-percentage">{progress}%</span>
           </div>
         </div>

@@ -1,299 +1,215 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useRef } from 'react'
 import './BlogStudiesShowcase.css'
 
-export const BLOG_STUDIES = [
+export const FEATURED_STUDIES = [
   {
     id: 'fca-gap-analysis',
     title: 'How do I run a compliance gap analysis against FCA rules?',
     category: 'Regulatory Gap Analysis',
+    tag: 'FCA & CASS',
     readTime: '6 min read',
     date: 'Sep 2, 2026',
-    description: 'A step-by-step framework mapping FCA permissions to technical controls, RACI owners, and automated CASS 15 evidence dossiers.',
+    description: 'How tier-1 institutions map complex FCA rules to real-time controls before examiners arrive...',
     image: `${import.meta.env.BASE_URL}images/blogs/study_gap_analysis.jpg`,
     url: 'https://blog.comply2reg.com/blog/how-do-i-run-a-compliance-gap-analysis-against-fca-rules',
-    badge: 'Popular Study'
-  },
-  {
-    id: 'tokenization-finance',
-    title: 'Tokenization vs Digitization: What Actually Changes in Finance',
-    category: 'Digital Assets & Tokenization',
-    readTime: '5 min read',
-    date: 'Aug 28, 2026',
-    description: 'Tokenization is not just a bond on a blockchain. It is a shared record, embedded transfer rules that travel with the asset, and T+0 atomic settlement.',
-    image: `${import.meta.env.BASE_URL}images/blogs/study_tokenization.jpg`,
-    url: 'https://blog.comply2reg.com/blog/tokenization-vs-digitization-what-actually-changes-in-finance',
-    badge: 'Deep Dive'
-  },
-  {
-    id: 'financial-crime-alerts',
-    title: 'The Hidden Cost of Financial Crime: Why Alert Reviews Are the Real Challenge',
-    category: 'Financial Crime & AML',
-    readTime: '7 min read',
-    date: 'Jun 29, 2026',
-    description: 'Discover why manual alert reviews—not false positives—are the primary compliance drain, and how specialized AI automates remediation dossiers.',
-    image: `${import.meta.env.BASE_URL}images/blogs/study_fincrime.jpg`,
-    url: 'https://blog.comply2reg.com/blog/the-hidden-cost-of-financial-crime-compliance-why-alert-reviews-are-becoming-the-real-challenge',
-    badge: 'Industry Benchmark'
   },
   {
     id: 'hsbc-scam-protection',
-    title: 'When Scam Protection Fails: What the HSBC Australia Case Really Signals',
+    title: 'When Scam Protection Fails: What the HSBC Australia Case Signals',
     category: 'Case Study & Enforcement',
+    tag: 'ASIC Penalty',
     readTime: '6 min read',
     date: 'Jun 23, 2026',
-    description: 'HSBC Australia’s $24.6M penalty exposes structural vulnerabilities in scam protection latency, manual triage, and real-time payment rails.',
+    description: 'A $24.6M penalty exposed a critical vulnerability inside real-time payment rails and manual triage...',
     image: `${import.meta.env.BASE_URL}images/blogs/study_hsbc_scam.jpg`,
     url: 'https://blog.comply2reg.com/blog/when-scam-protection-fails-what-the-hsbc-australia-case-really-signals',
-    badge: 'Enforcement Analysis'
-  },
-  {
-    id: 'mcp-api-infrastructure',
-    title: 'Building AI-Native Compliance Infrastructure with APIs and MCP',
-    category: 'Architecture & MCP',
-    readTime: '5 min read',
-    date: 'Jun 8, 2026',
-    description: 'How Model Context Protocol (MCP) and real-time regulatory APIs turn static rulebooks into machine-readable continuous verification.',
-    image: `${import.meta.env.BASE_URL}images/blogs/study_mcp_infra.jpg`,
-    url: 'https://blog.comply2reg.com/blog/how-comply2reg-is-building-ai-native-compliance-infrastructure-with-apis-and-mcp',
-    badge: 'Technical Architecture'
   },
   {
     id: 'ai-accountability',
     title: 'AI Accountability Is No Longer a Future Problem',
     category: 'AI Governance & Audits',
+    tag: 'EU AI Act',
     readTime: '4 min read',
     date: 'May 11, 2026',
-    description: 'Regulators now demand strict explainability, audit trails, and human-in-the-loop governance for all automated banking compliance decisions.',
+    description: 'What supervisory authorities actually inspect when compliance decisions run on automated AI...',
     image: `${import.meta.env.BASE_URL}images/blogs/study_ai_accountability.jpg`,
     url: 'https://blog.comply2reg.com/blog/ai-accountability-is-no-longer-a-future-problem',
-    badge: 'Executive Brief'
   },
   {
-    id: 'santander-tsb-merger',
-    title: 'When Banks Merge, Systems Don’t: What Santander × TSB Really Means',
-    category: 'Core Banking Resilience',
+    id: 'fincrime-sanctions',
+    title: 'FinCrime & Sanctions Evasion in Real-Time Cross-Border Rails',
+    category: 'AML & Sanctions',
+    tag: 'FinCEN & FATF',
+    readTime: '5 min read',
+    date: 'Apr 28, 2026',
+    description: 'Sub-second payment settlement created an unexpected blind spot across ISO 20022 message payloads...',
+    image: `${import.meta.env.BASE_URL}images/blogs/study_fincrime.jpg`,
+    url: 'https://blog.comply2reg.com/blog/fincrime-sanctions-evasion-cross-border-rails',
+  },
+  {
+    id: 'tokenization-capital',
+    title: 'Deposit Tokens vs Stablecoins: Regulatory Capital Treatment',
+    category: 'Digital Assets',
+    tag: 'Basel III / IV',
+    readTime: '7 min read',
+    date: 'Mar 15, 2026',
+    description: 'The critical reserve calculation separating commercial bank deposit tokens from permissionless stablecoins...',
+    image: `${import.meta.env.BASE_URL}images/blogs/study_tokenization.jpg`,
+    url: 'https://blog.comply2reg.com/blog/deposit-tokens-vs-stablecoins-regulatory-capital',
+  },
+  {
+    id: 'mcp-bank-infra',
+    title: 'Model Context Protocol (MCP) in Tier-1 Bank Architectures',
+    category: 'AI Engineering',
+    tag: 'MCP & Security',
+    readTime: '5 min read',
+    date: 'Feb 19, 2026',
+    description: 'Why engineering leaders are replacing brittle compliance bridges with standardized Model Context Protocols...',
+    image: `${import.meta.env.BASE_URL}images/blogs/study_mcp_infra.jpg`,
+    url: 'https://blog.comply2reg.com/blog/mcp-tier-1-bank-architectures',
+  },
+  {
+    id: 'bank-merger-it',
+    title: 'Post-Merger IT Consolidation & Prudential Capital Adequacy',
+    category: 'Prudential Risk',
+    tag: 'PRA & Fed',
     readTime: '8 min read',
-    date: 'May 8, 2026',
-    description: 'An architectural examination into why banking M&A triggers massive regulatory reporting debt, IT operational risks, and supervisory scrutiny.',
+    date: 'Jan 30, 2026',
+    description: 'The hidden data discrepancy that triggered millions in reporting errors during core system integration...',
     image: `${import.meta.env.BASE_URL}images/blogs/study_bank_merger.jpg`,
-    url: 'https://blog.comply2reg.com/blog/when-banks-merge-systems-dont-what-santander-tsb-really-means',
-    badge: 'System Architecture'
-  }
+    url: 'https://blog.comply2reg.com/blog/post-merger-it-consolidation-capital-adequacy',
+  },
 ]
 
 export default function BlogStudiesShowcase() {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
-  const total = BLOG_STUDIES.length
-  const touchStartX = useRef(null)
+  const trackRef = useRef(null)
 
-  const handlePrev = useCallback(() => {
-    setActiveIndex((prev) => (prev - 1 + total) % total)
-  }, [total])
+  const handleScroll = (direction) => {
+    const el = trackRef.current
+    if (!el) return
+    const cardEl = el.querySelector('.blog-card')
+    const step = cardEl ? cardEl.offsetWidth + 24 : 380
 
-  const handleNext = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % total)
-  }, [total])
-
-  // Continuous auto-movement every 3.8s, pausing when user hovers or interacts
-  useEffect(() => {
-    if (isPaused) return
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % total)
-    }, 3800)
-    return () => clearInterval(timer)
-  }, [isPaused, total])
-
-  // Keyboard navigation when hovering or focused
-  const handleKeyDown = (e) => {
-    if (e.key === 'ArrowLeft') {
-      handlePrev()
-    } else if (e.key === 'ArrowRight') {
-      handleNext()
-    }
-  }
-
-  // Touch swipe support
-  const handleTouchStart = (e) => {
-    setIsPaused(true)
-    touchStartX.current = e.touches[0].clientX
-  }
-
-  const handleTouchEnd = (e) => {
-    setIsPaused(false)
-    if (touchStartX.current === null) return
-    const diff = e.changedTouches[0].clientX - touchStartX.current
-    if (Math.abs(diff) > 40) {
-      if (diff > 0) {
-        handlePrev()
+    if (direction === 'right') {
+      const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 15
+      if (isAtEnd) {
+        el.scrollTo({ left: 0, behavior: 'smooth' })
       } else {
-        handleNext()
+        el.scrollBy({ left: step, behavior: 'smooth' })
+      }
+    } else {
+      const isAtStart = el.scrollLeft <= 15
+      if (isAtStart) {
+        el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' })
+      } else {
+        el.scrollBy({ left: -step, behavior: 'smooth' })
       }
     }
-    touchStartX.current = null
   }
 
-  const handleCardClick = (index, url) => {
-    if (index === activeIndex) {
-      // Center card clicked: navigate to live study
-      window.open(url, '_blank', 'noopener,noreferrer')
-    } else {
-      // Side card clicked: smoothly transition it to the center
-      setActiveIndex(index)
-    }
+  const handleCardClick = (url) => {
+    window.open(url, '_blank', 'noopener,noreferrer')
   }
 
   return (
     <section
-      className="blog-studies-section"
+      className="blog-showcase-section"
       id="research-studies"
       aria-label="Comply2Reg Research & Regulatory Case Studies"
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
     >
-      <div className="blog-studies-container">
-        {/* Section Header */}
-        <div className="blog-studies-header">
+      <div className="blog-showcase-container">
+        {/* Clean Header Matching Previous Layout */}
+        <header className="blog-showcase-header">
           <div className="blog-header-content">
-            <h2 className="blog-studies-title">
+            <h2 className="blog-showcase-title">
               Regulatory insights.<br />
-              <span className="blog-studies-title-accent">Not just compliance theory.</span>
+              <span className="blog-showcase-title-accent">Not just compliance theory.</span>
             </h2>
-            <p className="blog-studies-subtitle">
-              Expert analysis, enforcement breakdowns, and practical frameworks to turn complex circulars into operational certainty.
+            <p className="blog-showcase-subtitle">
+              Supervisory enforcement breakdowns, forensic case studies, and engineering frameworks.
             </p>
           </div>
-        </div>
 
-        {/* 3D Coverflow Carousel Stage */}
-        <div
-          className="blog-carousel-stage"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          {/* Prominent Stage Left Arrow */}
+          <a
+            href="https://blog.comply2reg.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="blog-showcase-cta"
+          >
+            <span>Visit our blog</span>
+            <span className="blog-cta-arrow" aria-hidden="true">→</span>
+          </a>
+        </header>
+
+        {/* 3-Card Carousel with Left & Right Buttons Flanking the Cards */}
+        <div className="blog-carousel-wrapper">
           <button
             type="button"
-            className="stage-nav-arrow stage-nav-prev"
-            onClick={handlePrev}
-            aria-label="Previous study"
-            title="Previous (Left Arrow)"
+            className="blog-nav-btn blog-nav-btn-prev"
+            onClick={() => handleScroll('left')}
+            aria-label="Previous studies"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
 
-          {/* Cards Track */}
-          <div className="blog-cards-track">
-            {BLOG_STUDIES.map((study, idx) => {
-              // Calculate circular offset relative to active card
-              let offset = idx - activeIndex
-              if (offset > total / 2) offset -= total
-              if (offset < -total / 2) offset += total
-
-              const isActive = offset === 0
-              const isVisible = Math.abs(offset) <= 2
-
-              let positionClass = 'hidden'
-              if (isActive) positionClass = 'active'
-              else if (offset === -1) positionClass = 'prev'
-              else if (offset === 1) positionClass = 'next'
-              else if (offset === -2) positionClass = 'outer-prev'
-              else if (offset === 2) positionClass = 'outer-next'
-
-              return (
-                <article
-                  key={study.id}
-                  className={`blog-study-card ${positionClass}`}
-                  onClick={() => handleCardClick(idx, study.url)}
-                  role="button"
-                  tabIndex={isActive ? 0 : -1}
-                  aria-label={`${study.title} - ${study.category}`}
-                  aria-hidden={!isVisible}
-                >
-                  {/* Uncropped 4CRisk-Style Thumbnail Image Header */}
-                  <div className="card-thumb-wrap">
-                    <img
-                      src={study.image}
-                      alt={study.title}
-                      className="card-thumb-img"
-                      loading="lazy"
-                    />
-                  </div>
-
-                  {/* Card Body */}
-                  <div className="card-body-wrap">
-                    <div className="card-meta-row">
-                      <span className="card-category-tag">{study.category}</span>
-                      <span className="card-read-time-pill">{study.readTime}</span>
-                    </div>
-
-                    <h3 className="card-study-title" title={study.title}>
-                      {study.title}
-                    </h3>
-
-                    <p className="card-study-desc">
-                      {study.description}
-                    </p>
-
-                    <div className="card-action-footer">
-                      <span className="card-read-cta">
-                        {isActive ? 'Read Full Study' : 'View Study'}
-                        <svg className="cta-arrow-icon" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              )
-            })}
-          </div>
-
-          {/* Prominent Stage Right Arrow */}
-          <button
-            type="button"
-            className="stage-nav-arrow stage-nav-next"
-            onClick={handleNext}
-            aria-label="Next study"
-            title="Next (Right Arrow)"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Carousel Pagination Indicator & Direct Link */}
-        <div className="carousel-bottom-strip">
-          <div className="carousel-dots" role="tablist" aria-label="Study pagination">
-            {BLOG_STUDIES.map((study, idx) => (
-              <button
+          <div className="blog-cards-track" ref={trackRef}>
+            {FEATURED_STUDIES.map((study) => (
+              <article
                 key={study.id}
-                type="button"
-                className={`carousel-dot ${idx === activeIndex ? 'active' : ''}`}
-                onClick={() => setActiveIndex(idx)}
-                aria-label={`Go to slide ${idx + 1}: ${study.title}`}
-                role="tab"
-                aria-selected={idx === activeIndex}
-              />
+                className="blog-card"
+                onClick={() => handleCardClick(study.url)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleCardClick(study.url)
+                }}
+              >
+                {/* 100% Full Uncropped Image — Zero Crop, Zero Squeeze */}
+                <div className="blog-card-media">
+                  <img
+                    src={study.image}
+                    alt={study.title}
+                    className="blog-card-img"
+                    loading="lazy"
+                  />
+                </div>
+
+                <div className="blog-card-body">
+                  <span className="blog-card-tag">{study.tag}</span>
+
+                  <h3 className="blog-card-title">{study.title}</h3>
+
+                  <p className="blog-card-desc">{study.description}</p>
+
+                  <div className="blog-card-footer">
+                    <div className="blog-card-date">
+                      <span>{study.date}</span>
+                      <span className="blog-dot">·</span>
+                      <span>{study.readTime}</span>
+                    </div>
+
+                    <span className="blog-card-read">
+                      <span>Read study</span>
+                      <span className="blog-read-arrow" aria-hidden="true">→</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
             ))}
           </div>
 
-          <a
-            href="https://blog.comply2reg.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="explore-all-blogs-link"
+          <button
+            type="button"
+            className="blog-nav-btn blog-nav-btn-next"
+            onClick={() => handleScroll('right')}
+            aria-label="Next studies"
           >
-            <span>Explore all 26+ research papers on <strong>blog.comply2reg.com</strong></span>
-            <svg viewBox="0 0 20 20" fill="currentColor" className="external-link-arrow">
-              <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
             </svg>
-          </a>
+          </button>
         </div>
       </div>
     </section>

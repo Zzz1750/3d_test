@@ -1,36 +1,22 @@
 /* =========================================================
-   Workflow Integrations — Clean Minimal 3D White Cards
-   - Pure white section background
-   - Original clean left-side content & CTA
-   - 3D tilted rotating cards
-   - White cards with ONLY centered logos (no other content)
-   - Double-sided so logos are never inverted
-   - Slow, smooth 3D rotation, no hover effects
+   Workflow Integrations — Clean Minimal Static Partner Logos
+   Supported Platforms: Teams, Slack, Confluence, ServiceNow, Archer, SharePoint
+   Strictly No Spinning Animations · Exact 3x2 Grid Layout
    ========================================================= */
 
-:root {
-  --fan-offset: 18px;
-  --card-w: 196px;
-  --card-h: 276px;
-}
-
-/* ---------------------------------------------------------
-   Section Wrapper — Clean White Background
-   --------------------------------------------------------- */
 .workflow-section {
   position: relative;
   width: 100%;
-  padding: 120px 48px;
+  padding: 100px 48px;
   background: #ffffff;
-  border-top: 1px solid #f1f5f9;
-  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif);
-  color: var(--color-text-primary, #0f172a);
+  border-top: 1px solid var(--color-border-subtle);
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 .workflow-container {
-  max-width: 1240px;
+  max-width: 1220px;
   margin: 0 auto;
   width: 100%;
 }
@@ -39,36 +25,39 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 60px;
+  gap: 72px;
   width: 100%;
 }
 
 /* ---------------------------------------------------------
-   Left Column: Original Minimal Text & CTA
+   Left Column: Copy & Action (Unified Site Typography)
    --------------------------------------------------------- */
 .workflow-content {
-  flex: 0 0 46%;
+  flex: 1;
   max-width: 520px;
 }
 
 .workflow-title {
-  font-size: clamp(32px, 3.4vw, 44px);
-  font-weight: var(--font-medium, 500);
-  line-height: var(--leading-tight, 1.15);
-  letter-spacing: -0.035em;
-  color: var(--color-text-primary, #0f172a);
-  margin: 0 0 20px;
+  font-family: var(--font-sans);
+  font-size: var(--site-heading);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+  color: var(--color-text-primary);
+  margin: 0 0 16px;
 }
 
 .workflow-title-accent {
-  color: var(--color-primary, #0066cc);
+  color: var(--color-primary);
+  font-weight: 600;
 }
 
 .workflow-subtitle {
-  font-size: var(--text-body, 16px);
-  font-weight: var(--font-regular, 400);
-  line-height: var(--leading-normal, 1.6);
-  color: var(--color-text-secondary, #475569);
+  font-family: var(--font-sans);
+  font-size: var(--site-content);
+  font-weight: var(--font-regular);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
   margin: 0 0 32px;
   max-width: 500px;
 }
@@ -82,20 +71,20 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 13px 30px;
-  background: #0066cc;
+  padding: 13px 28px;
+  background-color: var(--color-primary);
   color: #ffffff;
-  border-radius: 999px;
+  border-radius: 9999px;
   text-decoration: none;
   font-family: var(--font-sans);
   font-size: 14.5px;
-  font-weight: var(--font-medium, 500);
+  font-weight: 500;
   transition: all 0.22s ease;
   box-shadow: 0 4px 14px rgba(0, 102, 204, 0.28);
 }
 
 .workflow-btn-demo:hover {
-  background: #0052a3;
+  background-color: var(--color-primary-hover);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 102, 204, 0.38);
 }
@@ -111,188 +100,132 @@
 }
 
 /* ---------------------------------------------------------
-   Right Column: 3D Stage & Radial Fan Rotor
+   Right Column: 3x2 Partner Logos Grid
    --------------------------------------------------------- */
-.workflow-showcase-wrap {
+.workflow-logos-grid {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  min-height: 520px;
-  pointer-events: none; /* Plain component, no hover effects */
-}
-
-/* 3D Perspective Stage */
-.workflow-3d-stage {
-  perspective: 1200px;
-  perspective-origin: 50% 50%;
+  max-width: 540px;
   width: 100%;
-  height: 520px;
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  grid-template-rows: auto auto;
+  column-gap: 40px;
+  row-gap: 56px;
+  align-items: center;
+  justify-items: center;
+}
+
+.workflow-logo-cell {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  user-select: none;
+  width: 100%;
+  height: 56px;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* 3D Tilted Rig (Pitch X: 24deg, Roll Z: -24deg directly from user screenshot) */
-.workflow-3d-tilt {
-  position: relative;
-  width: 0;
-  height: 0;
-  transform-style: preserve-3d;
-  transform: rotateX(24deg) rotateZ(-24deg);
-  display: flex;
-  align-items: center;
+.workflow-logo-cell:hover {
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Exact alignments to match reference design */
+.item-teams {
+  justify-content: flex-start;
+}
+
+.item-slack {
   justify-content: center;
 }
 
-/* 3D Rotating Rotor — Smooth Slow Rotation */
-.workflow-3d-rotor {
-  position: relative;
-  width: 0;
-  height: 0;
-  transform-style: preserve-3d;
-  animation: spinRadialFan 36s linear infinite;
-  will-change: transform;
+.item-confluence {
+  justify-content: flex-end;
 }
 
-@keyframes spinRadialFan {
-  from {
-    transform: rotateY(0deg);
-  }
-  to {
-    transform: rotateY(-360deg);
-  }
+.item-servicenow {
+  justify-content: flex-start;
 }
 
-/* ---------------------------------------------------------
-   Radial Fan Card Slot
-   --------------------------------------------------------- */
-.workflow-3d-card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: var(--card-w, 196px);
-  height: var(--card-h, 276px);
-  margin-top: calc(var(--card-h, 276px) / -2);
-  margin-left: 0;
-  transform-origin: 0% 50% 0;
-  transform-style: preserve-3d;
-}
-
-/* ---------------------------------------------------------
-   Pure White Card Faces with Centered Logo Only
-   --------------------------------------------------------- */
-.card-face {
-  position: absolute;
-  inset: 0;
-  border-radius: 22px;
-  background: #ffffff;
-  border: 1px solid rgba(226, 232, 240, 0.85);
-  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08), 0 2px 8px rgba(15, 23, 42, 0.03);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform-style: preserve-3d;
-  display: flex;
-  align-items: center;
+.item-archer {
   justify-content: center;
-  padding: 24px 20px;
-  box-sizing: border-box;
-  overflow: hidden;
 }
 
-/* Front Face */
-.card-face-front {
-  transform: rotateY(0deg);
-}
-
-/* Back Face: Pre-rotated 180deg so logo is right-side-reading from behind */
-.card-face-back {
-  transform: rotateY(180deg);
+.item-sharepoint {
+  justify-content: flex-end;
 }
 
 /* ---------------------------------------------------------
-   Centered Logo Optical Heights & Sizing
+   Logo Optical Heights & Sizing
    --------------------------------------------------------- */
-.card-center-logo {
+.workflow-logo-img {
   display: block;
   object-fit: contain;
   user-select: none;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .logo-teams {
-  height: 52px;
+  height: 48px;
   width: auto;
-  max-width: 60px;
+  max-width: 56px;
 }
 
-.logo-servicenow {
-  height: 28px;
-  width: auto;
-  max-width: 145px;
-}
-
-.logo-archer {
-  height: 22px;
+.logo-slack {
+  height: 31px;
   width: auto;
   max-width: 130px;
 }
 
 .logo-confluence {
-  height: 26px;
+  height: 24px;
   width: auto;
-  max-width: 145px;
+  max-width: 190px;
 }
 
-.logo-slack {
-  height: 32px;
+.logo-servicenow {
+  height: 25px;
   width: auto;
-  max-width: 125px;
+  max-width: 175px;
+}
+
+.logo-archer {
+  height: 20px;
+  width: auto;
+  max-width: 140px;
 }
 
 .logo-sharepoint {
-  height: 54px;
+  height: 52px;
   width: auto;
-  max-width: 60px;
+  max-width: 58px;
 }
 
 /* ---------------------------------------------------------
    Responsive Design Breakpoints
    --------------------------------------------------------- */
 @media (max-width: 1024px) {
-  :root {
-    --fan-offset: 16px;
-    --card-w: 175px;
-    --card-h: 245px;
-  }
-
   .workflow-section {
-    padding: 100px 36px;
+    padding: 88px 36px;
   }
 
   .workflow-layout {
-    gap: 40px;
+    gap: 48px;
+  }
+
+  .workflow-logos-grid {
+    column-gap: 28px;
+    row-gap: 44px;
   }
 }
 
 @media (max-width: 860px) {
-  :root {
-    --fan-offset: 14px;
-    --card-w: 160px;
-    --card-h: 225px;
-  }
-
   .workflow-section {
-    padding: 80px 24px;
+    padding: 72px 24px;
   }
 
   .workflow-layout {
     flex-direction: column;
     align-items: flex-start;
-    gap: 50px;
+    gap: 52px;
   }
 
   .workflow-content {
@@ -303,40 +236,45 @@
     max-width: 100%;
   }
 
-  .workflow-showcase-wrap {
-    width: 100%;
-    min-height: 440px;
-  }
-
-  .workflow-3d-stage {
-    height: 440px;
+  .workflow-logos-grid {
+    max-width: 480px;
+    margin: 0 auto;
+    column-gap: 32px;
+    row-gap: 40px;
   }
 }
 
 @media (max-width: 540px) {
-  :root {
-    --fan-offset: 12px;
-    --card-w: 135px;
-    --card-h: 195px;
-  }
-
   .workflow-section {
-    padding: 64px 20px;
+    padding: 60px 20px;
   }
 
-  .workflow-title {
-    font-size: 28px;
+  .workflow-logos-grid {
+    column-gap: 20px;
+    row-gap: 32px;
   }
 
-  .workflow-subtitle {
-    font-size: 14.5px;
+  .logo-teams {
+    height: 38px;
   }
 
-  .workflow-showcase-wrap {
-    min-height: 360px;
+  .logo-slack {
+    height: 24px;
   }
 
-  .workflow-3d-stage {
-    height: 360px;
+  .logo-confluence {
+    height: 19px;
+  }
+
+  .logo-servicenow {
+    height: 20px;
+  }
+
+  .logo-archer {
+    height: 16px;
+  }
+
+  .logo-sharepoint {
+    height: 40px;
   }
 }

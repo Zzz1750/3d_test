@@ -1,318 +1,238 @@
 /* =========================================================
-   Problem Statement — Elevated Frosted Cloud Theme
-   (Translucent frosted glass canvas, cloud atmosphere, refined deliverables)
+   Use Cases Section — Minimal & Clean Swiss Grid
+   - Outside boxes removed (no enclosing card borders or backgrounds)
+   - Inside boxes kept (white Problem/Roles/Severity, brand-blue Solution)
+   - Logo / Icon: standalone vector, increased size, border box removed
+   - Generous spacing between columns, boxes, and items
    ========================================================= */
 
 .problem-section {
   position: relative;
   width: 100%;
-  background: linear-gradient(180deg, #ffffff 0%, rgba(248, 250, 252, 0.65) 30%, rgba(241, 245, 249, 0.5) 70%, #ffffff 100%);
-  padding: 120px 48px 140px;
+  background-color: #ffffff;
+  padding: 88px 32px 104px;
   box-sizing: border-box;
   font-family: var(--font-sans);
   color: var(--color-text-primary);
-  user-select: text;
-  overflow: hidden;
-}
-
-/* Ambient Cloud Sky Glow */
-.problem-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 1200px;
-  height: 500px;
-  background: radial-gradient(ellipse 70% 50% at 50% 20%, rgba(238, 246, 255, 0.7) 0%, rgba(255, 255, 255, 0) 70%);
-  pointer-events: none;
-  z-index: 0;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .problem-container {
   width: 100%;
-  max-width: 1440px;
+  max-width: 1360px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  position: relative;
-  z-index: 1;
 }
 
 /* ---------------------------------------------------------
-   Header Block
+   Section Header
    --------------------------------------------------------- */
-.problem-intro {
-  max-width: 840px;
-  margin-bottom: 68px;
-}
-
-.problem-lead-highlight {
-  font-weight: var(--font-semibold);
-  color: var(--color-text-primary);
+.problem-header {
+  max-width: 820px;
+  margin-bottom: 56px;
 }
 
 .problem-title {
-  font-size: var(--text-h1);
-  font-weight: var(--font-medium);
-  line-height: var(--leading-tight);
-  letter-spacing: -0.035em;
+  font-family: var(--font-sans);
+  font-size: var(--site-heading);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.025em;
   color: var(--color-text-primary);
-  margin: 0 0 20px 0;
+  margin: 0 0 14px 0;
 }
 
 .problem-title-accent {
-  display: block;
   color: var(--color-primary);
-  font-weight: var(--font-medium);
+  font-weight: 600;
 }
 
-.problem-desc {
-  font-size: var(--text-body-lg);
-  line-height: var(--leading-normal);
-  color: var(--color-text-muted);
+.problem-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--site-content);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
   font-weight: var(--font-regular);
   margin: 0;
 }
 
 /* ---------------------------------------------------------
-   Frosted Cloud Glass Columns Grid
+   3-Column Use Cases Grid: Generous Space Between Columns
    --------------------------------------------------------- */
-.hairline-columns-grid {
+.usecase-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid var(--color-border);
-  border-radius: 20px;
-  box-shadow: 0 16px 40px -8px rgba(15, 23, 42, 0.04),
-    0 1px 2px rgba(15, 23, 42, 0.02),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
-  overflow: visible;
-  position: relative;
-  z-index: 1;
 }
 
-/* AskLia reading on laptop sitting on top right of card */
-.problem-reading-mascot-wrap {
-  position: absolute;
-  bottom: 100%;
-  right: 28px;
-  margin-bottom: -5px;
-  z-index: 25;
-  pointer-events: none;
-  user-select: none;
+/* ---------------------------------------------------------
+   Column Layout: Logo on Left + Stack on Right
+   --------------------------------------------------------- */
+.usecase-col {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
+  gap: 24px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
-.problem-reading-mascot-img {
-  height: clamp(130px, 12vw, 170px);
+/* Logo / Icon Container (Border Box Removed, Standalone Vector) */
+.usecase-icon-col {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 4px;
+}
+
+.usecase-icon-box {
   width: auto;
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 10px 24px rgba(0, 112, 243, 0.15));
+  height: auto;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  padding: 0;
+  margin: 0;
 }
 
-.hairline-col {
-  padding: 44px 32px;
+.usecase-icon-svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--color-primary);
+  display: block;
+}
+
+/* Stack of Inside Boxes (Increased Space Between Each Box) */
+.usecase-stack {
   display: flex;
   flex-direction: column;
-  position: relative;
-  background: transparent;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
 }
 
-/* Subtle hairline divider between columns */
-.hairline-col:not(:last-child) {
-  border-right: 1px solid rgba(226, 232, 240, 0.6);
-}
-
-.hairline-col:first-child {
-  padding-left: 36px;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-}
-
-.hairline-col:last-child {
-  padding-right: 36px;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-}
-
-.col-top-meta {
+/* Base Inside Box */
+.usecase-box {
+  border-radius: 8px;
+  padding: 13px 16px;
   display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-sizing: border-box;
+}
+
+/* Problem Box (Pure White with Crisp Defined Border) */
+.usecase-box-problem {
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* Solution Box (Brand Blue Highlight Box) */
+.usecase-box-solution {
+  background-color: var(--color-primary);
+  border: 1.5px solid #0056b3;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.14);
+}
+
+/* Roles Box (Pure White with Crisp Defined Border) */
+.usecase-box-roles {
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* Severity Box (Pure White Compact Box with Crisp Defined Border) */
+.usecase-box-severity {
+  align-self: flex-start;
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px 14px;
+  display: inline-flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
-
-.col-index {
-  font-size: var(--text-xs);
-  font-weight: var(--font-semibold);
-  color: var(--color-primary);
-}
-
-/* Cloud Pill Module Badge */
-.col-module-badge {
-  font-size: var(--text-xs);
-  font-weight: var(--font-semibold);
-  letter-spacing: -0.01em;
-  color: var(--color-text-secondary);
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.7);
-  padding: 3px 10px;
-  border-radius: 9999px;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03), inset 0 1px 0 #ffffff;
-}
-
-.col-question {
-  font-size: clamp(22px, 1.8vw, 28px);
-  font-weight: var(--font-semibold);
-  line-height: 1.25;
-  letter-spacing: -0.025em;
-  color: var(--color-text-primary);
-  margin: 0 0 6px 0;
-}
-
-.col-tagline {
-  display: inline-block;
-  font-size: var(--text-xs);
-  font-weight: var(--font-medium);
-  color: var(--color-text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 16px;
-}
-
-.col-desc {
-  font-size: 15px;
-  line-height: 1.65;
-  color: var(--color-text-muted);
-  font-weight: var(--font-regular);
-  margin: 0;
-  flex-grow: 1;
-}
-
-/* ---------------------------------------------------------
-   Understated Bottom Impact Strip (Original Clean Layout Preserved)
-   --------------------------------------------------------- */
-.problem-impact-strip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  padding: 24px 0 0;
-  flex-wrap: wrap;
-  position: relative;
-  z-index: 1;
-}
-
-.impact-point {
-  display: flex;
-  align-items: baseline;
   gap: 8px;
+  width: fit-content;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
-.impact-lead {
-  font-size: 13px;
-  font-weight: var(--font-semibold);
-  color: var(--color-text-primary);
+/* Box Labels */
+.usecase-box-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.05em;
+  color: #64748b;
 }
 
-.impact-text {
-  font-size: 14.5px;
-  color: var(--color-text-muted);
-  font-weight: var(--font-regular);
+.usecase-box-label-solution {
+  color: #dbeafe;
 }
 
-.impact-divider {
-  width: 1px;
-  height: 20px;
-  background-color: var(--color-border);
+/* Box Body Text */
+.usecase-box-text {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  margin: 0;
 }
 
+.usecase-box-text-solution {
+  color: #ffffff;
+  font-weight: 400;
+}
+
+.usecase-severity-val {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
 
 /* ---------------------------------------------------------
-   Responsive Breakpoints
+   Responsive Adaptations
    --------------------------------------------------------- */
-@media (max-width: 1100px) {
-  .hairline-columns-grid {
+@media (max-width: 1080px) {
+  .usecase-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .hairline-col {
-    padding: 36px 28px;
-  }
-
-  .hairline-col:first-child {
-    padding-left: 28px;
-  }
-
-  .hairline-col:last-child {
-    padding-right: 28px;
-  }
-
-  .hairline-col:nth-child(2) {
-    border-right: none;
-  }
-
-  .hairline-col:nth-child(1),
-  .hairline-col:nth-child(2) {
-    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
-  }
-
-  .impact-divider {
-    display: none;
-  }
-
-  .problem-impact-strip {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    gap: 36px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .problem-section {
-    padding: 80px 20px 100px;
+    padding: 64px 20px 72px;
   }
 
-  .hairline-columns-grid {
+  .problem-header {
+    margin-bottom: 36px;
+  }
+
+  .usecase-grid {
     grid-template-columns: 1fr;
-    border-radius: 16px;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .usecase-col {
+    flex-direction: column;
+    gap: 16px;
   }
 
-  .hairline-col {
-    padding: 28px 20px;
-    border-right: none !important;
-  }
-
-  .hairline-col:not(:last-child) {
-    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
-  }
-
-  .hairline-col:first-child {
-    padding-left: 20px;
-  }
-
-  .hairline-col:last-child {
-    padding-right: 20px;
-    border-bottom: none;
-  }
-
-  .problem-reading-mascot-wrap {
-    right: 16px;
-    margin-bottom: -4px;
-  }
-
-  .problem-reading-mascot-img {
-    height: clamp(80px, 16vw, 102px);
+  .usecase-icon-svg {
+    width: 24px;
+    height: 24px;
   }
 }

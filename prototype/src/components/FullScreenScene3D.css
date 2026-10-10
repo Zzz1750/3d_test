@@ -1,0 +1,43 @@
+/* =========================================================
+   FullScreenScene3D — Fullscreen 3D City Stage
+   No Tags / animation.glb / Same Camera Angle & Position
+   ========================================================= */
+
+.fullscreen-scene-viewport {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #ffffff;
+  z-index: 1;
+}
+
+.fullscreen-scene-viewport a-scene {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  pointer-events: auto;
+}
+
+.fullscreen-scene-viewport .a-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: auto;
+}
+
+/* Hide default A-Frame VR / UI overlays */
+.fullscreen-scene-viewport .a-enter-vr,
+.fullscreen-scene-viewport .a-enter-ar,
+.fullscreen-scene-viewport .a-enter-vr-button,
+.fullscreen-scene-viewport .a-enter-ar-button,
+.fullscreen-scene-viewport .a-enter-vr-modal,
+.fullscreen-scene-viewport .a-orientation-modal,
+.fullscreen-scene-viewport .a-dialog,
+.fullscreen-scene-viewport .a-loader-title,
+.fullscreen-scene-viewport .a-fullscreen {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

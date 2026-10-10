@@ -6,8 +6,8 @@ const INITIAL_CAMERA_CONFIG = {
   position: { x: -0.15, y: 0.35, z: 5.688 },
   rotation: { x: -18.11, y: 22.12, z: 0 },
   frustumSize: 4.2,
-  near: 0.01,
-  far: 2000
+  near: -500,
+  far: 20000
 }
 
 // Register Orthographic Camera Component
@@ -341,7 +341,19 @@ if (typeof window !== 'undefined' && window.AFRAME) {
     gapanalyser: {
       pos: { x: -0.12, y: 0.35, z: 5.7 },
       frustum: 1.6
+    },
+    asklia: {
+      pos: { x: -0.88, y: 0.58, z: 4.25 },
+      frustum: 0.82
+    },
+    auditgeniee: {
+      pos: { x: 0.70, y: 0.05, z: 5.15 },
+      frustum: 1.20
     }
+  }
+
+  if (typeof window !== 'undefined') {
+    window.__CAMERA_TARGETS = CAMERA_TARGETS
   }
 
   if (!window.AFRAME.components['camera-zoom-controller']) {
@@ -357,19 +369,24 @@ if (typeof window !== 'undefined' && window.AFRAME) {
         this.currentRot = { ...BASE_CAMERA_ROTATION }
 
         this.activeStationId = null
+        this.isZoomingOut = false
         this.cinematicStartTime = null
         this.cinematicDuration = 8000 // 8 seconds inspection window
 
         this.onFocusStation = (e) => {
           const id = e.detail && e.detail.stationId
+          const wasZoomed = Boolean(this.activeStationId)
           this.activeStationId = id || null
-          const target = (id && CAMERA_TARGETS[id]) || CAMERA_TARGETS.default
+          const targets = window.__CAMERA_TARGETS || CAMERA_TARGETS
+          const target = (id && targets[id]) || targets.default
           this.targetPos = { ...target.pos }
           this.targetFrustum = target.frustum
 
           if (id) {
+            this.isZoomingOut = false
             this.cinematicStartTime = performance.now()
           } else {
+            this.isZoomingOut = wasZoomed
             this.cinematicStartTime = null
             this.targetRot = { ...BASE_CAMERA_ROTATION }
           }
@@ -378,10 +395,10 @@ if (typeof window !== 'undefined' && window.AFRAME) {
         window.addEventListener('city-focus-station', this.onFocusStation)
       },
       tick: function () {
-        // Calibrated lerp rates: significantly slower and gentler on zoom-out
+        // Calibrated lerp rates: smooth and responsive transition
         const isZoomed = Boolean(this.activeStationId)
-        const posLerp = isZoomed ? 0.020 : 0.013
-        const rotLerp = 0.007
+        const posLerp = isZoomed ? 0.020 : 0.024
+        const rotLerp = 0.009
 
         // Calculate ultra-slow, micro-whisper cinematic camera drift during station inspection
         if (isZoomed && this.cinematicStartTime) {
@@ -418,6 +435,20 @@ if (typeof window !== 'undefined' && window.AFRAME) {
         this.currentRot.x += (this.targetRot.x - this.currentRot.x) * rotLerp
         this.currentRot.y += (this.targetRot.y - this.currentRot.y) * rotLerp
         this.currentRot.z += (this.targetRot.z - this.currentRot.z) * rotLerp
+
+        // Detect when zoom out reaches default position and signal completion
+        if (this.isZoomingOut) {
+          const dx = this.targetPos.x - this.currentPos.x
+          const dy = this.targetPos.y - this.currentPos.y
+          const dz = this.targetPos.z - this.currentPos.z
+          const df = Math.abs(this.targetFrustum - this.currentFrustum)
+          const distSq = dx * dx + dy * dy + dz * dz
+
+          if (distSq < 0.003 && df < 0.05) {
+            this.isZoomingOut = false
+            window.dispatchEvent(new CustomEvent('city-zoom-out-complete'))
+          }
+        }
 
         this.el.object3D.position.set(this.currentPos.x, this.currentPos.y, this.currentPos.z)
         this.el.object3D.rotation.x = (this.currentRot.x * Math.PI) / 180
@@ -487,7 +518,8 @@ export default function Scene3D({
       >
         <a-camera
           id="main-camera"
-          ortho-camera={`frustumSize: ${frustumSize}; near: 0.01; far: 2000`}
+          camera="far: 20000; near: -500"
+          ortho-camera={`frustumSize: ${frustumSize}; near: -500; far: 20000`}
           look-controls="enabled: false"
           wasd-controls="enabled: false"
         ></a-camera>
