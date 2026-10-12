@@ -1,17 +1,17 @@
 /* =========================================================
-   Left-Side Minimal Proof Metrics (Compact)
+   Left-Side Minimal Proof Metrics (Clean 3-Item Layout)
    ========================================================= */
 .stats-creds-container {
   position: relative;
   z-index: 20;
   display: flex;
   align-items: flex-start;
-  gap: 28px;
-  margin-top: 28px;
+  gap: clamp(28px, 3.2vw, 44px);
+  margin-top: 30px;
   border-top: 1px solid #e2e8f0;
   padding-top: 24px;
   width: 100%;
-  max-width: 480px;
+  max-width: 660px;
   background: transparent;
   pointer-events: auto;
   user-select: none;
@@ -26,26 +26,27 @@
 
 .stat-minimal-value {
   font-family: var(--font-sans);
-  font-size: clamp(24px, 2.2vw, 29px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-size: clamp(26px, 2.4vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
   color: #0f172a;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .stat-minimal-label {
   font-family: var(--font-sans);
-  font-size: 13.5px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   letter-spacing: -0.01em;
   color: #64748b;
-  margin-top: 4px;
+  margin-top: 5px;
+  line-height: 1.35;
   white-space: nowrap;
 }
 
 @media (max-width: 640px) {
   .stats-creds-container {
-    gap: 16px;
+    gap: 18px 24px;
     flex-wrap: wrap;
   }
 }

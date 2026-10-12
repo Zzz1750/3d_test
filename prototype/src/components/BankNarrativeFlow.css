@@ -24,11 +24,11 @@
 }
 
 /* ---------------------------------------------------------
-   Contextual Flow Header (Centered & Balanced)
+   Contextual Flow Header (Centered)
    --------------------------------------------------------- */
 .flow-header {
-  max-width: 100%;
-  margin: 0 auto 52px;
+  max-width: 1000px;
+  margin: 0 auto 44px auto;
   text-align: center;
 }
 
@@ -39,7 +39,6 @@
   letter-spacing: -0.025em;
   color: var(--color-text-primary);
   margin: 0 0 14px 0;
-  white-space: nowrap;
 }
 
 .flow-title-accent {

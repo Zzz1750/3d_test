@@ -2,9 +2,9 @@ import './StatsCreds.css'
 
 export default function StatsCreds() {
   const stats = [
-    { value: '60–90d', label: 'Audit-Ready Timeline' },
-    { value: '50+', label: 'Global Regulators' },
-    { value: '70%', label: 'Less Overhead' }
+    { value: '10×', label: 'Rule Ownership' },
+    { value: '8×', label: 'Audit Evidence' },
+    { value: '100%', label: 'Evidenced Gaps' }
   ]
 
   return (

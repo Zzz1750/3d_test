@@ -17,10 +17,10 @@ export default function IntroStatement() {
         <div className="intro-statement-wrapper">
           <h2 className="intro-statement-text">
             <span className="intro-text-bold">
-              AI-Powered Regulatory Compliance Made Simple.
+              Comply2Reg turns regulatory change into action.
             </span>{' '}
             <span className="intro-text-muted">
-              Automate compliance, track regulatory changes, and reduce risk with an intelligent RegTech platform.
+              Our agentic AI helps banks track new rules, identify compliance gaps and stay audit-ready.
             </span>
           </h2>
         </div>

@@ -181,13 +181,16 @@ if (typeof window !== 'undefined' && window.AFRAME) {
     })
   }
 
-  // Delayed smooth zoom controller (Phase 1 zoom -> 5s delay -> Phase 2 zoom more in & topper)
+  // Delayed smooth zoom controller:
+  // Phase 1 (Small delay -> Zoom in)
+  // Phase 2 (Delay -> Zoom more in)
+  // Phase 3 (3s delay -> Zoom out a bit & tilt camera to left top corner)
   if (window.AFRAME.components['delayed-zoom-controller']) {
     delete window.AFRAME.components['delayed-zoom-controller']
   }
   window.AFRAME.registerComponent('delayed-zoom-controller', {
     schema: {
-      // Phase 1 (Initial zoom into right-bottom)
+      // Phase 1 (Small delay -> Zoom in to right-bottom)
       delay: { type: 'number', default: 1000 },
       duration: { type: 'number', default: 2600 },
       targetX: { type: 'number', default: 1.75 },
@@ -195,13 +198,32 @@ if (typeof window !== 'undefined' && window.AFRAME) {
       targetZ: { type: 'number', default: 4.80 },
       targetFrustum: { type: 'number', default: 1.60 },
 
-      // Phase 2 (5s delay, then zoom more in & little topper)
-      delay2: { type: 'number', default: 5000 },
+      // Phase 2 (Delay -> Zoom more in)
+      delay2: { type: 'number', default: 3000 },
       duration2: { type: 'number', default: 2600 },
       targetX2: { type: 'number', default: 1.75 },
       targetY2: { type: 'number', default: 0.20 },
       targetZ2: { type: 'number', default: 4.80 },
-      targetFrustum2: { type: 'number', default: 1.15 }
+      targetFrustum2: { type: 'number', default: 1.15 },
+
+      // Phase 3 (3s delay -> Zoom out a bit towards top left corner, same camera style as Phase 1)
+      delay3: { type: 'number', default: 3000 },
+      duration3: { type: 'number', default: 2800 },
+      targetX3: { type: 'number', default: -1.15 },
+      targetY3: { type: 'number', default: 0.65 },
+      targetZ3: { type: 'number', default: 5.25 },
+      targetFrustum3: { type: 'number', default: 2.10 },
+
+      // Phase 4 (2s pause after reaching top left -> Zoom in towards top left corner & rotate a little more left)
+      delay4: { type: 'number', default: 2000 },
+      duration4: { type: 'number', default: 2600 },
+      targetX4: { type: 'number', default: -1.10 },
+      targetY4: { type: 'number', default: 0.70 },
+      targetZ4: { type: 'number', default: 5.25 },
+      targetFrustum4: { type: 'number', default: 1.25 },
+      targetRotX4: { type: 'number', default: -18.11 },
+      targetRotY4: { type: 'number', default: 12.0 },
+      targetRotZ4: { type: 'number', default: 0 }
     },
     init: function () {
       this.startTime = typeof performance !== 'undefined' ? performance.now() : Date.now()
@@ -211,6 +233,13 @@ if (typeof window !== 'undefined' && window.AFRAME) {
         z: this.el.object3D.position.z || 5.688
       }
       this.startFrustum = 4.6
+
+      const rot = this.el.getAttribute('rotation') || {}
+      this.startRot = {
+        x: typeof rot.x === 'number' ? rot.x : -18.11,
+        y: typeof rot.y === 'number' ? rot.y : 22.12,
+        z: typeof rot.z === 'number' ? rot.z : 0
+      }
       this.isComplete = false
 
       // Fetch initialized camera frustum
@@ -228,15 +257,23 @@ if (typeof window !== 'undefined' && window.AFRAME) {
       const elapsed = now - this.startTime
       if (elapsed < this.data.delay) return
 
-      const p1End = this.data.delay + this.data.duration
+      const p1Start = this.data.delay
+      const p1End = p1Start + this.data.duration
       const p2Start = p1End + this.data.delay2
       const p2End = p2Start + this.data.duration2
+      const p3Start = p2End + this.data.delay3
+      const p3End = p3Start + this.data.duration3
+      const p4Start = p3End + this.data.delay4
+      const p4End = p4Start + this.data.duration4
 
       let currentX, currentY, currentZ, currentFrustum
+      let currentRotX = this.startRot.x
+      let currentRotY = this.startRot.y
+      let currentRotZ = this.startRot.z
 
       if (elapsed < p1End) {
-        // --- Phase 1: Smooth Zoom into target 1 ---
-        const progress1 = Math.min(1.0, (elapsed - this.data.delay) / this.data.duration)
+        // --- Phase 1: Smooth Zoom into right bottom corner ---
+        const progress1 = Math.min(1.0, (elapsed - p1Start) / this.data.duration)
         const eased1 = progress1 < 0.5
           ? 4 * progress1 * progress1 * progress1
           : 1 - Math.pow(-2 * progress1 + 2, 3) / 2
@@ -246,13 +283,13 @@ if (typeof window !== 'undefined' && window.AFRAME) {
         currentZ = this.startPos.z + (this.data.targetZ - this.startPos.z) * eased1
         currentFrustum = this.startFrustum + (this.data.targetFrustum - this.startFrustum) * eased1
       } else if (elapsed < p2Start) {
-        // --- 5s Pause at Phase 1 target ---
+        // --- Pause at Phase 1 target ---
         currentX = this.data.targetX
         currentY = this.data.targetY
         currentZ = this.data.targetZ
         currentFrustum = this.data.targetFrustum
       } else if (elapsed < p2End) {
-        // --- Phase 2: Smooth Zoom More In and Topper ---
+        // --- Phase 2: Smooth Zoom More In on right bottom corner ---
         const progress2 = Math.min(1.0, (elapsed - p2Start) / this.data.duration2)
         const eased2 = progress2 < 0.5
           ? 4 * progress2 * progress2 * progress2
@@ -262,16 +299,60 @@ if (typeof window !== 'undefined' && window.AFRAME) {
         currentY = this.data.targetY + (this.data.targetY2 - this.data.targetY) * eased2
         currentZ = this.data.targetZ + (this.data.targetZ2 - this.data.targetZ) * eased2
         currentFrustum = this.data.targetFrustum + (this.data.targetFrustum2 - this.data.targetFrustum) * eased2
-      } else {
-        // --- Phase 2 Completed: Hold final framing ---
+      } else if (elapsed < p3Start) {
+        // --- 3s Pause at Phase 2 target ---
         currentX = this.data.targetX2
         currentY = this.data.targetY2
         currentZ = this.data.targetZ2
         currentFrustum = this.data.targetFrustum2
+      } else if (elapsed < p3End) {
+        // --- Phase 3: Smooth Zoom out a bit towards top left corner ---
+        const progress3 = Math.min(1.0, (elapsed - p3Start) / this.data.duration3)
+        const eased3 = progress3 < 0.5
+          ? 4 * progress3 * progress3 * progress3
+          : 1 - Math.pow(-2 * progress3 + 2, 3) / 2
+
+        currentX = this.data.targetX2 + (this.data.targetX3 - this.data.targetX2) * eased3
+        currentY = this.data.targetY2 + (this.data.targetY3 - this.data.targetY2) * eased3
+        currentZ = this.data.targetZ2 + (this.data.targetZ3 - this.data.targetZ2) * eased3
+        currentFrustum = this.data.targetFrustum2 + (this.data.targetFrustum3 - this.data.targetFrustum2) * eased3
+      } else if (elapsed < p4Start) {
+        // --- 2s Pause after reaching top left corner ---
+        currentX = this.data.targetX3
+        currentY = this.data.targetY3
+        currentZ = this.data.targetZ3
+        currentFrustum = this.data.targetFrustum3
+      } else if (elapsed < p4End) {
+        // --- Phase 4: Smooth Zoom in towards top left corner & rotate camera a little more left ---
+        const progress4 = Math.min(1.0, (elapsed - p4Start) / this.data.duration4)
+        const eased4 = progress4 < 0.5
+          ? 4 * progress4 * progress4 * progress4
+          : 1 - Math.pow(-2 * progress4 + 2, 3) / 2
+
+        currentX = this.data.targetX3 + (this.data.targetX4 - this.data.targetX3) * eased4
+        currentY = this.data.targetY3 + (this.data.targetY4 - this.data.targetY3) * eased4
+        currentZ = this.data.targetZ3 + (this.data.targetZ4 - this.data.targetZ3) * eased4
+        currentFrustum = this.data.targetFrustum3 + (this.data.targetFrustum4 - this.data.targetFrustum3) * eased4
+
+        currentRotX = this.startRot.x + (this.data.targetRotX4 - this.startRot.x) * eased4
+        currentRotY = this.startRot.y + (this.data.targetRotY4 - this.startRot.y) * eased4
+        currentRotZ = this.startRot.z + (this.data.targetRotZ4 - this.startRot.z) * eased4
+      } else {
+        // --- Phase 4 Completed: Hold zoomed-in top left corner framing & rotation ---
+        currentX = this.data.targetX4
+        currentY = this.data.targetY4
+        currentZ = this.data.targetZ4
+        currentFrustum = this.data.targetFrustum4
+        currentRotX = this.data.targetRotX4
+        currentRotY = this.data.targetRotY4
+        currentRotZ = this.data.targetRotZ4
         this.isComplete = true
       }
 
       this.el.object3D.position.set(currentX, currentY, currentZ)
+      this.el.object3D.rotation.x = (currentRotX * Math.PI) / 180
+      this.el.object3D.rotation.y = (currentRotY * Math.PI) / 180
+      this.el.object3D.rotation.z = (currentRotZ * Math.PI) / 180
 
       const cameraEl = this.el.querySelector('#main-camera')
       const orthoComp = cameraEl && cameraEl.components['ortho-camera']
@@ -297,20 +378,37 @@ export default function FullScreenScene3D({
   isLoaded = true,
   far = 20000,
   near = -500,
-  // Phase 1 Zoom
+  // Phase 1 Zoom (Small delay -> Zoom in to right bottom)
   delay = 1000,
   duration = 2600,
   targetX = 1.75,
   targetY = -0.05,
   targetZ = 4.80,
   targetFrustum = 1.60,
-  // Phase 2 Zoom (5s delay, then zoom more in and little topper)
-  delay2 = 5000,
+  // Phase 2 Zoom (Delay -> Zoom more in)
+  delay2 = 3000,
   duration2 = 2600,
   targetX2 = 1.75,
   targetY2 = 0.20,
   targetZ2 = 4.80,
-  targetFrustum2 = 1.15
+  targetFrustum2 = 1.15,
+  // Phase 3 (3s delay -> Zoom out a bit towards top left corner)
+  delay3 = 3000,
+  duration3 = 2800,
+  targetX3 = -1.15,
+  targetY3 = 0.65,
+  targetZ3 = 5.25,
+  targetFrustum3 = 2.10,
+  // Phase 4 (2s pause after reaching top left -> Zoom in towards top left corner & rotate camera a little more left)
+  delay4 = 2000,
+  duration4 = 2600,
+  targetX4 = -1.10,
+  targetY4 = 0.70,
+  targetZ4 = 5.25,
+  targetFrustum4 = 1.25,
+  targetRotX4 = -18.11,
+  targetRotY4 = 12.0,
+  targetRotZ4 = 0
 }) {
   return (
     <div className="fullscreen-scene-viewport">
@@ -341,12 +439,12 @@ export default function FullScreenScene3D({
           ></a-entity>
         </a-entity>
 
-        {/* Orthographic Camera Rig — Two-stage smooth delayed zoom: P1 zoom -> 5s pause -> P2 zoom in & topper */}
+        {/* Orthographic Camera Rig — Four-stage smooth delayed zoom */}
         <a-entity
           id="camera-rig"
           position="-0.15 0.35 5.688"
           rotation="-18.11 22.12 0"
-          delayed-zoom-controller={`delay: ${delay}; duration: ${duration}; targetX: ${targetX}; targetY: ${targetY}; targetZ: ${targetZ}; targetFrustum: ${targetFrustum}; delay2: ${delay2}; duration2: ${duration2}; targetX2: ${targetX2}; targetY2: ${targetY2}; targetZ2: ${targetZ2}; targetFrustum2: ${targetFrustum2}`}
+          delayed-zoom-controller={`delay: ${delay}; duration: ${duration}; targetX: ${targetX}; targetY: ${targetY}; targetZ: ${targetZ}; targetFrustum: ${targetFrustum}; delay2: ${delay2}; duration2: ${duration2}; targetX2: ${targetX2}; targetY2: ${targetY2}; targetZ2: ${targetZ2}; targetFrustum2: ${targetFrustum2}; delay3: ${delay3}; duration3: ${duration3}; targetX3: ${targetX3}; targetY3: ${targetY3}; targetZ3: ${targetZ3}; targetFrustum3: ${targetFrustum3}; delay4: ${delay4}; duration4: ${duration4}; targetX4: ${targetX4}; targetY4: ${targetY4}; targetZ4: ${targetZ4}; targetFrustum4: ${targetFrustum4}; targetRotX4: ${targetRotX4}; targetRotY4: ${targetRotY4}; targetRotZ4: ${targetRotZ4}`}
         >
           <a-camera
             id="main-camera"

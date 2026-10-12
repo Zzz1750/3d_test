@@ -1,0 +1,299 @@
+/* =========================================================
+   Use Cases Section — Minimal, High-Precision Institutional Design
+   Strictly NO Eyebrows / Kickers
+   ========================================================= */
+
+.usecases-section {
+  position: relative;
+  width: 100%;
+  padding: 104px 32px 116px;
+  background-color: #ffffff;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.usecases-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------------------------------------------------------
+   Header Zone — Clean & Confident (Centered)
+   --------------------------------------------------------- */
+.usecases-header {
+  max-width: 880px;
+  margin: 0 auto 44px auto;
+  text-align: center;
+}
+
+.usecases-title {
+  font-family: var(--font-sans);
+  font-size: var(--site-heading);
+  font-weight: 600;
+  line-height: 1.24;
+  letter-spacing: -0.024em;
+  color: #0f172a;
+  margin: 0 0 14px 0;
+}
+
+.usecases-title-accent {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.usecases-subtitle {
+  font-family: var(--font-sans);
+  font-size: 16.5px;
+  line-height: 1.62;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+  margin: 0 auto;
+  max-width: 720px;
+}
+
+/* ---------------------------------------------------------
+   8 Use Cases Grid (4x2 on Desktop, 2x4 on Tablet, 1-col on Mobile)
+   --------------------------------------------------------- */
+.usecases-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  margin-bottom: 0;
+}
+
+.usecase-card {
+  position: relative;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
+}
+
+/* Card Icon: Unboxed, Standalone & Minimal */
+.usecase-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 22px;
+}
+
+.usecase-icon-svg {
+  width: 38px;
+  height: 38px;
+  display: block;
+}
+
+/* Card Typography */
+.usecase-card-title {
+  font-family: var(--font-sans);
+  font-size: 20.5px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  margin: 0 0 10px 0;
+}
+
+.usecase-card-desc {
+  font-family: var(--font-sans);
+  font-size: 16.5px;
+  font-weight: 400;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0;
+  flex-grow: 1;
+}
+
+/* ---------------------------------------------------------
+   Connected Leadership Axis — Creative, Minimal & Static
+   --------------------------------------------------------- */
+.usecases-roles-section {
+  margin-top: 60px;
+  padding-top: 48px;
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.usecases-roles-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.usecases-roles-title {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.usecases-roles-accent {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.usecases-roles-axis {
+  position: relative;
+  width: 100%;
+  max-width: 1260px;
+  margin: 0 auto;
+}
+
+/* Continuous connecting line running behind the nodes */
+.usecases-axis-line {
+  position: absolute;
+  top: 9px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 1px;
+  background: linear-gradient(90deg,
+      rgba(0, 102, 204, 0.25) 0%,
+      rgba(0, 102, 204, 0.75) 25%,
+      rgba(0, 102, 204, 0.75) 75%,
+      rgba(0, 102, 204, 0.25) 100%);
+  z-index: 1;
+}
+
+.usecases-axis-nodes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.usecases-axis-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 12px;
+  user-select: none;
+}
+
+/* Precision Geometric Waypoint Node */
+.usecases-axis-node {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1.5px solid var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.usecases-node-core {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+}
+
+.usecases-axis-text {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+
+/* ---------------------------------------------------------
+   Responsive Adaptations
+   --------------------------------------------------------- */
+@media (max-width: 1180px) {
+  .usecases-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .usecases-section {
+    padding: 60px 20px 72px;
+  }
+
+  .usecases-header {
+    margin: 0 auto 36px auto;
+    text-align: center;
+  }
+
+  .usecases-title {
+    font-size: 26px;
+  }
+
+  .usecases-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .usecases-roles-section {
+    margin-top: 40px;
+    padding-top: 32px;
+  }
+
+  .usecases-roles-header {
+    margin-bottom: 28px;
+  }
+
+  .usecases-roles-title {
+    font-size: 18.5px;
+  }
+
+  .usecases-roles-axis {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .usecases-axis-line {
+    top: 10px;
+    bottom: 20px;
+    left: 9px;
+    right: auto;
+    width: 1px;
+    height: auto;
+    background: linear-gradient(180deg,
+        rgba(0, 102, 204, 0.25) 0%,
+        rgba(0, 102, 204, 0.75) 25%,
+        rgba(0, 102, 204, 0.75) 75%,
+        rgba(0, 102, 204, 0.25) 100%);
+  }
+
+  .usecases-axis-nodes {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .usecases-axis-item {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    padding: 0;
+    gap: 16px;
+  }
+
+  .usecases-axis-node {
+    margin-bottom: 0;
+  }
+
+  .usecases-axis-text {
+    font-size: 15.5px;
+  }
+}

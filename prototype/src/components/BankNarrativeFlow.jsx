@@ -140,7 +140,7 @@ export default function BankNarrativeFlow() {
             Why Banking Compliance Breaks Down: <span className="flow-title-accent">The Data Deluge</span>
           </h2>
           <p className="flow-subtitle">
-            Banks receive high-speed feeds across payment rails, markets, and 24/7 digital assets into 40-year-old core systems. Comply2Reg unifies the chaos and delivers clean, verified compliance records directly to your team.
+            Banks face nonstop data across legacy systems; Comply2Reg unifies regulatory complexity into verified, actionable compliance records.
           </p>
         </div>
 
@@ -374,15 +374,22 @@ export default function BankNarrativeFlow() {
                 <text x="0" y="4" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="12.5" fontWeight="700" fill="#ffffff" letterSpacing="0.08em">THE BANK</text>
               </g>
 
-              {/* Banker Robot Character (Removed - left empty) */}
+              {/* 2D Minimal Cartoon Banker Character with Seal Stamp */}
               <g
-                className="banker-character banker-robot-sticker"
+                className="banker-character"
                 style={{
-                  transform: isStamping ? 'translateY(3px)' : 'translateY(0)',
-                  transition: 'transform 0.14s ease'
+                  transform: isStamping ? 'translateY(5px)' : 'translateY(0)',
+                  transition: 'transform 0.12s cubic-bezier(0.2, 0, 0, 1)'
                 }}
               >
-                {/* Placeholder / empty for now */}
+                <image
+                  href={`${import.meta.env.BASE_URL}images/banker_guy.png`}
+                  x="76"
+                  y="11"
+                  width="166"
+                  height="174"
+                  preserveAspectRatio="xMidYMid meet"
+                />
               </g>
 
               {/* Coffee Mug */}

@@ -1,280 +1,373 @@
 /* =========================================================
-   Workflow Integrations — Clean Minimal Static Partner Logos
-   Supported Platforms: Teams, Slack, Confluence, ServiceNow, Archer, SharePoint
-   Strictly No Spinning Animations · Exact 3x2 Grid Layout
+   Workflow Integrations — Systems Topology & Hub Section
+   Comply2Reg Minimal, Institutional & Clean Theme
    ========================================================= */
 
 .workflow-section {
   position: relative;
   width: 100%;
-  padding: 100px 48px;
-  background: #ffffff;
-  border-top: 1px solid var(--color-border-subtle);
+  padding: 104px 32px 92px;
+  background-color: #ffffff;
   font-family: var(--font-sans);
   color: var(--color-text-primary);
   box-sizing: border-box;
 }
 
 .workflow-container {
-  max-width: 1220px;
+  max-width: 1360px;
   margin: 0 auto;
   width: 100%;
-}
-
-.workflow-layout {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 72px;
-  width: 100%;
 }
 
 /* ---------------------------------------------------------
-   Left Column: Copy & Action (Unified Site Typography)
+   Section Header
    --------------------------------------------------------- */
-.workflow-content {
-  flex: 1;
-  max-width: 520px;
+.workflow-header {
+  max-width: 860px;
+  text-align: center;
+  margin-bottom: 56px;
 }
 
 .workflow-title {
   font-family: var(--font-sans);
   font-size: var(--site-heading);
   font-weight: 600;
-  line-height: 1.22;
+  line-height: 1.25;
   letter-spacing: -0.025em;
-  color: var(--color-text-primary);
-  margin: 0 0 16px;
+  color: #0f172a;
+  margin: 0;
 }
 
 .workflow-title-accent {
-  color: var(--color-primary);
+  color: var(--color-primary, #0066cc);
   font-weight: 600;
 }
 
-.workflow-subtitle {
-  font-family: var(--font-sans);
-  font-size: var(--site-content);
-  font-weight: var(--font-regular);
-  line-height: 1.6;
-  color: var(--color-text-secondary);
-  margin: 0 0 32px;
-  max-width: 500px;
-}
-
-.workflow-cta-box {
-  display: flex;
+/* ---------------------------------------------------------
+   Topology Stage: Hub & Surrounding 6 System Cards
+   --------------------------------------------------------- */
+.workflow-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1240px;
+  display: grid;
+  grid-template-columns: 1fr 270px 1fr;
+  gap: 36px;
   align-items: center;
+  margin-bottom: 52px;
 }
 
-.workflow-btn-demo {
+/* SVG Connector Curved Dashed Lines — Thematic Blue Tint */
+.workflow-connectors-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.workflow-dashed-line {
+  stroke: rgba(0, 102, 204, 0.24);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+  fill: none;
+}
+
+.workflow-anchor-dot {
+  fill: var(--color-primary, #0066cc);
+}
+
+/* Cards Columns */
+.workflow-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Individual Category Card — Minimal Clean White Surface */
+.workflow-category-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.workflow-category-title {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.workflow-pills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+
+/* Minimal Tool Pill — Light Surface, Crisp Slate Text & Theme Hover */
+.workflow-pill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 13px 28px;
-  background-color: var(--color-primary);
+  gap: 7px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 5px 11px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #0f172a;
+  white-space: nowrap;
+  user-select: none;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.015);
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.workflow-pill:hover {
+  background-color: #ffffff;
+  border-color: rgba(0, 102, 204, 0.35);
+  color: var(--color-primary, #0066cc);
+}
+
+.workflow-tool-ico {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* ---------------------------------------------------------
+   Central Hub
+   --------------------------------------------------------- */
+.workflow-hub-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 3;
+}
+
+.workflow-hub-aura {
+  width: 236px;
+  height: 236px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 102, 204, 0.05) 0%, rgba(0, 102, 204, 0.01) 70%, transparent 100%);
+  border: 1px dashed rgba(0, 102, 204, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workflow-hub-circle {
+  width: 188px;
+  height: 188px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 102, 204, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+}
+
+.workflow-hub-logo {
+  width: 130px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Protocol Badges — Thematic Tint & Clean Stroke */
+.workflow-protocol-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.workflow-protocol-pill {
+  background-color: rgba(0, 102, 204, 0.08);
+  color: var(--color-primary, #0066cc);
+  border: 1px solid rgba(0, 102, 204, 0.2);
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
+   Bottom Horizontal Tool Strip — Clean Neutral Shelf
+   --------------------------------------------------------- */
+.workflow-bottom-strip {
+  width: 100%;
+  max-width: 1240px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  box-sizing: border-box;
+  margin-bottom: 32px;
+}
+
+.workflow-strip-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  white-space: nowrap;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.workflow-strip-item:hover {
+  color: var(--color-primary, #0066cc);
+}
+
+/* ---------------------------------------------------------
+   Action Buttons (CTAs) — Brand Primary & Crisp Outline
+   --------------------------------------------------------- */
+.workflow-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.workflow-btn-primary {
+  background-color: var(--color-primary, #0066cc);
   color: #ffffff;
-  border-radius: 9999px;
-  text-decoration: none;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 26px;
   font-family: var(--font-sans);
   font-size: 14.5px;
   font-weight: 500;
-  transition: all 0.22s ease;
-  box-shadow: 0 4px 14px rgba(0, 102, 204, 0.28);
-}
-
-.workflow-btn-demo:hover {
-  background-color: var(--color-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 102, 204, 0.38);
-}
-
-.workflow-btn-arrow {
-  width: 14px;
-  height: 14px;
-  transition: transform 0.2s ease;
-}
-
-.workflow-btn-demo:hover .workflow-btn-arrow {
-  transform: translateX(3px);
-}
-
-/* ---------------------------------------------------------
-   Right Column: 3x2 Partner Logos Grid
-   --------------------------------------------------------- */
-.workflow-logos-grid {
-  flex: 1;
-  max-width: 540px;
-  width: 100%;
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  grid-template-rows: auto auto;
-  column-gap: 40px;
-  row-gap: 56px;
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
-  justify-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.22);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.workflow-logo-cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 56px;
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+.workflow-btn-primary:hover {
+  background-color: var(--color-primary-hover, #0052a3);
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
 }
 
-.workflow-logo-cell:hover {
-  transform: translateY(-2px) scale(1.04);
+.workflow-btn-secondary {
+  background-color: #ffffff;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 26px;
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-/* Exact alignments to match reference design */
-.item-teams {
-  justify-content: flex-start;
-}
-
-.item-slack {
-  justify-content: center;
-}
-
-.item-confluence {
-  justify-content: flex-end;
-}
-
-.item-servicenow {
-  justify-content: flex-start;
-}
-
-.item-archer {
-  justify-content: center;
-}
-
-.item-sharepoint {
-  justify-content: flex-end;
+.workflow-btn-secondary:hover {
+  background-color: #f8fafc;
+  border-color: rgba(0, 102, 204, 0.35);
+  color: var(--color-primary, #0066cc);
 }
 
 /* ---------------------------------------------------------
-   Logo Optical Heights & Sizing
+   Responsive Adaptations
    --------------------------------------------------------- */
-.workflow-logo-img {
-  display: block;
-  object-fit: contain;
-  user-select: none;
-  pointer-events: auto;
+@media (max-width: 1120px) {
+  .workflow-stage {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .workflow-connectors-svg {
+    display: none;
+  }
+
+  .workflow-hub-col {
+    order: -1;
+    margin-bottom: 8px;
+  }
+
+  .workflow-bottom-strip {
+    justify-content: center;
+  }
 }
 
-.logo-teams {
-  height: 48px;
-  width: auto;
-  max-width: 56px;
-}
-
-.logo-slack {
-  height: 31px;
-  width: auto;
-  max-width: 130px;
-}
-
-.logo-confluence {
-  height: 24px;
-  width: auto;
-  max-width: 190px;
-}
-
-.logo-servicenow {
-  height: 25px;
-  width: auto;
-  max-width: 175px;
-}
-
-.logo-archer {
-  height: 20px;
-  width: auto;
-  max-width: 140px;
-}
-
-.logo-sharepoint {
-  height: 52px;
-  width: auto;
-  max-width: 58px;
-}
-
-/* ---------------------------------------------------------
-   Responsive Design Breakpoints
-   --------------------------------------------------------- */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .workflow-section {
-    padding: 88px 36px;
+    padding: 64px 20px 60px;
   }
 
-  .workflow-layout {
-    gap: 48px;
+  .workflow-header {
+    margin-bottom: 36px;
   }
 
-  .workflow-logos-grid {
-    column-gap: 28px;
-    row-gap: 44px;
-  }
-}
-
-@media (max-width: 860px) {
-  .workflow-section {
-    padding: 72px 24px;
+  .workflow-title {
+    font-size: 26px;
   }
 
-  .workflow-layout {
+  .workflow-hub-aura {
+    width: 200px;
+    height: 200px;
+  }
+
+  .workflow-hub-circle {
+    width: 160px;
+    height: 160px;
+  }
+
+  .workflow-hub-logo {
+    width: 110px;
+  }
+
+  .workflow-bottom-strip {
+    gap: 10px 14px;
+    padding: 12px 16px;
+  }
+
+  .workflow-actions {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 52px;
+    width: 100%;
   }
 
-  .workflow-content {
-    max-width: 100%;
-  }
-
-  .workflow-subtitle {
-    max-width: 100%;
-  }
-
-  .workflow-logos-grid {
-    max-width: 480px;
-    margin: 0 auto;
-    column-gap: 32px;
-    row-gap: 40px;
-  }
-}
-
-@media (max-width: 540px) {
-  .workflow-section {
-    padding: 60px 20px;
-  }
-
-  .workflow-logos-grid {
-    column-gap: 20px;
-    row-gap: 32px;
-  }
-
-  .logo-teams {
-    height: 38px;
-  }
-
-  .logo-slack {
-    height: 24px;
-  }
-
-  .logo-confluence {
-    height: 19px;
-  }
-
-  .logo-servicenow {
-    height: 20px;
-  }
-
-  .logo-archer {
-    height: 16px;
-  }
-
-  .logo-sharepoint {
-    height: 40px;
+  .workflow-btn-primary,
+  .workflow-btn-secondary {
+    width: 100%;
+    justify-content: center;
   }
 }

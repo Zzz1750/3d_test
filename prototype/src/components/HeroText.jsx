@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 import './HeroText.css'
 
 export default function HeroText({
-  title = "AI-Powered Compliance for Banks & Fintechs",
-  subtitle = "Eliminate manual regulatory tracking. Map circulars directly to internal controls and achieve complete audit readiness in 60–90 days.",
+  title,
+  subtitle = "Our proprietary Small Language Model and agents map every rule to policies and controls, close gaps, preserve evidence, hosted securely, human-approved.",
   demoLink = "/demo",
   onHowItWorks
 }) {
@@ -12,7 +12,7 @@ export default function HeroText({
       onHowItWorks()
       return
     }
-    const el = document.getElementById('problem-statement')
+    const el = document.getElementById('use-cases') || document.getElementById('compliance-flow')
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' })
     }
@@ -20,16 +20,20 @@ export default function HeroText({
 
   return (
     <div className="hero-headline-container">
-      {/* Original Headline */}
+      {/* Clean Minimal Hero Headline */}
       <h1 className="hero-headline">
-        AI-Powered Compliance<br />
-        <span className="hero-headline-sub">for Banks &amp; Fintechs</span>
+        {title || (
+          <>
+            Regulatory change. Simplified.<br />
+            <span className="hero-headline-sub">Agentic AI, inside your bank.</span>
+          </>
+        )}
       </h1>
 
-      {/* Original Subtitle */}
+      {/* Clean Sub-copy */}
       {subtitle && <p className="hero-subtext">{subtitle}</p>}
 
-      {/* Clean Buttons Only */}
+      {/* Action Buttons */}
       <div className="hero-actions">
         <Link to={demoLink} style={{ textDecoration: 'none' }}>
           <button className="btn-demo-primary" type="button">
@@ -38,7 +42,7 @@ export default function HeroText({
               alt=""
               className="demo-icon"
             />
-            <span>Book a Demo</span>
+            <span>Book a demo</span>
           </button>
         </Link>
 

@@ -1,71 +1,93 @@
-import footerBg from "../assets/new_ui_assets/footer_back.png";
 import companyLogo from "../assets/new_ui_assets/full_logo_bw.png";
 import linkLogo from "../assets/new_ui_assets/link_logo.png";
 import xLogo from "../assets/new_ui_assets/x_logo.png";
+import "./New_Footer.css";
 
 export default function Footer() {
   return (
-    <footer style={styles.footer}>
-      <img src={footerBg} alt="footer background" style={styles.bg} />
+    <div className="new-footer-wrapper">
+      {/* Above-Footer Graphic: Joins and touches footer top */}
+      <div className="new-footer-above-banner">
+        <img
+          src={`${import.meta.env.BASE_URL}images/above_footer.png`}
+          alt="Comply2Reg"
+          className="new-footer-above-img"
+        />
+      </div>
 
-      <div style={styles.overlay}>
-        <div style={styles.topSection}>
-          <div style={styles.columns}>
-            {sections.map((section, i) => (
-              <div key={i} style={styles.column}>
-                <h4 style={styles.heading}>{section.title}</h4>
+      {/* Main Solid Blue Footer */}
+      <footer className="new-footer-main">
+        <div className="new-footer-container">
+          <div className="new-footer-top-section">
+            <div className="new-footer-columns">
+              {sections.map((section, i) => (
+                <div key={i} className="new-footer-column">
+                  <h4 className="new-footer-heading">{section.title}</h4>
 
-                {section.links.map((item, idx) => (
-                  <a 
-                    key={idx} 
-                    href={getLinkHref(item)} 
-                    style={styles.link}
-                  >
-                    {item}
-                  </a>
-                ))}
-
-                {section.contact && (
-                  <>
-                    <div style={styles.iconRow}>
-                      <a href="https://linkedin.com/company/comply2reg" target="_blank" rel="noopener noreferrer">
-                        <img src={linkLogo} alt="linkedin" style={styles.icon} />
-                      </a>
-                      <a href="https://twitter.com/comply2reg" target="_blank" rel="noopener noreferrer">
-                        <img src={xLogo} alt="x" style={styles.icon} />
-                      </a>
-                    </div>
-                    <a href="mailto:talk2us@comply2reg.com" style={styles.email}>
-                      talk2us@comply2reg.com
+                  {section.links.map((item, idx) => (
+                    <a 
+                      key={idx} 
+                      href={getLinkHref(item)} 
+                      className="new-footer-link"
+                    >
+                      {item}
                     </a>
-                  </>
-                )}
-              </div>
-            ))}
+                  ))}
+
+                  {section.contact && (
+                    <>
+                      <div className="new-footer-icon-row">
+                        <a 
+                          href="https://linkedin.com/company/comply2reg" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="new-footer-social-link"
+                          aria-label="LinkedIn"
+                        >
+                          <img src={linkLogo} alt="LinkedIn" className="new-footer-icon" />
+                        </a>
+                        <a 
+                          href="https://twitter.com/comply2reg" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="new-footer-social-link"
+                          aria-label="X (formerly Twitter)"
+                        >
+                          <img src={xLogo} alt="X" className="new-footer-icon" />
+                        </a>
+                      </div>
+                      <a href="mailto:talk2us@comply2reg.com" className="new-footer-email">
+                        talk2us@comply2reg.com
+                      </a>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <img src={companyLogo} alt="Comply2Reg Logo" className="new-footer-company-logo" />
           </div>
 
-          <img src={companyLogo} alt="company logo" style={styles.logo} />
-        </div>
+          <div className="new-footer-legal-section">
+            <p className="new-footer-legal-text">
+              Comply2Reg is a product of JinniAl Technologies Private Limited.
+            </p>
+            <p className="new-footer-legal-text">GSTIN: 29AAGCJ7636QIZM</p>
+            <p className="new-footer-legal-text">
+              Registered office: 192/1, N03, Behind 3rd B Cross, Gururaja Layout,
+              Doddanekundi, Bengaluru 560037, India
+            </p>
+          </div>
 
-        <div style={styles.legalSection}>
-          <p style={styles.legalText}>
-            Comply2Reg is a product of JinniAl Technologies Private Limited.
-          </p>
-          <p style={styles.legalText}>GSTIN: 29AAGCJ7636QIZM</p>
-          <p style={styles.legalText}>
-            Registered office: 192/1, N03, Behind 3rd B Cross, Gururaja Layout,
-            Doddanekundi, Bengaluru 560037, India
-          </p>
+          <div className="new-footer-bottom-section">
+            <div></div>
+            <p className="new-footer-copyright">
+              © 2026 | Comply2reg all rights reserved.
+            </p>
+          </div>
         </div>
-
-        <div style={styles.bottomSection}>
-          <div></div> {/* Empty div for spacing */}
-          <p style={styles.copyright}>
-            © 2026 | Comply2reg all rights reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </div>
   );
 }
 
@@ -112,131 +134,3 @@ const sections = [
     contact: true,
   },
 ];
-
-const styles = {
-  footer: {
-    position: "relative",
-    width: "100%",
-    color: "#fff",
-    fontFamily: "Inter, sans-serif",
-    overflow: "hidden",
-  },
-
-  bg: {
-    position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    zIndex: 0,
-  },
-
-  overlay: {
-    position: "relative",
-    zIndex: 1,
-    padding: "60px 40px 40px 40px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "60px",
-  },
-
-  topSection: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    gap: "40px",
-  },
-
-  columns: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "60px",
-  },
-
-  column: {
-    minWidth: "160px",
-  },
-
-  heading: {
-    fontSize: "13px",
-    letterSpacing: "1px",
-    marginBottom: "14px",
-    opacity: 0.9,
-  },
-
-  link: {
-    fontSize: "13px",
-    marginBottom: "6px",
-    opacity: 0.7,
-    cursor: "pointer",
-    color: "#fff",
-    textDecoration: "none",
-    display: "block",
-    transition: "opacity 0.2s",
-    ':hover': {
-      opacity: 1,
-    },
-  },
-
-  iconRow: {
-    display: "flex",
-    gap: "12px",
-    marginBottom: "8px",
-  },
-
-  icon: {
-    width: "18px",
-    height: "18px",
-    objectFit: "contain",
-    cursor: "pointer",
-    transition: "opacity 0.2s",
-    ':hover': {
-      opacity: 0.8,
-    },
-  },
-
-  email: {
-    fontSize: "12px",
-    opacity: 0.7,
-    color: "#fff",
-    textDecoration: "none",
-    transition: "opacity 0.2s",
-    ':hover': {
-      opacity: 1,
-    },
-  },
-
-  logo: {
-    width: "140px",
-    alignSelf: "flex-start",
-  },
-
-  legalSection: {
-    borderTop: "1px solid rgba(255, 255, 255, 0.15)",
-    paddingTop: "20px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "4px",
-  },
-
-  legalText: {
-    fontSize: "11px",
-    opacity: 0.5,
-    margin: 0,
-    lineHeight: 1.6,
-  },
-
-  bottomSection: {
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    flexWrap: "wrap",
-  },
-
-  copyright: {
-    fontSize: "12px",
-    opacity: 0.7,
-    margin: 0,
-    textAlign: "right",
-  },
-};

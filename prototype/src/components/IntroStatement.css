@@ -6,7 +6,7 @@
   position: relative;
   width: 100%;
   background-color: #ffffff;
-  padding: 90px 48px;
+  padding: 110px 48px;
   box-sizing: border-box;
   font-family: var(--font-sans);
   border-bottom: none;
@@ -27,7 +27,7 @@
 }
 
 .intro-mascot-img {
-  width: clamp(100px, 8vw, 130px);
+  width: clamp(110px, 8.5vw, 150px);
   height: auto;
   object-fit: contain;
   display: block;
@@ -35,7 +35,7 @@
 
 /* Centered container grouping text together */
 .intro-statement-container {
-  max-width: 1320px;
+  max-width: 1360px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -46,7 +46,7 @@
 
 /* Text Wrapper */
 .intro-statement-wrapper {
-  max-width: 980px;
+  max-width: 1160px;
   margin: 0 auto;
   position: relative;
   z-index: 5;
@@ -56,7 +56,7 @@
 .intro-statement-text {
   font-family: var(--font-sans);
   font-size: var(--site-heading);
-  line-height: 1.44;
+  line-height: 1.45;
   letter-spacing: -0.022em;
   text-align: center;
   margin: 0;
@@ -87,7 +87,8 @@
     width: clamp(70px, 12vw, 95px);
   }
 
-  .intro-paragraph {
+  .intro-statement-text {
+    font-size: 28px;
     text-align: center;
   }
 }

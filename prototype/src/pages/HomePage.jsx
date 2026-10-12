@@ -4,7 +4,7 @@ import HeroText from '../components/HeroText'
 import StatsCreds from '../components/StatsCreds'
 import LoadingScreen from '../components/LoadingScreen'
 import IntroStatement from '../components/IntroStatement'
-import ProblemStatement from '../components/ProblemStatement'
+import UseCases from '../components/UseCases'
 import BankNarrativeFlow from '../components/BankNarrativeFlow'
 import ProductShowcase from '../components/ProductShowcase'
 import WorkflowIntegrations from '../components/WorkflowIntegrations'
@@ -100,8 +100,8 @@ export default function HomePage() {
       {/* Centered Intro Statement */}
       <IntroStatement />
 
-      {/* Problem Statement Section */}
-      <ProblemStatement />
+      {/* 8 Core Use Cases & Leadership Roles */}
+      <UseCases />
 
       {/* Centered Data Streams & Overloaded Banker Diagram (Directly Under Problem Statement) */}
       <section className="banker-diagram-section-wrapper">

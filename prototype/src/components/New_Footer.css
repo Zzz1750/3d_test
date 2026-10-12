@@ -1,0 +1,265 @@
+/* =========================================================
+   Comply2Reg Footer & Above-Footer Graphic
+   Theme: var(--color-primary, #0066cc) solid background
+   ========================================================= */
+
+.new-footer-wrapper {
+  width: 100%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ---------------------------------------------------------
+   Above-Footer Graphic Lockup
+   Joins and touches the footer top with zero gap
+   --------------------------------------------------------- */
+.new-footer-above-banner {
+  width: 100%;
+  display: flex;
+  justifyContent: center;
+  align-items: flex-end;
+  background-color: #ffffff;
+  padding-top: 64px;
+  line-height: 0;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 2;
+}
+
+.new-footer-above-img {
+  width: 100%;
+  max-width: 920px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  vertical-align: bottom;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------------------------------------------------------
+   Main Blue Footer Container
+   --------------------------------------------------------- */
+.new-footer-main {
+  position: relative;
+  width: 100%;
+  background-color: var(--color-primary, #0066cc);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.new-footer-container {
+  max-width: 1360px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 64px 40px 44px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------
+   Top Section: Columns & Brand Logo
+   --------------------------------------------------------- */
+.new-footer-top-section {
+  display: flex;
+  justifyContent: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 48px;
+}
+
+.new-footer-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 56px;
+}
+
+.new-footer-column {
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+}
+
+.new-footer-heading {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  color: #ffffff;
+  opacity: 1;
+}
+
+.new-footer-link {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #ffffff;
+  opacity: 0.9;
+  text-decoration: none;
+  display: block;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.new-footer-link:hover {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+.new-footer-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+.new-footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.new-footer-social-link:hover {
+  opacity: 0.8;
+  transform: scale(1.08);
+}
+
+.new-footer-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+}
+
+.new-footer-email {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.9;
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.new-footer-email:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.new-footer-company-logo {
+  width: 148px;
+  height: auto;
+  object-fit: contain;
+  align-self: flex-start;
+  opacity: 0.95;
+}
+
+/* ---------------------------------------------------------
+   Legal Section & Copyright
+   --------------------------------------------------------- */
+.new-footer-legal-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.new-footer-legal-text {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: #ffffff;
+  opacity: 0.85;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.new-footer-bottom-section {
+  display: flex;
+  justifyContent: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.new-footer-copyright {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #ffffff;
+  opacity: 0.88;
+  margin: 0;
+  text-align: right;
+}
+
+/* ---------------------------------------------------------
+   Responsive Breakpoints
+   --------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .new-footer-above-banner {
+    padding-top: 48px;
+  }
+
+  .new-footer-above-img {
+    max-width: 85vw;
+  }
+
+  .new-footer-container {
+    padding: 52px 32px 36px 32px;
+    gap: 44px;
+  }
+
+  .new-footer-columns {
+    gap: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .new-footer-above-banner {
+    padding-top: 36px;
+  }
+
+  .new-footer-above-img {
+    max-width: 90vw;
+  }
+
+  .new-footer-container {
+    padding: 44px 20px 32px 20px;
+    gap: 36px;
+  }
+
+  .new-footer-top-section {
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .new-footer-columns {
+    gap: 32px;
+  }
+
+  .new-footer-column {
+    min-width: 140px;
+  }
+
+  .new-footer-bottom-section {
+    justify-content: flex-start;
+  }
+
+  .new-footer-copyright {
+    text-align: left;
+  }
+}

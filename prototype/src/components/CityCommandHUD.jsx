@@ -7,18 +7,28 @@ export const CITY_STATIONS = [
     code: '01',
     label: 'RegPulse',
     role: 'Monitor Regulatory Change',
+    tagline: 'Monitors global regulatory updates and flags affected policies and controls on day of issue.',
     coords: { x: '39%', y: '36%' },
     explanation: 'Monitor Regulatory Change',
+    inputs: [
+      'Regulatory updates & circulars',
+      'Global jurisdictional rules'
+    ],
     input: 'Regulatory updates across jurisdictions and regulators',
-    output: 'Relevant changes, classified and prioritised'
+    output: 'Relevant changes, classified and prioritised by impact'
   },
   {
     id: 'regulens',
     code: '02',
     label: 'ReguLens',
     role: 'Assess Regulatory Impact',
+    tagline: 'Maps complex regulatory obligations directly across entities, products, and internal policies.',
     coords: { x: '24%', y: '50%' },
     explanation: 'Assess Regulatory Impact',
+    inputs: [
+      'Regulatory obligations & rules',
+      'Internal policies & business context'
+    ],
     input: 'Regulations + internal policies + business context',
     output: 'Applicable requirements across entities, products and business units'
   },
@@ -27,8 +37,13 @@ export const CITY_STATIONS = [
     code: '03',
     label: 'Gap Analyser',
     role: 'Identify Compliance Gaps',
+    tagline: 'Continuously evaluates internal controls against applicable obligations to surface compliance gaps.',
     coords: { x: '58%', y: '46%' },
     explanation: 'Identify Compliance Gaps',
+    inputs: [
+      'Applicable requirements',
+      'Internal policies & control registers'
+    ],
     input: 'Applicable requirements + internal policies and controls',
     output: 'Policy, process and control gaps requiring remediation'
   },
@@ -37,11 +52,16 @@ export const CITY_STATIONS = [
     code: '04',
     label: 'AuditGeniee',
     role: 'Evidence Compliance',
+    tagline: 'Automatically aggregates tamper-proof evidence and generates audit-ready inspection packs.',
     coords: { x: '67%', y: '60%' },
     zoomedCoords: { x: '42%', y: '54%' },
     explanation: 'Evidence Compliance',
+    inputs: [
+      'Obligation requirements',
+      'Actions & supporting evidence'
+    ],
     input: 'Requirements + actions + supporting evidence',
-    output: 'Audit-ready reports and a complete evidence trail',
+    output: 'Audit-ready reports and complete immutable evidence trail',
     flow: ['Requirements', 'Actions', 'Evidence', 'Reports', 'Audit Trail']
   },
   {
@@ -49,34 +69,18 @@ export const CITY_STATIONS = [
     code: '05',
     label: 'AskLia',
     role: 'Orchestrate Compliance',
+    tagline: 'AI compliance copilot that reasons across regulations, controls, and telemetry to orchestrate remediation.',
     coords: { x: '56%', y: '30%' },
     explanation: 'Orchestrate Compliance',
+    inputs: [
+      'Regulations & internal policies',
+      'Controls & platform telemetry'
+    ],
     input: 'Regulations + policies + controls + compliance context',
-    output: 'Contextual insights, decisions and actions across the platform',
+    output: 'Contextual insights, decisions and automated platform actions',
     flow: ['Ask', 'Analyse', 'Recommend', 'Act']
   }
 ]
-
-// Subtle tactile audio feedback using native Web Audio API
-function playTactileFeedback(freq = 560, type = 'sine', duration = 0.07) {
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext
-    if (!AudioCtx) return
-    const ctx = new AudioCtx()
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.type = type
-    osc.frequency.setValueAtTime(freq, ctx.currentTime)
-    gain.gain.setValueAtTime(0.03, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration)
-    osc.connect(gain)
-    gain.connect(ctx.destination)
-    osc.start()
-    osc.stop(ctx.currentTime + duration)
-  } catch {
-    // Non-critical audio
-  }
-}
 
 export default function CityCommandHUD({
   speed = 1.0,
@@ -122,7 +126,6 @@ export default function CityCommandHUD({
   }, [activeStationId])
 
   const handleStationClick = (id) => {
-    playTactileFeedback(480, 'sine', 0.05)
     setActiveStationId((prev) => {
       const nextId = prev === id ? null : id
       if (!nextId) {
@@ -167,7 +170,6 @@ export default function CityCommandHUD({
               aria-label={`Select ${station.label}`}
             >
               <div className="beacon-header-row">
-                <span className="beacon-num">{station.code}</span>
                 <span className="beacon-title">{station.label}</span>
               </div>
               {station.role && (
@@ -183,10 +185,11 @@ export default function CityCommandHUD({
         <div className="hud-detail-card" role="dialog" aria-label={`${activeStation.label} Details`}>
           <div className="detail-card-header">
             <div className="detail-header-left">
-              <span className="detail-badge">{activeStation.code}</span>
               <div>
                 <h4 className="detail-title">{activeStation.label}</h4>
-                <p className="detail-subtitle">{activeStation.role || activeStation.explanation}</p>
+                <p className="detail-subtitle">
+                  {activeStation.tagline || activeStation.role || activeStation.explanation}
+                </p>
               </div>
             </div>
             <button
@@ -200,36 +203,66 @@ export default function CityCommandHUD({
             </button>
           </div>
 
-          <div className="detail-card-body">
-            <div className="detail-section">
-              <span className="detail-section-label">Input</span>
-              <p className="detail-section-text">{activeStation.input}</p>
-            </div>
-
-            <div className="detail-section">
-              <span className="detail-section-label">Output</span>
-              <p className="detail-section-text">{activeStation.output}</p>
-            </div>
-
-            {activeStation.flow && (
-              <div className="detail-section">
-                <span className="detail-section-label">Flow</span>
-                <div className="detail-flow-chain">
-                  {(Array.isArray(activeStation.flow)
-                    ? activeStation.flow
-                    : activeStation.flow.split('→').map((s) => s.trim())
-                  ).map((step, idx, arr) => (
-                    <span key={idx} className="detail-flow-item">
-                      <span className="detail-flow-step">{step}</span>
-                      {idx < arr.length - 1 && (
-                        <span className="detail-flow-sep" aria-hidden="true">→</span>
-                      )}
-                    </span>
-                  ))}
+          {/* Architecture Input / Feature / Output Stage */}
+          <div className="hud-diagram-stage">
+            {/* Top Inputs */}
+            <div className="hud-diagram-inputs-row">
+              <div className="hud-diagram-input-col">
+                <div className="hud-diagram-chip input-chip">
+                  <span className="hud-chip-label">Input</span>
+                  <span className="hud-chip-value">
+                    {(activeStation.inputs && activeStation.inputs[0]) || activeStation.input}
+                  </span>
                 </div>
+                <div className="hud-connector-line top-line" aria-hidden="true" />
               </div>
-            )}
+
+              <div className="hud-diagram-input-col">
+                <div className="hud-diagram-chip input-chip">
+                  <span className="hud-chip-label">Input</span>
+                  <span className="hud-chip-value">
+                    {(activeStation.inputs && activeStation.inputs[1]) || 'Internal policies & context'}
+                  </span>
+                </div>
+                <div className="hud-connector-line top-line" aria-hidden="true" />
+              </div>
+            </div>
+
+            {/* Feature Center Pill */}
+            <div className="hud-feature-box" title={activeStation.label}>
+              <span className="hud-feature-title">{activeStation.label}</span>
+            </div>
+
+            {/* Bottom Connector Line */}
+            <div className="hud-connector-line bottom-line" aria-hidden="true" />
+
+            {/* Bottom Output */}
+            <div className="hud-diagram-output-wrap">
+              <div className="hud-diagram-chip output-chip">
+                <span className="hud-chip-label output-label">Output</span>
+                <span className="hud-chip-value output-value">{activeStation.output}</span>
+              </div>
+            </div>
           </div>
+
+          {activeStation.flow && (
+            <div className="detail-flow-section">
+              <span className="detail-flow-label">Execution flow</span>
+              <div className="detail-flow-chain">
+                {(Array.isArray(activeStation.flow)
+                  ? activeStation.flow
+                  : activeStation.flow.split('→').map((s) => s.trim())
+                ).map((step, idx, arr) => (
+                  <span key={idx} className="detail-flow-item">
+                    <span className="detail-flow-step">{step}</span>
+                    {idx < arr.length - 1 && (
+                      <span className="detail-flow-sep" aria-hidden="true">→</span>
+                    )}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
