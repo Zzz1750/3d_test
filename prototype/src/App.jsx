@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import HomePage from './pages/HomePage'
 import ProductShowcase from './components/ProductShowcase'
@@ -6,7 +6,7 @@ import TestPage from './pages/TestPage'
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Header />
 
       <Routes>
@@ -20,7 +20,9 @@ export default function App() {
           }
         />
         <Route path="/test" element={<TestPage />} />
+        {/* Fallback to Home for any unrecognized path */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }

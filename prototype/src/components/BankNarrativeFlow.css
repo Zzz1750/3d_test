@@ -79,8 +79,8 @@
 .unified-flow-svg {
   width: 100%;
   height: auto;
-  min-height: 560px;
-  max-height: 720px;
+  min-height: 520px;
+  max-height: 700px;
   display: block;
 }
 
@@ -115,7 +115,7 @@
   stroke: var(--color-primary);
   stroke-width: 2.2;
   stroke-dasharray: 6 4;
-  animation: pipeWaveSurge 1.0s linear infinite;
+  animation: pipeWaveSurge 2.4s linear infinite;
 }
 
 .line-trunk {
@@ -127,7 +127,7 @@
   stroke: var(--color-primary);
   stroke-width: 2;
   stroke-dasharray: 6 4;
-  animation: pipeWaveSurge 1.2s linear infinite;
+  animation: pipeWaveSurge 2.8s linear infinite;
 }
 
 .c2r-slow-flow {
@@ -193,9 +193,11 @@
 }
 
 @keyframes c2rHeroEntrance {
-  from { opacity: 0; transform: translate(625px, 285px) scale(0.7); }
-  to { opacity: 1; transform: translate(625px, 275px) scale(1); }
+  from { opacity: 0; transform: translate(620px, 300px) scale(0.7); }
+  to { opacity: 1; transform: translate(620px, 290px) scale(1); }
 }
+
+
 
 /* ---------------------------------------------------------
    Responsive Adaptations

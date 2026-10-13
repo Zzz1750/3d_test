@@ -100,13 +100,15 @@ export default function HomePage() {
       {/* Centered Intro Statement */}
       <IntroStatement />
 
-      {/* 8 Core Use Cases & Leadership Roles */}
-      <UseCases />
-
       {/* Centered Data Streams & Overloaded Banker Diagram (Directly Under Problem Statement) */}
       <section className="banker-diagram-section-wrapper">
         <BankNarrativeFlow />
       </section>
+
+      {/* 8 Core Use Cases & Leadership Roles */}
+      <UseCases />
+
+
 
       {/* New Toolkit (Bento Grid cards with screenshots) */}
       <ProductShowcase />
@@ -115,7 +117,7 @@ export default function HomePage() {
       <BlogStudiesShowcase />
 
       {/* Workflow Integrations: ServiceNow, Teams, Confluence, Slack, SharePoint, Archer */}
-      <WorkflowIntegrations />
+      {/* <WorkflowIntegrations /> */}
 
       {/* Footer */}
       <NewFooter />

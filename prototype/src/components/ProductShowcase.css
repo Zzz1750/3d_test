@@ -128,7 +128,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin: 28px 0 32px;
+  margin-top: auto;
+  margin-bottom: 0;
 }
 
 .toolkit-point {
@@ -149,15 +150,19 @@
   color: #94a3b8;
 }
 
+.toolkit-point-solution {
+  margin-top: auto;
+}
+
 .toolkit-point-solution .toolkit-point-label {
   color: var(--color-primary);
 }
 
 .toolkit-point-text {
   font-family: var(--font-sans);
-  font-size: 14.5px;
+  font-size: 20.5px;
   line-height: 1.6;
-  margin: 0;
+  margin: 20px;
 }
 
 .toolkit-point-reality .toolkit-point-text {
@@ -172,8 +177,12 @@
 
 /* Action Link */
 .toolkit-action {
-  margin-top: auto;
-  padding-top: 8px;
+  padding-top: 0;
+}
+
+.toolkit-action:has(span:empty),
+.toolkit-action:empty {
+  display: none;
 }
 
 .toolkit-link {

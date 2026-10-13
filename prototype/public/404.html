@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Comply2Reg</title>
+    <script>
+      // Single Page App redirect for GitHub Pages (redirects non-hash routes to hash routes)
+      (function () {
+        var base = '/3d_test/'
+        var pathname = window.location.pathname
+        var subpath = pathname.indexOf(base) === 0 ? pathname.slice(base.length) : pathname.replace(/^\//, '')
+        var search = window.location.search || ''
+        var hash = window.location.hash || ''
+        var target = base + '#' + (subpath ? '/' + subpath : '/') + search + hash
+        window.location.replace(target)
+      })()
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

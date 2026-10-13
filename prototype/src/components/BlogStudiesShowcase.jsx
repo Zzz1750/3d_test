@@ -138,7 +138,7 @@ export default function BlogStudiesShowcase() {
               <span className="blog-showcase-title-accent">Not just compliance theory.</span>
             </h2>
             <p className="blog-showcase-subtitle">
-              Supervisory enforcement breakdowns, forensic case studies, and engineering frameworks.
+
             </p>
           </div>
         </header>

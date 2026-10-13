@@ -103,60 +103,72 @@ const USE_CASES = [
 ]
 
 const ROLES = [
-  'Head of Compliance',
-  'Head of Products',
-  'Head of Risk & Audit',
-  'Head of Ops & IT',
+  'Heads of Product',
+  'Heads of Product Teams',
+  'Heads of Operations and IT',
+  'Heads of Risk and Audit',
 ]
 
 export default function UseCases() {
   return (
     <section className="usecases-section" id="use-cases" aria-label="Use Cases">
       <div className="usecases-container">
-        {/* Clean Header — NO Eyebrow as requested */}
+        {/* Clean Header */}
         <div className="usecases-header">
           <h2 className="usecases-title">
-            Use Cases Across the <span className="usecases-title-accent">Bank</span>
+            Insights to action.<br /><span className="usecases-title-accent">Connected compliance across the bank.</span>
           </h2>
-          <p className="usecases-subtitle">
-
-          </p>
         </div>
 
-        {/* 8 Minimal Clean Use Case Cards */}
-        <div className="usecases-grid">
-          {USE_CASES.map((uc) => (
-            <div key={uc.id} className="usecase-card">
-              <div className="usecase-card-icon" aria-hidden="true">
-                {uc.icon}
-              </div>
-              <h3 className="usecase-card-title">{uc.title}</h3>
-              <p className="usecase-card-desc">{uc.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Connected Leadership Axis — Creative, Minimal & Non-Clickable */}
-        <div className="usecases-roles-section">
-          <div className="usecases-roles-header">
-            <h3 className="usecases-roles-title">
-              Connected compliance across <span className="usecases-roles-accent">bank leadership</span>
-            </h3>
-          </div>
-
-          <div className="usecases-roles-axis">
-            <div className="usecases-axis-line" aria-hidden="true" />
-            <div className="usecases-axis-nodes">
-              {ROLES.map((role) => (
-                <div key={role} className="usecases-axis-item">
-                  <div className="usecases-axis-node" aria-hidden="true">
-                    <span className="usecases-node-core" />
-                  </div>
-                  <span className="usecases-axis-text">{role}</span>
+        {/* Combined Stage: Boxes on Left + Timeline Rail on Right */}
+        <div className="usecases-stage">
+          {/* 8 Use Case Cards */}
+          <div className="usecases-grid">
+            {USE_CASES.map((uc) => (
+              <div key={uc.id} className="usecase-card">
+                <div className="usecase-card-icon" aria-hidden="true">
+                  {uc.icon}
                 </div>
-              ))}
-            </div>
+                <h3 className="usecase-card-title">{uc.title}</h3>
+                <p className="usecase-card-desc">{uc.desc}</p>
+              </div>
+            ))}
           </div>
+
+          {/* Right Side: Minimal Timeline Rail (Clean, non-clickable, only the 4 role titles) */}
+          <aside className="usecases-roles-rail" aria-label="Bank Leadership Roles">
+            <div className="roles-timeline-track">
+              {/* Continuous vertical timeline connector line */}
+              <div className="roles-timeline-line" aria-hidden="true" />
+
+              {/* 4 Leadership Role Items from Top to Bottom */}
+              <div className="roles-timeline-items">
+                {ROLES.map((role) => (
+                  <div
+                    key={role}
+                    className="roles-timeline-item"
+                  >
+                    {/* Node on the timeline */}
+                    <div className="roles-timeline-node-wrap">
+                      <div className="roles-timeline-node" aria-hidden="true" />
+                    </div>
+
+                    {/* Timeline Content: Dash + Sparkle on top, Role Title below */}
+                    <div className="roles-timeline-body">
+                      <div className="roles-timeline-connector" aria-hidden="true">
+                        <span className="roles-sparkle-dash" />
+                        <span className="roles-sparkle-dot" />
+                        <svg className="roles-sparkle-star" viewBox="0 0 16 16" fill="currentColor">
+                          <path d="M8 0c0 4.418 3.582 8 8 8-4.418 0-8 3.582-8 8 0-4.418-3.582-8-8-8 4.418 0 8-3.582 8-8z" />
+                        </svg>
+                      </div>
+                      <span className="roles-timeline-title">{role}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </section>

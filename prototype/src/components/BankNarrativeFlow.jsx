@@ -78,22 +78,23 @@ export default function BankNarrativeFlow() {
   }, [isPlaying])
 
   // Coordinates
-  const trunkX = 440
-  const c2rIntakeTarget = { x: 620, y: 350 }
-  const c2rOutputTarget = { x: 780, y: 350 }
-  const bankerRightTarget = { x: 972, y: 350 }
+  const cardRightX = 364
+  const trunkX = 436
+  const c2rIntakeTarget = { x: 620, y: 370 }
+  const c2rOutputTarget = { x: 780, y: 370 }
+  const bankerRightTarget = { x: 960, y: 370 }
   const outputMidX = 868
 
   // Y-coordinates of all 8 stream cards
   const streamY = {
-    node1: 76,
+    node1: 78,
     node2: 156,
-    node3: 236,
-    node4: 316,
-    node5: 396,
-    node6: 476,
-    digitalAssets: 608,
-    alternativeData: 690
+    node3: 234,
+    node4: 312,
+    node5: 390,
+    node6: 468,
+    digitalAssets: 588,
+    alternativeData: 666
   }
 
   // Outflow delivery animation from Comply2Reg to Banker
@@ -103,32 +104,99 @@ export default function BankNarrativeFlow() {
   const outflowProgress = cycleTime < OUTFLOW_FLIGHT ? cycleTime / OUTFLOW_FLIGHT : -1
   const isStamping = cycleTime >= OUTFLOW_FLIGHT && cycleTime < (OUTFLOW_FLIGHT + 0.6)
 
-  // Document renderer along orthogonal lines
-  const renderMovingDoc = (progress, x0, y0, xMid, x1, y1, isDigital = false) => {
+  // Clean, consistent document icon in white or Comply2Reg blue (no texts, no other colors)
+  const renderDocIcon = (type = 'paper', scale = 1, rotation = 0) => (
+    <g transform={`rotate(${rotation}) scale(${scale})`}>
+      {type === 'digital' ? (
+        <g>
+          <rect x="-11" y="-14" width="22" height="28" rx="3.5" fill="#eff6ff" stroke="#0070f3" strokeWidth="1.8" />
+          <circle cx="-4" cy="-6" r="2.8" fill="#0070f3" />
+          <line x1="-7" y1="2" x2="5" y2="2" stroke="#0070f3" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="-7" y1="7" x2="2" y2="7" stroke="#0070f3" strokeWidth="1.5" strokeLinecap="round" />
+        </g>
+      ) : (
+        <g>
+          <rect x="-11" y="-14" width="22" height="28" rx="3" fill="#ffffff" stroke="#0f172a" strokeWidth="1.8" />
+          <line x1="-6" y1="-6" x2="4" y2="-6" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
+          <line x1="-6" y1="-1" x2="6" y2="-1" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
+          <line x1="-6" y1="4" x2="3" y2="4" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
+          <line x1="-6" y1="9" x2="-1" y2="9" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
+        </g>
+      )}
+    </g>
+  )
+
+  // Document renderer along orthogonal lines with random rotations and chaotic jumps
+  const renderMovingDoc = (progress, x0, y0, xMid, x1, y1, isDigital = false, baseRot = 0, jumpAmount = 10) => {
     if (progress < 0 || progress > 1) return null
     const { x, y } = getOrthogonalPoint(progress, x0, y0, xMid, x1, y1)
 
+    // Dynamic rotation: individual random base angle + gentle in-flight flutter
+    const flightRot = baseRot + Math.sin(progress * Math.PI * 4) * 4
+
+    // Gentle hop and micro-jitter
+    const hop = Math.sin(progress * Math.PI * 2) * jumpAmount
+    const jitter = Math.sin(progress * 8) * 1.2
+
+    // Segment lengths to apply hop perpendicular to motion
+    const l1 = Math.abs(xMid - x0)
+    const l2 = Math.abs(y1 - y0)
+    const total = l1 + l2 + Math.abs(x1 - xMid)
+    const d = progress * total
+
+    let offsetX = 0
+    let offsetY = 0
+
+    if (d <= l1) {
+      // Horizontal feeder from card: jump vertically
+      offsetY = hop + jitter
+    } else if (d <= l1 + l2) {
+      // Vertical trunk: jump horizontally off the line
+      offsetX = hop + jitter
+    } else {
+      // Horizontal intake into Comply2Reg: jump vertically
+      offsetY = hop + jitter
+    }
+
+    // Smooth suction into the logo at intake
+    let scale = 1
+    let opacity = 1
+    if (progress > 0.90) {
+      const p = (progress - 0.90) / 0.10
+      scale = 1 - p * 0.3
+      opacity = 1 - p * 0.85
+      offsetX *= (1 - p)
+      offsetY *= (1 - p)
+    }
+
     return (
-      <g transform={`translate(${x}, ${y})`} filter="url(#card-soft-shadow)">
-        {isDigital ? (
-          <g>
-            <rect x="-12" y="-15" width="24" height="30" rx="3.5" fill="#eff6ff" stroke="#0070f3" strokeWidth="2" />
-            <circle cx="-4" cy="-6" r="3" fill="#0070f3" />
-            <line x1="-7" y1="2" x2="4" y2="2" stroke="#0070f3" strokeWidth="1.6" strokeLinecap="round" />
-            <line x1="-7" y1="7" x2="2" y2="7" stroke="#0070f3" strokeWidth="1.6" strokeLinecap="round" />
-          </g>
-        ) : (
-          <g>
-            <rect x="-11" y="-14" width="22" height="28" rx="3" fill="#ffffff" stroke="#0f172a" strokeWidth="1.8" />
-            <line x1="-6" y1="-6" x2="4" y2="-6" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
-            <line x1="-6" y1="-1" x2="6" y2="-1" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
-            <line x1="-6" y1="4" x2="3" y2="4" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
-            <line x1="-6" y1="9" x2="-1" y2="9" stroke="#94a3b8" strokeWidth="1.6" strokeLinecap="round" />
-          </g>
-        )}
+      <g
+        transform={`translate(${x + offsetX}, ${y + offsetY}) scale(${scale})`}
+        filter="url(#card-soft-shadow)"
+        opacity={opacity}
+      >
+        {renderDocIcon(isDigital ? 'digital' : 'paper', 1, flightRot)}
       </g>
     )
   }
+
+  // Multi-source streams with calmed pacing and unique rotation/hop
+  const incomingStreams = [
+    { y: streamY.node1, cycle: 3.6, offset: 0.0, isDigital: false, rot: -12, jump: 7 },
+    { y: streamY.node1, cycle: 3.6, offset: 1.8, isDigital: true, rot: 10, jump: -6 },
+    { y: streamY.node2, cycle: 3.0, offset: 0.5, isDigital: true, rot: 12, jump: -8 },
+    { y: streamY.node2, cycle: 3.0, offset: 2.0, isDigital: false, rot: -10, jump: 6 },
+    { y: streamY.node3, cycle: 3.8, offset: 0.3, isDigital: false, rot: -14, jump: 8 },
+    { y: streamY.node3, cycle: 3.8, offset: 2.2, isDigital: false, rot: 11, jump: -7 },
+    { y: streamY.node4, cycle: 3.2, offset: 0.8, isDigital: true, rot: 12, jump: -6 },
+    { y: streamY.node4, cycle: 3.2, offset: 2.4, isDigital: false, rot: -10, jump: 7 },
+    { y: streamY.node5, cycle: 4.0, offset: 1.0, isDigital: false, rot: -12, jump: 8 },
+    { y: streamY.node6, cycle: 3.4, offset: 0.4, isDigital: false, rot: 14, jump: -7 },
+    { y: streamY.node6, cycle: 3.4, offset: 2.1, isDigital: false, rot: -8, jump: 6 },
+    { y: streamY.digitalAssets, cycle: 3.2, offset: 0.6, isDigital: true, rot: -14, jump: 8 },
+    { y: streamY.digitalAssets, cycle: 3.2, offset: 2.2, isDigital: true, rot: 12, jump: -6 },
+    { y: streamY.alternativeData, cycle: 4.2, offset: 1.2, isDigital: false, rot: 10, jump: -7 },
+  ]
 
   return (
     <section ref={sectionRef} className="flow-section" id="compliance-flow">
@@ -137,10 +205,10 @@ export default function BankNarrativeFlow() {
         {/* Clear Contextual Header */}
         <div className="flow-header">
           <h2 className="flow-title">
-            Why Banking Compliance Breaks Down: <span className="flow-title-accent">The Data Deluge</span>
+            The data deluge. <br /> <span className="flow-title-accent">Why banking compliance breaks down. </span>
           </h2>
           <p className="flow-subtitle">
-            Banks face nonstop data across legacy systems; Comply2Reg unifies regulatory complexity into verified, actionable compliance records.
+
           </p>
         </div>
 
@@ -149,7 +217,7 @@ export default function BankNarrativeFlow() {
 
           <svg
             className="unified-flow-svg"
-            viewBox="0 0 1340 798"
+            viewBox="0 0 1340 760"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -170,14 +238,14 @@ export default function BankNarrativeFlow() {
                 ============================================================== */}
             <g className="pipelines-c2r-layer">
               {/* Feeder Lines from Left Cards into Vertical Trunk */}
-              <line x1="360" y1={streamY.node1} x2={trunkX} y2={streamY.node1} className="pipe-wire line-streaming" />
-              <line x1="360" y1={streamY.node2} x2={trunkX} y2={streamY.node2} className="pipe-wire line-streaming" />
-              <line x1="360" y1={streamY.node3} x2={trunkX} y2={streamY.node3} className="pipe-wire line-streaming" />
-              <line x1="360" y1={streamY.node4} x2={trunkX} y2={streamY.node4} className="pipe-wire line-streaming" />
-              <line x1="360" y1={streamY.node5} x2={trunkX} y2={streamY.node5} className="pipe-wire line-ondemand" />
-              <line x1="360" y1={streamY.node6} x2={trunkX} y2={streamY.node6} className="pipe-wire line-batch" />
-              <line x1="360" y1={streamY.digitalAssets} x2={trunkX} y2={streamY.digitalAssets} className="pipe-wire digital-line-surge" />
-              <line x1="360" y1={streamY.alternativeData} x2={trunkX} y2={streamY.alternativeData} className="pipe-wire digital-line-surge" />
+              <line x1={cardRightX} y1={streamY.node1} x2={trunkX} y2={streamY.node1} className="pipe-wire line-streaming" />
+              <line x1={cardRightX} y1={streamY.node2} x2={trunkX} y2={streamY.node2} className="pipe-wire line-streaming" />
+              <line x1={cardRightX} y1={streamY.node3} x2={trunkX} y2={streamY.node3} className="pipe-wire line-streaming" />
+              <line x1={cardRightX} y1={streamY.node4} x2={trunkX} y2={streamY.node4} className="pipe-wire line-streaming" />
+              <line x1={cardRightX} y1={streamY.node5} x2={trunkX} y2={streamY.node5} className="pipe-wire line-ondemand" />
+              <line x1={cardRightX} y1={streamY.node6} x2={trunkX} y2={streamY.node6} className="pipe-wire line-batch" />
+              <line x1={cardRightX} y1={streamY.digitalAssets} x2={trunkX} y2={streamY.digitalAssets} className="pipe-wire digital-line-surge" />
+              <line x1={cardRightX} y1={streamY.alternativeData} x2={trunkX} y2={streamY.alternativeData} className="pipe-wire digital-line-surge" />
 
               {/* Vertical Trunk Backbone */}
               <line x1={trunkX} y1={streamY.node1} x2={trunkX} y2={streamY.alternativeData} className="pipe-wire line-trunk" />
@@ -207,12 +275,15 @@ export default function BankNarrativeFlow() {
                 2. CONTINUOUS FLYING DOCUMENTS
                 ============================================================== */}
             <g className="moving-docs-c2r">
-              {/* Documents streaming from data feeds into Comply2Reg */}
-              {renderMovingDoc((time % 1.6) / 1.6, 360, streamY.node1, trunkX, c2rIntakeTarget.x, c2rIntakeTarget.y)}
-              {renderMovingDoc(((time + 0.5) % 1.6) / 1.6, 360, streamY.node3, trunkX, c2rIntakeTarget.x, c2rIntakeTarget.y)}
-              {renderMovingDoc(((time + 1.0) % 1.6) / 1.6, 360, streamY.node5, trunkX, c2rIntakeTarget.x, c2rIntakeTarget.y)}
-              {renderMovingDoc(((time + 0.3) % 1.5) / 1.5, 360, streamY.digitalAssets, trunkX, c2rIntakeTarget.x, c2rIntakeTarget.y, true)}
-              {renderMovingDoc(((time + 0.8) % 1.5) / 1.5, 360, streamY.alternativeData, trunkX, c2rIntakeTarget.x, c2rIntakeTarget.y, true)}
+              {/* Flow streaming from all 8 sources with random rotations and chaotic jumps */}
+              {incomingStreams.map((s, idx) => {
+                const prog = ((time + s.offset) % s.cycle) / s.cycle
+                return (
+                  <g key={`stream-${idx}`}>
+                    {renderMovingDoc(prog, cardRightX, s.y, trunkX, c2rIntakeTarget.x, c2rIntakeTarget.y, s.isDigital, s.rot, s.jump)}
+                  </g>
+                )
+              })}
 
               {/* Verified document with Comply2Reg logo delivered to Banker */}
               {outflowProgress >= 0 && outflowProgress <= 1 && (
@@ -248,102 +319,102 @@ export default function BankNarrativeFlow() {
                 ============================================================== */}
             <g className="sources-group">
               {/* Heading: Core Banking Data */}
-              <g transform="translate(30, 22)">
-                <text x="2" y="2" fontFamily="var(--font-sans)" fontSize="11.5" fontWeight="700" fill="#94a3b8" letterSpacing="0.08em">
+              <g transform="translate(24, 24)">
+                <text x="2" y="2" fontFamily="var(--font-sans)" fontSize="12" fontWeight="700" fill="#94a3b8" letterSpacing="0.08em">
                   CORE BANKING DATA
                 </text>
               </g>
 
               {/* Node 1: Payment Rails */}
-              <g transform="translate(30, 40)" filter="url(#card-soft-shadow)">
-                <rect x="0" y="0" width="330" height="72" rx="15" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
-                <text x="22" y="30" fontFamily="var(--font-sans)" fontSize="15" fontWeight="600" fill="#0f172a">Payment rails</text>
-                <text x="308" y="30" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12.5" fontStyle="italic" fill="#0070f3">~ every second</text>
-                <text x="22" y="53" fontFamily="var(--font-sans)" fontSize="12.5" fill="#64748b">cards, SWIFT, instant pay · ISO 20022</text>
+              <g transform="translate(24, 44)" filter="url(#card-soft-shadow)">
+                <rect x="0" y="0" width="340" height="68" rx="14" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
+                <text x="18" y="28" fontFamily="var(--font-sans)" fontSize="14.5" fontWeight="600" fill="#0f172a">Payment rails</text>
+                <text x="322" y="28" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12" fontStyle="italic" fill="#0070f3">~ every second</text>
+                <text x="18" y="52" fontFamily="var(--font-sans)" fontSize="13.5" fill="#64748b">cards, SWIFT, instant pay · ISO 20022</text>
               </g>
 
               {/* Node 2: Markets */}
-              <g transform="translate(30, 120)" filter="url(#card-soft-shadow)">
-                <rect x="0" y="0" width="330" height="72" rx="15" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
-                <text x="22" y="30" fontFamily="var(--font-sans)" fontSize="15" fontWeight="600" fill="#0f172a">Markets & Exchanges</text>
-                <text x="308" y="30" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12.5" fontStyle="italic" fill="#0070f3">~ millisecond</text>
-                <text x="22" y="53" fontFamily="var(--font-sans)" fontSize="12.5" fill="#64748b">exchanges, price & rate feeds · FIX</text>
+              <g transform="translate(24, 122)" filter="url(#card-soft-shadow)">
+                <rect x="0" y="0" width="340" height="68" rx="14" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
+                <text x="18" y="28" fontFamily="var(--font-sans)" fontSize="14.5" fontWeight="600" fill="#0f172a">Markets & Exchanges</text>
+                <text x="322" y="28" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12" fontStyle="italic" fill="#0070f3">~ millisecond</text>
+                <text x="18" y="52" fontFamily="var(--font-sans)" fontSize="13.5" fill="#64748b">exchanges, price & rate feeds · FIX</text>
               </g>
 
               {/* Node 3: Customers */}
-              <g transform="translate(30, 200)" filter="url(#card-soft-shadow)">
-                <rect x="0" y="0" width="330" height="72" rx="15" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
-                <text x="22" y="30" fontFamily="var(--font-sans)" fontSize="15" fontWeight="600" fill="#0f172a">Customers & KYC</text>
-                <text x="308" y="30" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12.5" fontStyle="italic" fill="#0070f3">~ all day</text>
-                <text x="22" y="53" fontFamily="var(--font-sans)" fontSize="12.5" fill="#64748b">apps, web, branches · video KYC</text>
+              <g transform="translate(24, 200)" filter="url(#card-soft-shadow)">
+                <rect x="0" y="0" width="340" height="68" rx="14" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
+                <text x="18" y="28" fontFamily="var(--font-sans)" fontSize="14.5" fontWeight="600" fill="#0f172a">Customers & KYC</text>
+                <text x="322" y="28" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12" fontStyle="italic" fill="#0070f3">~ all day</text>
+                <text x="18" y="52" fontFamily="var(--font-sans)" fontSize="13.5" fill="#64748b">apps, web, branches · video KYC</text>
               </g>
 
               {/* Node 4: Devices & Channels */}
-              <g transform="translate(30, 280)" filter="url(#card-soft-shadow)">
-                <rect x="0" y="0" width="330" height="72" rx="15" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
-                <text x="22" y="30" fontFamily="var(--font-sans)" fontSize="15" fontWeight="600" fill="#0f172a">Devices & channels</text>
-                <text x="308" y="30" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12.5" fontStyle="italic" fill="#0070f3">~ every second</text>
-                <text x="22" y="53" fontFamily="var(--font-sans)" fontSize="12.5" fill="#64748b">phone, browser, ATM, POS · event logs</text>
+              <g transform="translate(24, 278)" filter="url(#card-soft-shadow)">
+                <rect x="0" y="0" width="340" height="68" rx="14" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
+                <text x="18" y="28" fontFamily="var(--font-sans)" fontSize="14.5" fontWeight="600" fill="#0f172a">Devices & channels</text>
+                <text x="322" y="28" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12" fontStyle="italic" fill="#0070f3">~ every second</text>
+                <text x="18" y="52" fontFamily="var(--font-sans)" fontSize="13.5" fill="#64748b">phone, browser, ATM, POS · event logs</text>
               </g>
 
               {/* Node 5: Open Banking & Credit */}
-              <g transform="translate(30, 360)" filter="url(#card-soft-shadow)">
-                <rect x="0" y="0" width="330" height="72" rx="15" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
-                <text x="22" y="30" fontFamily="var(--font-sans)" fontSize="15" fontWeight="600" fill="#0f172a">Open banking & credit</text>
-                <text x="308" y="30" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12.5" fontStyle="italic" fill="#0070f3">~ on consent</text>
-                <text x="22" y="53" fontFamily="var(--font-sans)" fontSize="12.5" fill="#64748b">other banks' data · JSON APIs · XBRL</text>
+              <g transform="translate(24, 356)" filter="url(#card-soft-shadow)">
+                <rect x="0" y="0" width="340" height="68" rx="14" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
+                <text x="18" y="28" fontFamily="var(--font-sans)" fontSize="14.5" fontWeight="600" fill="#0f172a">Open banking & credit</text>
+                <text x="322" y="28" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12" fontStyle="italic" fill="#0070f3">~ on consent</text>
+                <text x="18" y="52" fontFamily="var(--font-sans)" fontSize="13.5" fill="#64748b">other banks' data · JSON APIs · XBRL</text>
               </g>
 
               {/* Node 6: Watchlists & Regulators */}
-              <g transform="translate(30, 440)" filter="url(#card-soft-shadow)">
-                <rect x="0" y="0" width="330" height="72" rx="15" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
-                <text x="22" y="30" fontFamily="var(--font-sans)" fontSize="15" fontWeight="600" fill="#0f172a">Watchlists & Regulators</text>
-                <text x="308" y="30" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12.5" fontStyle="italic" fill="#0070f3">~ any hour</text>
-                <text x="22" y="53" fontFamily="var(--font-sans)" fontSize="12.5" fill="#64748b">sanctions, PEPs · rules, consultations</text>
+              <g transform="translate(24, 434)" filter="url(#card-soft-shadow)">
+                <rect x="0" y="0" width="340" height="68" rx="14" fill="#ffffff" fillOpacity="0.96" stroke="#e2e8f0" strokeWidth="1.2" />
+                <text x="18" y="28" fontFamily="var(--font-sans)" fontSize="14.5" fontWeight="600" fill="#0f172a">Watchlists & Regulators</text>
+                <text x="322" y="28" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12" fontStyle="italic" fill="#0070f3">~ any hour</text>
+                <text x="18" y="52" fontFamily="var(--font-sans)" fontSize="13.5" fill="#64748b">sanctions, PEPs · rules, consultations</text>
               </g>
 
               {/* Heading: New Digital Assets & Alt Data */}
-              <g transform="translate(30, 556)">
-                <text x="2" y="2" fontFamily="var(--font-sans)" fontSize="11.5" fontWeight="700" fill="#94a3b8" letterSpacing="0.08em">
+              <g transform="translate(24, 532)">
+                <text x="2" y="2" fontFamily="var(--font-sans)" fontSize="12" fontWeight="700" fill="#94a3b8" letterSpacing="0.08em">
                   NEW DIGITAL ASSETS & ALT DATA
                 </text>
               </g>
 
               {/* Node 7: Digital Assets */}
-              <g transform="translate(30, 572)" filter="url(#card-soft-shadow)">
-                <rect x="0" y="0" width="330" height="72" rx="15" fill="#ffffff" stroke="#93c5fd" strokeWidth="1.4" />
-                <text x="22" y="30" fontFamily="var(--font-sans)" fontSize="15" fontWeight="600" fill="#0070f3">Digital assets</text>
-                <text x="308" y="30" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12.5" fontWeight="600" fill="#0070f3">~ 24/7, no weekends</text>
-                <text x="22" y="53" fontFamily="var(--font-sans)" fontSize="12.5" fill="#475569">chains, custodians, VASPs · Travel Rule</text>
+              <g transform="translate(24, 554)" filter="url(#card-soft-shadow)">
+                <rect x="0" y="0" width="340" height="68" rx="14" fill="#ffffff" stroke="#93c5fd" strokeWidth="1.4" />
+                <text x="18" y="28" fontFamily="var(--font-sans)" fontSize="14.5" fontWeight="600" fill="#0070f3">Digital assets</text>
+                <text x="322" y="28" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12" fontWeight="600" fill="#0070f3">~ 24/7, no weekends</text>
+                <text x="18" y="52" fontFamily="var(--font-sans)" fontSize="13.5" fill="#475569">chains, custodians, VASPs · Travel Rule</text>
               </g>
 
               {/* Node 8: Alternative Data */}
-              <g transform="translate(30, 654)" filter="url(#card-soft-shadow)">
-                <rect x="0" y="0" width="330" height="72" rx="15" fill="#ffffff" stroke="#93c5fd" strokeWidth="1.4" />
-                <text x="22" y="30" fontFamily="var(--font-sans)" fontSize="15" fontWeight="600" fill="#0070f3">Alternative data</text>
-                <text x="308" y="30" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12.5" fontWeight="600" fill="#0070f3">~ daily to weekly</text>
-                <text x="22" y="53" fontFamily="var(--font-sans)" fontSize="12.5" fill="#475569">satellite, weather, ESG, news · APIs</text>
+              <g transform="translate(24, 632)" filter="url(#card-soft-shadow)">
+                <rect x="0" y="0" width="340" height="68" rx="14" fill="#ffffff" stroke="#93c5fd" strokeWidth="1.4" />
+                <text x="18" y="28" fontFamily="var(--font-sans)" fontSize="14.5" fontWeight="600" fill="#0070f3">Alternative data</text>
+                <text x="322" y="28" textAnchor="end" fontFamily="var(--font-sans)" fontSize="12" fontWeight="600" fill="#0070f3">~ daily to weekly</text>
+                <text x="18" y="52" fontFamily="var(--font-sans)" fontSize="13.5" fill="#475569">satellite, weather, ESG, news · APIs</text>
               </g>
 
               {/* Speed Legend — Bottom-Right Corner */}
-              <g transform="translate(1155, 680)">
-                <text x="0" y="0" fontFamily="var(--font-sans)" fontSize="15" fontWeight="700" fill="#94a3b8" letterSpacing="0.04em">how fast it arrives:</text>
+              <g transform="translate(1145, 635)">
+                <text x="0" y="0" fontFamily="var(--font-sans)" fontSize="14.5" fontWeight="700" fill="#94a3b8" letterSpacing="0.04em">how fast it arrives:</text>
 
                 <line x1="0" y1="24" x2="36" y2="24" stroke="#94a3b8" strokeWidth="3" strokeLinecap="round" />
-                <text x="46" y="29" fontFamily="var(--font-sans)" fontSize="15" fontWeight="500" fill="#64748b">streaming</text>
+                <text x="46" y="29" fontFamily="var(--font-sans)" fontSize="14" fontWeight="500" fill="#64748b">streaming</text>
 
                 <line x1="0" y1="56" x2="36" y2="56" stroke="#94a3b8" strokeWidth="2.8" strokeDasharray="6 4" strokeLinecap="round" />
-                <text x="46" y="61" fontFamily="var(--font-sans)" fontSize="15" fontWeight="500" fill="#64748b">batch</text>
+                <text x="46" y="61" fontFamily="var(--font-sans)" fontSize="14" fontWeight="500" fill="#64748b">batch</text>
 
                 <line x1="0" y1="88" x2="36" y2="88" stroke="#94a3b8" strokeWidth="2.8" strokeDasharray="2 5" strokeLinecap="round" />
-                <text x="46" y="93" fontFamily="var(--font-sans)" fontSize="15" fontWeight="500" fill="#64748b">on consent</text>
+                <text x="46" y="93" fontFamily="var(--font-sans)" fontSize="14" fontWeight="500" fill="#64748b">on consent</text>
               </g>
             </g>
 
             {/* ==============================================================
                 4. COMPLY2REG LOGO IN THE MIDDLE (Always present)
                 ============================================================== */}
-            <g transform="translate(625, 275)" className="c2r-hero-group" filter="url(#c2r-glow-shadow)">
+            <g transform="translate(620, 290)" className="c2r-hero-group" filter="url(#c2r-glow-shadow)">
               <rect x="-5" y="-5" width="160" height="160" rx="32" fill="#ffffff" />
               <image
                 href={`${import.meta.env.BASE_URL}images/logo2.svg`}
@@ -355,12 +426,12 @@ export default function BankNarrativeFlow() {
             </g>
 
             {/* ==============================================================
-                5. THE BANKER ON THE RIGHT (Always at final position 950px, 180px)
+                5. THE BANKER ON THE RIGHT (Always at final position 950px, 185px)
                 ============================================================== */}
             <g
               className="banker-master-group"
               style={{
-                transform: 'translate(950px, 180px)'
+                transform: 'translate(950px, 185px)'
               }}
             >
               {/* Table Surface */}
@@ -456,9 +527,9 @@ export default function BankNarrativeFlow() {
 
               {/* Legacy Core Ledger */}
               <g transform="translate(30, 200)">
-                <rect x="0" y="0" width="260" height="46" rx="12" fill="#f8fafc" fillOpacity="0.95" stroke="#e2e8f0" strokeWidth="1.2" />
-                <text x="130" y="20" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="13.5" fontWeight="600" fill="#0f172a">Legacy Core Ledger (1983)</text>
-                <text x="130" y="36" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="12" fill="#64748b">+ 40 years of patched systems</text>
+                <rect x="0" y="0" width="270" height="52" rx="12" fill="#f8fafc" fillOpacity="0.95" stroke="#e2e8f0" strokeWidth="1.2" />
+                <text x="135" y="23" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="15" fontWeight="600" fill="#0f172a">Legacy Core Ledger (1983)</text>
+                <text x="135" y="41" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="13.5" fill="#64748b">+ 40 years of patched systems</text>
               </g>
             </g>
 

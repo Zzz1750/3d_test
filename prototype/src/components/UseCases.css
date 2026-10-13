@@ -1,6 +1,6 @@
 /* =========================================================
    Use Cases Section — Minimal, High-Precision Institutional Design
-   Strictly NO Eyebrows / Kickers
+   Strictly NO Eyebrows / Kickers on Header
    ========================================================= */
 
 .usecases-section {
@@ -15,7 +15,7 @@
 }
 
 .usecases-container {
-  max-width: 1360px;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -26,7 +26,7 @@
    --------------------------------------------------------- */
 .usecases-header {
   max-width: 880px;
-  margin: 0 auto 44px auto;
+  margin: 0 auto 48px auto;
   text-align: center;
 }
 
@@ -47,8 +47,8 @@
 
 .usecases-subtitle {
   font-family: var(--font-sans);
-  font-size: 16.5px;
-  line-height: 1.62;
+  font-size: var(--site-content);
+  line-height: 1.6;
   color: var(--color-text-secondary);
   font-weight: 400;
   margin: 0 auto;
@@ -56,12 +56,23 @@
 }
 
 /* ---------------------------------------------------------
-   8 Use Cases Grid (4x2 on Desktop, 2x4 on Tablet, 1-col on Mobile)
+   Combined Stage: Use Case Boxes on Left + Timeline on Right
+   --------------------------------------------------------- */
+.usecases-stage {
+  display: flex;
+  align-items: stretch;
+  gap: 48px;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------
+   8 Use Cases Grid
    --------------------------------------------------------- */
 .usecases-grid {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 22px;
+  gap: 20px;
   margin-bottom: 0;
 }
 
@@ -70,10 +81,17 @@
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 16px;
-  padding: 32px 28px;
+  padding: 26px 20px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.usecase-card:hover {
+  border-color: rgba(0, 102, 204, 0.3);
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.06);
+  transform: translateY(-2px);
 }
 
 /* Card Icon: Unboxed, Standalone & Minimal */
@@ -81,135 +99,156 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
+  height: 32px;
 }
 
 .usecase-icon-svg {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   display: block;
 }
 
 /* Card Typography */
 .usecase-card-title {
   font-family: var(--font-sans);
-  font-size: 20.5px;
+  font-size: 18px;
   font-weight: 600;
   color: #0f172a;
   line-height: 1.35;
   letter-spacing: -0.015em;
-  margin: 0 0 10px 0;
+  margin: 0 0 12px 0;
+  min-height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .usecase-card-desc {
   font-family: var(--font-sans);
-  font-size: 16.5px;
+  font-size: 14.5px;
   font-weight: 400;
   color: #475569;
-  line-height: 1.6;
+  line-height: 1.55;
   margin: 0;
   flex-grow: 1;
 }
 
 /* ---------------------------------------------------------
-   Connected Leadership Axis — Creative, Minimal & Static
+   Right Side Roles Timeline Rail — Minimal, Clean & Non-Clickable
    --------------------------------------------------------- */
-.usecases-roles-section {
-  margin-top: 60px;
-  padding-top: 48px;
-  border-top: 1px solid var(--color-border-subtle);
+.usecases-roles-rail {
+  width: 320px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 100%;
+  justify-content: center;
+  padding-left: 12px;
+  pointer-events: none;
 }
 
-.usecases-roles-header {
-  text-align: center;
-  margin-bottom: 36px;
-}
-
-.usecases-roles-title {
-  font-family: var(--font-sans);
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.018em;
-  color: var(--color-text-primary);
-  margin: 0;
-  line-height: 1.35;
-}
-
-.usecases-roles-accent {
-  color: var(--color-primary);
-  font-weight: 600;
-}
-
-.usecases-roles-axis {
+.roles-timeline-track {
   position: relative;
-  width: 100%;
-  max-width: 1260px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-around;
+  padding: 12px 0;
 }
 
-/* Continuous connecting line running behind the nodes */
-.usecases-axis-line {
+/* Continuous vertical timeline connector line */
+.roles-timeline-line {
   position: absolute;
-  top: 9px;
-  left: 12.5%;
-  right: 12.5%;
-  height: 1px;
-  background: linear-gradient(90deg,
-      rgba(0, 102, 204, 0.25) 0%,
-      rgba(0, 102, 204, 0.75) 25%,
-      rgba(0, 102, 204, 0.75) 75%,
-      rgba(0, 102, 204, 0.25) 100%);
+  top: 18px;
+  bottom: 24px;
+  left: 6px;
+  width: 1.5px;
+  background: #e2e8f0;
   z-index: 1;
 }
 
-.usecases-axis-nodes {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  width: 100%;
+.roles-timeline-items {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: 36px;
   position: relative;
   z-index: 2;
 }
 
-.usecases-axis-item {
+.roles-timeline-item {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 0 12px;
+  align-items: flex-start;
+  gap: 14px;
+  position: relative;
+  cursor: default;
   user-select: none;
+  pointer-events: none;
 }
 
-/* Precision Geometric Waypoint Node */
-.usecases-axis-node {
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  border: 1.5px solid var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.08);
+/* Node indicator along the vertical spine */
+.roles-timeline-node-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.roles-timeline-node {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: #0066cc;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1.5px #0066cc;
+}
+
+/* Body: dash + dot + sparkle star on top, role title below */
+.roles-timeline-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roles-timeline-connector {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 14px;
+}
+
+.roles-sparkle-dash {
+  width: 20px;
+  height: 1.5px;
+  background-color: #0066cc;
+  border-radius: 1px;
+}
+
+.roles-sparkle-dot {
+  width: 2.5px;
+  height: 2.5px;
+  border-radius: 50%;
+  background-color: #0066cc;
+}
+
+.roles-sparkle-star {
+  width: 10px;
+  height: 10px;
+  color: #0066cc;
   flex-shrink: 0;
 }
 
-.usecases-node-core {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: var(--color-primary);
-}
-
-.usecases-axis-text {
+/* Role Title — Clean, Institutional, Minimal */
+.roles-timeline-title {
+  margin: 0;
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 17.5px;
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: #0f172a;
   letter-spacing: -0.015em;
   line-height: 1.35;
 }
@@ -217,83 +256,39 @@
 /* ---------------------------------------------------------
    Responsive Adaptations
    --------------------------------------------------------- */
-@media (max-width: 1180px) {
+@media (max-width: 1280px) {
+  .usecases-stage {
+    gap: 36px;
+  }
   .usecases-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
+  }
+  .usecases-roles-rail {
+    width: 290px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .usecases-section {
     padding: 60px 20px 72px;
   }
 
-  .usecases-header {
-    margin: 0 auto 36px auto;
-    text-align: center;
-  }
-
-  .usecases-title {
-    font-size: 26px;
+  .usecases-stage {
+    flex-direction: column;
+    gap: 48px;
   }
 
   .usecases-grid {
     grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .usecases-roles-section {
-    margin-top: 40px;
-    padding-top: 32px;
-  }
-
-  .usecases-roles-header {
-    margin-bottom: 28px;
-  }
-
-  .usecases-roles-title {
-    font-size: 18.5px;
-  }
-
-  .usecases-roles-axis {
-    max-width: 320px;
-    margin: 0 auto;
-  }
-
-  .usecases-axis-line {
-    top: 10px;
-    bottom: 20px;
-    left: 9px;
-    right: auto;
-    width: 1px;
-    height: auto;
-    background: linear-gradient(180deg,
-        rgba(0, 102, 204, 0.25) 0%,
-        rgba(0, 102, 204, 0.75) 25%,
-        rgba(0, 102, 204, 0.75) 75%,
-        rgba(0, 102, 204, 0.25) 100%);
-  }
-
-  .usecases-axis-nodes {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-  }
-
-  .usecases-axis-item {
-    flex-direction: row;
-    align-items: center;
-    text-align: left;
-    padding: 0;
     gap: 16px;
   }
 
-  .usecases-axis-node {
-    margin-bottom: 0;
+  .usecases-roles-rail {
+    width: 100%;
+    padding-left: 8px;
   }
 
-  .usecases-axis-text {
-    font-size: 15.5px;
+  .roles-timeline-items {
+    gap: 32px;
   }
 }

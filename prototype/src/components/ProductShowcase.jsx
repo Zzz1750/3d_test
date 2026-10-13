@@ -2,29 +2,29 @@ import './ProductShowcase.css'
 
 const TOOLKIT_ITEMS = [
   {
-    num: '01',
+    num: '',
     title: 'Horizon scanning',
-    reality: 'Circulars arrive as PDFs and emails. Relevance is judged from memory, and intake lags by weeks.',
-    solution: 'RegPulse pulls every regulator notification, triages each change by impact and flags the policies and controls it affects, on the day of issue.',
-    cta: 'Explore horizon scanning',
+    reality: '',
+    solution: 'Real-time intake across 50+ regulators. Every circular, classified and prioritised the moment it lands.',
+    cta: '',
     image: `${import.meta.env.BASE_URL}images/tool1.png`,
-    urlName: 'horizon-scanning',
+    urlName: '',
   },
   {
-    num: '02',
+    num: '',
     title: 'Control gap mapping',
-    reality: 'Working out what a rule changes takes workshops, spreadsheets and weeks of email, and the list is never known to be complete.',
-    solution: 'ReguLens holds every regulation in one place, maps obligations to controls or drafts new ones for sign-off. Gap Analyser keeps a live register with owners and deadlines.',
-    cta: 'Explore gap mapping',
+    reality: '',
+    solution: 'Instant, semantic policy-to-control mapping. Every obligation traced to a policy, a control and an owner.',
+    cta: '',
     image: `${import.meta.env.BASE_URL}images/tool2.png`,
     urlName: 'control-gap-mapping',
   },
   {
-    num: '03',
+    num: '',
     title: 'Audit and accountability',
-    reality: 'Weeks spent pulling emails, minutes and screenshots for each auditor, from records that can be edited afterwards.',
-    solution: 'AuditGenie gathers evidence as work happens, tests controls, drafts findings and builds the pack from a record that cannot be changed.',
-    cta: 'Explore audit evidence',
+    reality: '',
+    solution: 'Continuous proof, audit-ready in 60 days. Evidence that builds itself, ready when the examiner asks.',
+    cta: '',
     image: `${import.meta.env.BASE_URL}images/tool3.png`,
     urlName: 'audit-accountability',
   },
@@ -41,10 +41,10 @@ export default function ProductShowcase({ standalone = false }) {
         {/* Clean Editorial Header */}
         <header className="toolkit-header">
           <h2 className="toolkit-title">
-            Comply2reg  <span className="toolkit-title-accent">Toolkit</span>
+            The toolkit. <br />  <span className="toolkit-title-accent">Intuitive features in a conversational setting.</span>
           </h2>
           <p className="toolkit-subtitle">
-            Three things to see first
+
           </p>
         </header>
 
@@ -54,19 +54,19 @@ export default function ProductShowcase({ standalone = false }) {
             <article key={item.num} className="toolkit-card">
               {/* Narrative Content */}
               <div className="toolkit-content">
-                <div className="toolkit-card-header">
+                {/* <div className="toolkit-card-header">
                   <span className="toolkit-num">{item.num}</span>
                   <h3 className="toolkit-card-title">{item.title}</h3>
-                </div>
+                </div> */}
 
                 <div className="toolkit-narrative">
-                  <div className="toolkit-point toolkit-point-reality">
-                    <span className="toolkit-point-label">Today's reality</span>
+                  {/* <div className="toolkit-point toolkit-point-reality">
+                    <span className="toolkit-point-label"></span>
                     <p className="toolkit-point-text">{item.reality}</p>
-                  </div>
+                  </div> */}
 
                   <div className="toolkit-point toolkit-point-solution">
-                    <span className="toolkit-point-label">With Comply2Reg</span>
+                    <span className="toolkit-point-label"></span>
                     <p className="toolkit-point-text">{item.solution}</p>
                   </div>
                 </div>
@@ -74,7 +74,7 @@ export default function ProductShowcase({ standalone = false }) {
                 <div className="toolkit-action">
                   <a href={`#${item.urlName}`} className="toolkit-link">
                     <span>{item.cta}</span>
-                    <span className="toolkit-arrow" aria-hidden="true">→</span>
+                    {/* <span className="toolkit-arrow" aria-hidden="true">→</span> */}
                   </a>
                 </div>
               </div>

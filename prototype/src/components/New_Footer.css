@@ -18,7 +18,7 @@
 .new-footer-above-banner {
   width: 100%;
   display: flex;
-  justifyContent: center;
+  justify-content: center;
   align-items: flex-end;
   background-color: #ffffff;
   padding-top: 64px;
