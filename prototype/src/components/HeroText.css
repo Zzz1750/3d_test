@@ -97,8 +97,8 @@
   filter: brightness(0) invert(1);
 }
 
-/* Secondary: How it works */
-.btn-how-it-works {
+/* Secondary: Use cases */
+.btn-use-cases {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -117,7 +117,7 @@
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.btn-how-it-works:hover {
+.btn-use-cases:hover {
   background-color: #f8fafc;
   border-color: #94a3b8;
   color: #000000;
@@ -125,13 +125,13 @@
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 
-.btn-how-it-works:active {
+.btn-use-cases:active {
   transform: translateY(1px);
 }
 
-.btn-how-it-works .play-icon {
-  width: 13px;
-  height: 13px;
+.btn-use-cases .use-cases-icon {
+  width: 15px;
+  height: 15px;
   display: block;
   color: #0066cc;
 }

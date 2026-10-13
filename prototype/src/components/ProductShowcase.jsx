@@ -2,31 +2,22 @@ import './ProductShowcase.css'
 
 const TOOLKIT_ITEMS = [
   {
-    num: '',
+    id: 'tool-horizon',
     title: 'Horizon scanning',
-    reality: '',
-    solution: 'Real-time intake across 50+ regulators. Every circular, classified and prioritised the moment it lands.',
-    cta: '',
+    text: 'Real-time intake across 50+ regulators. Every circular, classified and prioritised the moment it lands.',
     image: `${import.meta.env.BASE_URL}images/tool1.png`,
-    urlName: '',
   },
   {
-    num: '',
+    id: 'tool-gap',
     title: 'Control gap mapping',
-    reality: '',
-    solution: 'Instant, semantic policy-to-control mapping. Every obligation traced to a policy, a control and an owner.',
-    cta: '',
+    text: 'Instant, semantic policy-to-control mapping. Every obligation traced to a policy, a control and an owner.',
     image: `${import.meta.env.BASE_URL}images/tool2.png`,
-    urlName: 'control-gap-mapping',
   },
   {
-    num: '',
+    id: 'tool-audit',
     title: 'Audit and accountability',
-    reality: '',
-    solution: 'Continuous proof, audit-ready in 60 days. Evidence that builds itself, ready when the examiner asks.',
-    cta: '',
+    text: 'Continuous proof, audit-ready in 60 days. Evidence that builds itself, ready when the examiner asks.',
     image: `${import.meta.env.BASE_URL}images/tool3.png`,
-    urlName: 'audit-accountability',
   },
 ]
 
@@ -41,59 +32,43 @@ export default function ProductShowcase({ standalone = false }) {
         {/* Clean Editorial Header */}
         <header className="toolkit-header">
           <h2 className="toolkit-title">
-            The toolkit. <br />  <span className="toolkit-title-accent">Intuitive features in a conversational setting.</span>
+            The toolkit. <br />{' '}
+            <span className="toolkit-title-accent">Intuitive features in a conversational setting.</span>
           </h2>
-          <p className="toolkit-subtitle">
-
-          </p>
         </header>
 
-        {/* Minimal & Clean Showcase Cards */}
+        {/* Minimal Unboxed Showcase Rows (Zig-Zag) */}
         <div className="toolkit-list">
-          {TOOLKIT_ITEMS.map((item) => (
-            <article key={item.num} className="toolkit-card">
-              {/* Narrative Content */}
-              <div className="toolkit-content">
-                {/* <div className="toolkit-card-header">
-                  <span className="toolkit-num">{item.num}</span>
-                  <h3 className="toolkit-card-title">{item.title}</h3>
-                </div> */}
+          {TOOLKIT_ITEMS.map((item, index) => {
+            const isImageFirst = index % 2 === 0
 
-                <div className="toolkit-narrative">
-                  {/* <div className="toolkit-point toolkit-point-reality">
-                    <span className="toolkit-point-label"></span>
-                    <p className="toolkit-point-text">{item.reality}</p>
-                  </div> */}
+            return (
+              <article
+                key={item.id}
+                className={`toolkit-row ${isImageFirst ? 'row-image-first' : 'row-content-first'}`}
+              >
+                {/* Narrative Content */}
+                <div className="toolkit-content">
+                  <p className="toolkit-text">{item.text}</p>
+                </div>
 
-                  <div className="toolkit-point toolkit-point-solution">
-                    <span className="toolkit-point-label"></span>
-                    <p className="toolkit-point-text">{item.solution}</p>
+                {/* Framed Application Preview */}
+                <div className="toolkit-media">
+                  <div className="toolkit-media-frame">
+                    <img
+                      src={item.image}
+                      alt={`${item.title} Screenshot Preview`}
+                      className="toolkit-media-img"
+                      loading="lazy"
+                    />
                   </div>
                 </div>
-
-                <div className="toolkit-action">
-                  <a href={`#${item.urlName}`} className="toolkit-link">
-                    <span>{item.cta}</span>
-                    {/* <span className="toolkit-arrow" aria-hidden="true">→</span> */}
-                  </a>
-                </div>
-              </div>
-
-              {/* Framed Application Preview */}
-              <div className="toolkit-media">
-                <div className="toolkit-media-frame">
-                  <img
-                    src={item.image}
-                    alt={`${item.title} Screenshot Preview`}
-                    className="toolkit-media-img"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>
   )
 }
+

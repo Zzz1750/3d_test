@@ -5,14 +5,16 @@ export default function HeroText({
   title,
   subtitle = "Our proprietary Small Language Model and agents map every rule to policies and controls, close gaps, preserve evidence, hosted securely, human-approved.",
   demoLink = "/demo",
-  onHowItWorks
+  onUseCases,
+  onHowItWorks,
 }) {
-  const handleHowItWorks = () => {
-    if (onHowItWorks) {
-      onHowItWorks()
+  const handleUseCases = () => {
+    const callback = onUseCases || onHowItWorks
+    if (callback) {
+      callback()
       return
     }
-    const el = document.getElementById('use-cases') || document.getElementById('compliance-flow')
+    const el = document.getElementById('use-cases')
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' })
     }
@@ -47,20 +49,24 @@ export default function HeroText({
         </Link>
 
         <button
-          className="btn-how-it-works"
+          className="btn-use-cases"
           type="button"
-          onClick={handleHowItWorks}
-          aria-label="How it works"
+          onClick={handleUseCases}
+          aria-label="Use cases"
         >
           <svg
-            className="play-icon"
+            className="use-cases-icon"
             viewBox="0 0 24 24"
-            fill="currentColor"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             aria-hidden="true"
           >
-            <path d="M8 5v14l11-7z" />
+            <polyline points="6 9 12 15 18 9" />
           </svg>
-          <span>How it works</span>
+          <span>Use cases</span>
         </button>
       </div>
     </div>
