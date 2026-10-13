@@ -170,6 +170,14 @@ export default function UseCases() {
             </div>
           </aside>
         </div>
+
+        {/* Bottom Right Action: Book a demo */}
+        <div className="usecases-bottom-actions">
+          <button type="button" className="usecases-action-btn">
+            <span>Book a demo</span>
+            <span className="usecases-btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
       </div>
     </section>
   )

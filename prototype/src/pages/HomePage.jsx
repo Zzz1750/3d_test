@@ -9,6 +9,7 @@ import BankNarrativeFlow from '../components/BankNarrativeFlow'
 import ProductShowcase from '../components/ProductShowcase'
 import WorkflowIntegrations from '../components/WorkflowIntegrations'
 import BlogStudiesShowcase from '../components/BlogStudiesShowcase'
+import ContactCTA from '../components/ContactCTA'
 import CityCommandHUD from '../components/CityCommandHUD'
 import RegulatoryTicker from '../components/RegulatoryTicker'
 import NewFooter from '../components/New_Footer'
@@ -116,8 +117,8 @@ export default function HomePage() {
       {/* Blog & Regulatory Case Studies 3D Coverflow Showcase */}
       <BlogStudiesShowcase />
 
-      {/* Workflow Integrations: ServiceNow, Teams, Confluence, Slack, SharePoint, Archer */}
-      {/* <WorkflowIntegrations /> */}
+      {/* Creative Interactive Call to Action / Contact Us */}
+      <ContactCTA />
 
       {/* Footer */}
       <NewFooter />

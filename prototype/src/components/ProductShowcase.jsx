@@ -67,6 +67,14 @@ export default function ProductShowcase({ standalone = false }) {
             )
           })}
         </div>
+
+        {/* Bottom Right Action: View products */}
+        <div className="toolkit-bottom-actions">
+          <button type="button" className="toolkit-action-btn">
+            <span>View products</span>
+            <span className="toolkit-btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
       </div>
     </section>
   )

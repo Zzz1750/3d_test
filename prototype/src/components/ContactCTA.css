@@ -1,0 +1,145 @@
+/* =========================================================
+   Contact CTA Section — Minimal, High-Precision Layout
+   ========================================================= */
+
+.contact-cta-section {
+  position: relative;
+  width: 100%;
+  padding: 100px 24px 108px;
+  background-color: #ffffff;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.contact-cta-container {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Balanced 2-line title */
+.cta-title {
+  margin: 0 0 16px 0;
+  font-family: var(--font-sans);
+  font-size: var(--site-heading);
+  font-weight: 600;
+  line-height: 1.24;
+  letter-spacing: -0.025em;
+  color: #0f172a;
+}
+
+.cta-title-accent {
+  color: var(--color-primary, #0066cc);
+  font-weight: 600;
+}
+
+/* Subtitle — Light, Crisp & Perfectly Proportioned */
+.cta-subtitle {
+  margin: 0 0 32px 0;
+  font-family: var(--font-sans);
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: #475569;
+  font-weight: 400;
+  max-width: 540px;
+}
+
+/* Actions Row */
+.cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+}
+
+.cta-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 26px;
+  background-color: var(--color-primary, #0066cc);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.28);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-btn-primary:hover {
+  background-color: #0052a3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 102, 204, 0.35);
+}
+
+.cta-btn-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.cta-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 24px;
+  background-color: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-btn-secondary:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  color: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cta-mail-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  color: #0066cc;
+}
+
+@media (max-width: 640px) {
+  .contact-cta-section {
+    padding: 72px 20px 84px;
+  }
+
+  .cta-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .cta-btn-primary,
+  .cta-btn-secondary {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
