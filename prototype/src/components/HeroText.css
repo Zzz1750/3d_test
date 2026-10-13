@@ -28,6 +28,10 @@
   color: #0f172a;
 }
 
+.hero-headline-accent {
+  color: var(--color-primary, #0066cc);
+}
+
 .hero-headline-sub {
   font-weight: 400;
   color: #334155;

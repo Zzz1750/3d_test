@@ -26,7 +26,7 @@ export default function HeroText({
       <h1 className="hero-headline">
         {title || (
           <>
-            Regulatory change. Simplified.<br />
+            Regulatory change. <span className="hero-headline-accent">Simplified.</span><br />
             <span className="hero-headline-sub">Agentic AI, inside your bank.</span>
           </>
         )}
