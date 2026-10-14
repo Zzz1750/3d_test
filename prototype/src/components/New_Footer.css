@@ -5,32 +5,32 @@
 
 .new-footer-wrapper {
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--color-primary, #0066cc);
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
 /* ---------------------------------------------------------
-   Above-Footer Graphic Lockup
-   Joins and touches the footer top with zero gap
+   Bottom-Footer Graphic Banner
+   Inside footer, pushed to the bottom, under everything
    --------------------------------------------------------- */
-.new-footer-above-banner {
+.new-footer-bottom-banner {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  background-color: #ffffff;
-  padding-top: 64px;
   line-height: 0;
-  margin-bottom: -1px;
+  margin-top: 16px;
+  padding: 0 24px 0;
+  box-sizing: border-box;
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
-.new-footer-above-img {
+.new-footer-bottom-img {
   width: 100%;
-  max-width: 920px;
+  max-width: 980px;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -210,12 +210,13 @@
    Responsive Breakpoints
    --------------------------------------------------------- */
 @media (max-width: 1024px) {
-  .new-footer-above-banner {
-    padding-top: 48px;
+  .new-footer-bottom-banner {
+    margin-top: 14px;
+    padding: 0 20px 0;
   }
 
-  .new-footer-above-img {
-    max-width: 85vw;
+  .new-footer-bottom-img {
+    max-width: 90vw;
   }
 
   .new-footer-container {
@@ -229,12 +230,13 @@
 }
 
 @media (max-width: 768px) {
-  .new-footer-above-banner {
-    padding-top: 36px;
+  .new-footer-bottom-banner {
+    margin-top: 10px;
+    padding: 0 16px 0;
   }
 
-  .new-footer-above-img {
-    max-width: 90vw;
+  .new-footer-bottom-img {
+    max-width: 95vw;
   }
 
   .new-footer-container {

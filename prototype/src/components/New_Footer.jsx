@@ -6,15 +6,6 @@ import "./New_Footer.css";
 export default function Footer() {
   return (
     <div className="new-footer-wrapper">
-      {/* Above-Footer Graphic: Joins and touches footer top */}
-      <div className="new-footer-above-banner">
-        <img
-          src={`${import.meta.env.BASE_URL}images/above_footer.png`}
-          alt="Comply2Reg"
-          className="new-footer-above-img"
-        />
-      </div>
-
       {/* Main Solid Blue Footer */}
       <footer className="new-footer-main">
         <div className="new-footer-container">
@@ -85,6 +76,15 @@ export default function Footer() {
               © 2026 | Comply2reg all rights reserved.
             </p>
           </div>
+        </div>
+
+        {/* Brand Graphic Banner: Inside footer, pushed to the bottom, under everything */}
+        <div className="new-footer-bottom-banner">
+          <img
+            src={`${import.meta.env.BASE_URL}images/above_footer.png`}
+            alt="Comply2Reg"
+            className="new-footer-bottom-img"
+          />
         </div>
       </footer>
     </div>

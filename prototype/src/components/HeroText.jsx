@@ -3,7 +3,7 @@ import './HeroText.css'
 
 export default function HeroText({
   title,
-  subtitle = "Our proprietary Small Language Model and agents map every rule to policies and controls, close gaps, preserve evidence, hosted securely, human-approved.",
+  subtitle = "It hits Product, Operations, Technology, Risk and Compliance at once. Comply2Reg tells each team what it means for them.",
   demoLink = "/demo",
   onUseCases,
   onHowItWorks,
@@ -26,8 +26,8 @@ export default function HeroText({
       <h1 className="hero-headline">
         {title || (
           <>
-            Regulatory change. <span className="hero-headline-accent">Simplified.</span><br />
-            <span className="hero-headline-sub">Agentic AI, inside your bank.</span>
+            Regulatory change <span className="hero-headline-accent">never stops.</span><br />
+            <span className="hero-headline-sub">Nobody owns what it breaks.</span>
           </>
         )}
       </h1>
