@@ -97,10 +97,8 @@ function getLinkHref(linkText) {
     "Regulens": "/regulens",
     "Audit Geniee": "/audit-geniee",
     "AskLia": "/asklia",
-    "Alternative Investment Fund": "/aif",
     "Compliance Gap Analysis": "/compliance-gap-analysis",
-    "Role": "/industries-roles",
-    "Fintech Space": "/industries",
+    "RegOS": "/regos",
     "Pricing": "/pricing",
     "About us": "/about",
     "Terms and Conditions": "/terms",
@@ -113,11 +111,11 @@ function getLinkHref(linkText) {
 const sections = [
   {
     title: "SOLUTION",
-    links: ["Regulens", "Audit Geniee", "AskLia", "Alternative Investment Fund", "Compliance Gap Analysis"],
+    links: ["Regulens", "Audit Geniee", "AskLia", "Compliance Gap Analysis"],
   },
   {
-    title: "FINTECH",
-    links: ["Role", "Fintech Space"],
+    title: "REGOS",
+    links: ["RegOS"],
   },
   {
     title: "OTHER",

@@ -45,7 +45,7 @@
 .new-footer-main {
   position: relative;
   width: 100%;
-  background-color: var(--color-primary, #0066cc);
+  background-color: #0058af;
   color: #ffffff;
   font-family: var(--font-sans);
   box-sizing: border-box;
@@ -70,10 +70,11 @@
    --------------------------------------------------------- */
 .new-footer-top-section {
   display: flex;
-  justifyContent: space-between;
+  justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 48px;
+  width: 100%;
 }
 
 .new-footer-columns {
@@ -164,6 +165,8 @@
   height: auto;
   object-fit: contain;
   align-self: flex-start;
+  margin-left: auto;
+  flex-shrink: 0;
   opacity: 0.95;
 }
 
@@ -190,7 +193,7 @@
 
 .new-footer-bottom-section {
   display: flex;
-  justifyContent: flex-end;
+  justify-content: flex-end;
   align-items: center;
   flex-wrap: wrap;
   padding-top: 4px;
@@ -247,6 +250,11 @@
   .new-footer-top-section {
     flex-direction: column;
     gap: 36px;
+  }
+
+  .new-footer-company-logo {
+    align-self: flex-end;
+    margin-left: auto;
   }
 
   .new-footer-columns {
