@@ -40,7 +40,8 @@ export default function RegulatoryTicker() {
     >
       {/* Left Badge: Mention that we handle these all */}
       <div className="ticker-badge">
-        <span className="ticker-badge-text">WE HANDLE</span>
+        <span className="ticker-badge-text ticker-badge-desktop">Regulations handled</span>
+        <span className="ticker-badge-text ticker-badge-mobile">We handle</span>
       </div>
 
       <div className="ticker-viewport">

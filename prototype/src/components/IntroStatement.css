@@ -1,5 +1,5 @@
 /* =========================================================
-   Intro Statement — Centered Paragraph + AskLia on Left Corner
+   Intro Statement — Centered Paragraph + Mascot on Left
    ========================================================= */
 
 .intro-statement-section {
@@ -13,7 +13,7 @@
   overflow: hidden;
 }
 
-/* Mascot on the left edge */
+/* Mascot on the left edge (Desktop) */
 .intro-screen-left-img {
   position: absolute;
   left: 0;
@@ -55,7 +55,7 @@
 
 .intro-statement-text {
   font-family: var(--font-sans);
-  font-size: var(--site-heading);
+  font-size: clamp(28px, 2.4vw, 36px);
   line-height: 1.45;
   letter-spacing: -0.022em;
   text-align: center;
@@ -72,23 +72,59 @@
   font-weight: 400;
 }
 
-@media (max-width: 900px) {
+/* =========================================================
+   Mobile Adaptations (<= 768px):
+   - Remove hi.png mascot completely on mobile
+   - Clean, balanced, beautifully formatted typography
+   ========================================================= */
+@media (max-width: 768px) {
   .intro-statement-section {
-    padding: 60px 24px 75px;
+    padding: 44px 20px 40px;
   }
 
+  /* Remove hi.png / smile1.png mascot only for mobile */
   .intro-screen-left-img {
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    display: none !important;
   }
 
-  .intro-mascot-img {
-    width: clamp(70px, 12vw, 95px);
+  .intro-statement-container {
+    max-width: 100%;
+  }
+
+  .intro-statement-wrapper {
+    max-width: 100%;
+    text-align: center;
   }
 
   .intro-statement-text {
-    font-size: 28px;
+    font-size: clamp(19px, 4.8vw, 22px);
+    line-height: 1.45;
+    letter-spacing: -0.018em;
     text-align: center;
+  }
+
+  .intro-text-bold {
+    display: inline;
+    font-size: inherit;
+    font-weight: 600;
+    color: var(--color-text-primary, #0f172a);
+  }
+
+  .intro-text-muted {
+    display: inline;
+    font-size: inherit;
+    font-weight: 400;
+    color: #5a6a80;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-statement-section {
+    padding: 36px 16px 36px;
+  }
+
+  .intro-statement-text {
+    font-size: 18px;
+    line-height: 1.44;
   }
 }

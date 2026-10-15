@@ -46,7 +46,20 @@
 
 @media (max-width: 640px) {
   .stats-creds-container {
-    gap: 18px 24px;
-    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+
+  .stat-minimal-value {
+    font-size: clamp(20px, 5.2vw, 26px);
+  }
+
+  .stat-minimal-label {
+    font-size: clamp(11px, 2.8vw, 13px);
+    margin-top: 3px;
   }
 }

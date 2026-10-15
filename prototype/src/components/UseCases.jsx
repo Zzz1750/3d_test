@@ -136,12 +136,15 @@ export default function UseCases() {
           </div>
 
           {/* Right Side: Minimal Timeline Rail (Clean, non-clickable, only the 4 role titles) */}
-          <aside className="usecases-roles-rail" aria-label="Bank Leadership Roles">
+          <aside className="usecases-roles-rail" aria-label="Roles">
+            <div className="roles-mobile-header">
+              <span className="roles-mobile-badge">ROLES</span>
+            </div>
             <div className="roles-timeline-track">
               {/* Continuous vertical timeline connector line */}
               <div className="roles-timeline-line" aria-hidden="true" />
 
-              {/* 4 Leadership Role Items from Top to Bottom */}
+              {/* 4 Role Items from Top to Bottom */}
               <div className="roles-timeline-items">
                 {ROLES.map((role) => (
                   <div

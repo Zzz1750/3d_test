@@ -14,6 +14,15 @@ a-scene {
   pointer-events: auto;
 }
 
+/* Allow native touchscreen scrolling through 3D canvas on mobile & tablet viewports */
+@media (max-width: 1080px) {
+  a-scene,
+  .a-canvas {
+    pointer-events: none !important;
+    touch-action: pan-y !important;
+  }
+}
+
 /* Remove all default A-Frame UI elements, buttons, and overlays */
 .a-enter-vr,
 .a-enter-ar,

@@ -26,6 +26,154 @@ function getOrthogonalPoint(p, x0, y0, xMid, x1, y1) {
   }
 }
 
+// 8 Mobile Data Sources & Individual Conduit Paths
+const mobileSources = [
+  // Left column (4 sources)
+  {
+    side: 'left',
+    idx: 0,
+    title: 'Payment rails',
+    yCard: 5,
+    yExit: 19,
+    channelX: 172,
+    curveY: 152,
+    portX: 154,
+    isDigital: false,
+    cycle: 2.8,
+    offset: 0.0,
+    lineStyle: 'line-streaming'
+  },
+  {
+    side: 'left',
+    idx: 1,
+    title: 'Customers & KYC',
+    yCard: 42,
+    yExit: 56,
+    channelX: 175,
+    curveY: 156,
+    portX: 164,
+    isDigital: false,
+    cycle: 3.2,
+    offset: 1.1,
+    lineStyle: 'line-streaming'
+  },
+  {
+    side: 'left',
+    idx: 2,
+    title: 'Open banking & credit',
+    yCard: 79,
+    yExit: 93,
+    channelX: 178,
+    curveY: 160,
+    portX: 174,
+    isDigital: false,
+    cycle: 3.5,
+    offset: 2.0,
+    lineStyle: 'line-consent'
+  },
+  {
+    side: 'left',
+    idx: 3,
+    title: 'Digital assets',
+    yCard: 116,
+    yExit: 130,
+    channelX: 181,
+    curveY: 164,
+    portX: 184,
+    isDigital: true,
+    cycle: 2.6,
+    offset: 0.7,
+    lineStyle: 'line-digital'
+  },
+  // Right column (4 sources)
+  {
+    side: 'right',
+    idx: 0,
+    title: 'Markets & Exchanges',
+    yCard: 5,
+    yExit: 19,
+    channelX: 208,
+    curveY: 152,
+    portX: 226,
+    isDigital: false,
+    cycle: 2.7,
+    offset: 1.4,
+    lineStyle: 'line-streaming'
+  },
+  {
+    side: 'right',
+    idx: 1,
+    title: 'Devices & channels',
+    yCard: 42,
+    yExit: 56,
+    channelX: 205,
+    curveY: 156,
+    portX: 216,
+    isDigital: false,
+    cycle: 3.0,
+    offset: 0.4,
+    lineStyle: 'line-streaming'
+  },
+  {
+    side: 'right',
+    idx: 2,
+    title: 'Watchlists & Regulators',
+    yCard: 79,
+    yExit: 93,
+    channelX: 202,
+    curveY: 160,
+    portX: 206,
+    isDigital: false,
+    cycle: 3.6,
+    offset: 2.2,
+    lineStyle: 'line-batch'
+  },
+  {
+    side: 'right',
+    idx: 3,
+    title: 'Alternative data',
+    yCard: 116,
+    yExit: 130,
+    channelX: 199,
+    curveY: 164,
+    portX: 196,
+    isDigital: true,
+    cycle: 3.4,
+    offset: 1.6,
+    lineStyle: 'line-digital-alt'
+  }
+]
+
+function getMobileConduitPath(s) {
+  const xStart = s.side === 'left' ? 168 : 212
+  return `M ${xStart} ${s.yExit} L ${s.channelX} ${s.yExit} L ${s.channelX} ${s.curveY} C ${s.channelX} ${s.curveY + 6}, ${s.portX} ${s.curveY + 6}, ${s.portX} 176`
+}
+
+function getMobilePoint(s, prog) {
+  const xStart = s.side === 'left' ? 168 : 212
+  const l1 = Math.abs(s.channelX - xStart)
+  const l2 = Math.abs(s.curveY - s.yExit)
+  const l3 = Math.sqrt(Math.pow(s.portX - s.channelX, 2) + Math.pow(176 - s.curveY, 2))
+  const total = l1 + l2 + l3
+  const d = Math.max(0, Math.min(1, prog)) * total
+
+  if (d <= l1) {
+    const t = d / (l1 || 1)
+    return { x: xStart + t * (s.channelX - xStart), y: s.yExit }
+  } else if (d <= l1 + l2) {
+    const t = (d - l1) / (l2 || 1)
+    return { x: s.channelX, y: s.yExit + t * (s.curveY - s.yExit) }
+  } else {
+    const t = (d - l1 - l2) / (l3 || 1)
+    const p0x = s.channelX, p0y = s.curveY
+    const p1x = s.channelX, p1y = s.curveY + 6
+    const p2x = s.portX, p2y = 176
+    const x = (1 - t) * (1 - t) * p0x + 2 * (1 - t) * t * p1x + t * t * p2x
+    const y = (1 - t) * (1 - t) * p0y + 2 * (1 - t) * t * p1y + t * t * p2y
+    return { x, y }
+  }
+}
+
 export default function BankNarrativeFlow() {
   const [time, setTime] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -212,8 +360,8 @@ export default function BankNarrativeFlow() {
           </p>
         </div>
 
-        {/* Unified Stage */}
-        <div className="flow-stage-card">
+        {/* Unified Desktop Stage (Strictly Preserved for Desktop) */}
+        <div className="flow-stage-card flow-desktop-stage">
 
           <svg
             className="unified-flow-svg"
@@ -535,6 +683,273 @@ export default function BankNarrativeFlow() {
 
           </svg>
 
+        </div>
+
+        {/* Unified Mobile & Tablet Portrait Flow Diagram */}
+        <div className="flow-stage-card flow-mobile-stage">
+          <svg
+            className="unified-flow-mobile-svg"
+            viewBox="0 0 380 540"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <filter id="m-card-soft-shadow" x="-10%" y="-10%" width="120%" height="130%">
+                <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#0f172a" floodOpacity="0.05" />
+              </filter>
+              <filter id="m-badge-soft-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="1.5" stdDeviation="2" floodColor="#0f172a" floodOpacity="0.2" />
+              </filter>
+            </defs>
+
+            {/* ==============================================================
+                1. 8 INDIVIDUAL CONDUIT LINES CONNECTING EVERY CARD TO COMPLY2REG
+                ============================================================== */}
+            <g className="mobile-conduits-group">
+              {mobileSources.map((s, idx) => (
+                <path
+                  key={`m-line-${idx}`}
+                  d={getMobileConduitPath(s)}
+                  className={`mobile-conduit-line ${s.lineStyle}`}
+                />
+              ))}
+
+              {/* Intake terminal dots at Comply2Reg top edge */}
+              {mobileSources.map((s, idx) => (
+                <circle key={`m-intake-${idx}`} cx={s.portX} cy="176" r="2.2" fill="#0070f3" />
+              ))}
+            </g>
+
+            {/* ==============================================================
+                2. ANIMATED DATA STREAMS (Traveling from Cards to Comply2Reg)
+                ============================================================== */}
+            <g className="mobile-moving-docs">
+              {mobileSources.map((s, idx) => {
+                const prog = ((time + s.offset) % s.cycle) / s.cycle
+                const pt = getMobilePoint(s, prog)
+                let scale = 0.52
+                let opacity = 1
+                if (prog > 0.88) {
+                  const pFade = (prog - 0.88) / 0.12
+                  scale = 0.52 * (1 - pFade * 0.4)
+                  opacity = 1 - pFade * 0.9
+                }
+                return (
+                  <g
+                    key={`m-stream-${idx}`}
+                    transform={`translate(${pt.x}, ${pt.y}) scale(${scale})`}
+                    opacity={opacity}
+                    filter="url(#m-badge-soft-shadow)"
+                  >
+                    {renderDocIcon(s.isDigital ? 'digital' : 'paper', 1, 0)}
+                  </g>
+                )
+              })}
+            </g>
+
+            {/* ==============================================================
+                3. ALL 8 SOURCE CARDS ON TOP (Clean Titles, Pushed Higher Up)
+                ============================================================== */}
+            <g className="mobile-cards-group">
+              {mobileSources.map((s, idx) => {
+                const isLeft = s.side === 'left'
+                const cardX = isLeft ? 8 : 212
+                const textCenterX = isLeft ? 88 : 292
+                const pinX = isLeft ? 168 : 212
+
+                return (
+                  <g key={`m-card-${idx}`} filter="url(#m-card-soft-shadow)">
+                    {/* Card Container */}
+                    <rect
+                      x={cardX}
+                      y={s.yCard}
+                      width="160"
+                      height="28"
+                      rx="7"
+                      fill={s.isDigital ? "#f8faff" : "#ffffff"}
+                      stroke={s.isDigital ? "rgba(0, 112, 243, 0.4)" : "#e2e8f0"}
+                      strokeWidth="1.2"
+                    />
+                    {/* Uniform, Highly Legible Card Title */}
+                    <text
+                      x={textCenterX}
+                      y={s.yCard + 14}
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      fontFamily="var(--font-sans)"
+                      fontSize="13"
+                      fontWeight="600"
+                      fill={s.isDigital ? "#0070f3" : "#0f172a"}
+                      letterSpacing="-0.02em"
+                    >
+                      {s.title}
+                    </text>
+                    {/* Terminal Pin Dot */}
+                    <circle cx={pinX} cy={s.yExit} r="2.5" fill={s.isDigital ? "#0070f3" : "#94a3b8"} />
+                  </g>
+                )
+              })}
+            </g>
+
+            {/* ==============================================================
+                4. COMPLY2REG LOGO IN THE MIDDLE (Balanced & True Vertical Center: 116x88 inside 128x96)
+                ============================================================== */}
+            <g className="mobile-core-box" filter="url(#m-card-soft-shadow)">
+              <rect
+                x="126"
+                y="176"
+                width="128"
+                height="96"
+                rx="20"
+                fill="#ffffff"
+                stroke="rgba(0, 112, 243, 0.3)"
+                strokeWidth="1.5"
+              />
+              <image
+                href={`${import.meta.env.BASE_URL}images/logo2.svg`}
+                x="132"
+                y="180"
+                width="116"
+                height="88"
+                preserveAspectRatio="xMidYMid meet"
+              />
+            </g>
+
+            {/* ==============================================================
+                5. OUTFLOW CONDUIT & DELIVERED VERIFIED DOCUMENT
+                ============================================================== */}
+            <line x1="190" y1="272" x2="190" y2="334" stroke="#0070f3" strokeWidth="2" strokeDasharray="5 3" />
+            <circle cx="190" cy="272" r="3" fill="#0070f3" />
+            <circle cx="190" cy="334" r="3" fill="#0070f3" />
+
+            {/* Flying Verified Document Delivered Down into Banker */}
+            {outflowProgress >= 0 && outflowProgress <= 1 && (
+              <g transform={`translate(190, ${272 + outflowProgress * 62}) scale(0.85)`} filter="url(#m-badge-soft-shadow)">
+                <rect x="-10" y="-13" width="20" height="26" rx="3.5" fill="#ffffff" stroke="#0070f3" strokeWidth="1.8" />
+                <image href={`${import.meta.env.BASE_URL}images/logo2.svg`} x="-6" y="-9" width="12" height="12" />
+                <line x1="-6" y1="5" x2="6" y2="5" stroke="#0070f3" strokeWidth="1.4" strokeLinecap="round" />
+                <line x1="-6" y1="9" x2="3" y2="9" stroke="#94a3b8" strokeWidth="1.1" strokeLinecap="round" />
+              </g>
+            )}
+
+            {/* ==============================================================
+                6. THE BANK, BANKER, DESK, STAMP & LEGACY CORE LEDGER
+                ============================================================== */}
+            <g transform="translate(0, 10)">
+              {/* Table Surface */}
+              <line x1="68" y1="462" x2="312" y2="462" stroke="#0f172a" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="88" y1="462" x2="88" y2="496" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" />
+              <line x1="292" y1="462" x2="292" y2="496" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" />
+
+              {/* "THE BANK" Badge */}
+              <g transform="translate(190, 328)">
+                <rect x="-60" y="-14" width="120" height="28" rx="14" fill="#0f172a" />
+                <text x="0" y="5" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="13" fontWeight="700" fill="#ffffff" letterSpacing="0.08em">THE BANK</text>
+              </g>
+
+              {/* Banker Character */}
+              <g
+                className="banker-character"
+                style={{
+                  transform: isStamping ? 'translateY(4px)' : 'translateY(0)',
+                  transition: 'transform 0.12s cubic-bezier(0.2, 0, 0, 1)'
+                }}
+              >
+                <image
+                  href={`${import.meta.env.BASE_URL}images/banker_guy.png`}
+                  x="137"
+                  y="350"
+                  width="106"
+                  height="112"
+                  preserveAspectRatio="xMidYMid meet"
+                />
+              </g>
+
+              {/* Coffee Mug */}
+              <g className="coffee-upright">
+                <path d="M 270 433 Q 267 428 271 422" stroke="#94a3b8" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.7" />
+                <path d="M 278 434 Q 281 429 277 423" stroke="#94a3b8" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.7" />
+                <path d="M 287 444 C 296 444, 296 458, 287 458" fill="none" stroke="#0f172a" strokeWidth="2.2" strokeLinecap="round" />
+                <rect x="264" y="438" width="23" height="24" rx="3.5" fill="#ffffff" stroke="#0f172a" strokeWidth="2.2" />
+                <line x1="266" y1="450" x2="285" y2="450" stroke="#0070f3" strokeWidth="1.8" strokeLinecap="round" />
+              </g>
+
+              {/* Comply2Reg Clean Verified Stack on Desk */}
+              <g className="c2r-desk-stack">
+                {[0, 1, 2, 3].map((i) => {
+                  const isTop = i === 3
+                  const yPos = 454 - i * 6.5
+                  const rotation = (i % 2 === 0 ? 1 : -1) * 1.5
+                  return (
+                    <g key={i} transform={`rotate(${rotation} 97 ${yPos})`} filter="url(#m-card-soft-shadow)">
+                      <rect
+                        x="76"
+                        y={yPos}
+                        width="42"
+                        height="17"
+                        rx="3"
+                        fill="#ffffff"
+                        stroke="#0070f3"
+                        strokeWidth="1.4"
+                      />
+                      {isTop && (
+                        <image
+                          href={`${import.meta.env.BASE_URL}images/logo2.svg`}
+                          x="78"
+                          y={yPos + 2}
+                          width="13"
+                          height="13"
+                        />
+                      )}
+                      <line x1={isTop ? "94" : "80"} y1={yPos + 6} x2="112" y2={yPos + 6} stroke="#0070f3" strokeWidth="1.3" strokeLinecap="round" />
+                      <line x1={isTop ? "94" : "80"} y1={yPos + 11} x2="108" y2={yPos + 11} stroke="#94a3b8" strokeWidth="1.1" strokeLinecap="round" />
+                    </g>
+                  )
+                })}
+              </g>
+
+              {/* Stamp Pop Feedback: Smooth, Glitch-Free Verified Green Checkmark */}
+              {isStamping && (() => {
+                const sNorm = Math.max(0, Math.min(1, (cycleTime - OUTFLOW_FLIGHT) / 0.6))
+                let popScale = 1
+                let popOpacity = 1
+                if (sNorm < 0.25) {
+                  popScale = 0.5 + (sNorm / 0.25) * 0.6
+                  popOpacity = sNorm / 0.25
+                } else if (sNorm < 0.5) {
+                  popScale = 1.1 - ((sNorm - 0.25) / 0.25) * 0.1
+                  popOpacity = 1
+                } else if (sNorm > 0.85) {
+                  popScale = 1.0
+                  popOpacity = 1 - ((sNorm - 0.85) / 0.15)
+                }
+                return (
+                  <g
+                    transform={`translate(116, 426) scale(${popScale})`}
+                    opacity={popOpacity}
+                    filter="url(#m-badge-soft-shadow)"
+                  >
+                    <circle cx="0" cy="0" r="14" fill="#10b981" stroke="#ffffff" strokeWidth="2.4" />
+                    <path
+                      d="M -5.5 0.5 L -1.5 4.5 L 6 -3.8"
+                      stroke="#ffffff"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      fill="none"
+                    />
+                  </g>
+                )
+              })()}
+
+              {/* Legacy Core Ledger */}
+              <g transform="translate(50, 474)">
+                <rect x="0" y="0" width="280" height="50" rx="12" fill="#f8fafc" fillOpacity="0.95" stroke="#e2e8f0" strokeWidth="1.2" />
+                <text x="140" y="21" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="13" fontWeight="600" fill="#0f172a">Legacy Core Ledger (1983)</text>
+                <text x="140" y="39" textAnchor="middle" fontFamily="var(--font-sans)" fontSize="13" fill="#64748b">+ 40 years of patched systems</text>
+              </g>
+            </g>
+          </svg>
         </div>
 
       </div>

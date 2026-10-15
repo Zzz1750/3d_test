@@ -199,14 +199,284 @@
   object-fit: contain;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .app-navbar,
-  .app-navbar.scrolled {
-    padding: 14px 20px;
+/* Mobile & Tablet Hamburger Button */
+.navbar-hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.22s ease;
+  margin-left: 8px;
+}
+
+.navbar-hamburger-btn:hover {
+  background: #ffffff;
+  border-color: #94a3b8;
+  transform: scale(1.04);
+}
+
+.hamburger-bar {
+  width: 20px;
+  height: 2px;
+  background-color: #0f172a;
+  border-radius: 2px;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  transform-origin: center;
+}
+
+.navbar-hamburger-btn.open .top-bar {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar-hamburger-btn.open .mid-bar {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.navbar-hamburger-btn.open .bot-bar {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile Navigation Drawer */
+.navbar-mobile-drawer {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 20px;
+  right: 20px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 18px;
+  box-shadow: 0 20px 48px -4px rgba(15, 23, 42, 0.18), 0 4px 16px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-12px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 0.26s cubic-bezier(0.16, 1, 0.3, 1), transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 200;
+}
+
+.navbar-mobile-drawer.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.mobile-drawer-inner {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #334155;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: all 0.18s ease;
+}
+
+.mobile-nav-item:hover,
+.mobile-nav-item.active {
+  background-color: rgba(0, 102, 204, 0.08);
+  color: #0066cc;
+  padding-left: 18px;
+}
+
+.mobile-nav-arrow {
+  font-size: 16px;
+  color: #94a3b8;
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+
+.mobile-nav-item:hover .mobile-nav-arrow,
+.mobile-nav-item.active .mobile-nav-arrow {
+  transform: translateX(3px);
+  color: #0066cc;
+}
+
+.mobile-drawer-footer {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.btn-mobile-drawer-demo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background-color: #0066cc;
+  color: #ffffff;
+  border: 1px solid #0066cc;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 102, 204, 0.28);
+  transition: background-color 0.2s ease;
+}
+
+.btn-mobile-drawer-demo:hover {
+  background-color: #0052a3;
+}
+
+/* =========================================================
+   Tablet Breakpoints (<= 1080px): Header stays visible & accessible
+   ========================================================= */
+@media (max-width: 1080px) {
+  .app-navbar {
+    top: 18px;
+    padding: 0 24px;
   }
 
+  /* Don't hide the header off-screen on tablet and mobile so navigation is never lost */
+  .app-navbar.hidden {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .app-navbar.scrolled,
+  .app-navbar.menu-open {
+    top: 0;
+    padding: 14px 24px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  }
+
+  .app-navbar.scrolled .navbar-cloud-bg,
+  .app-navbar.menu-open .navbar-cloud-bg {
+    opacity: 0; /* Handled cleanly by navbar frosted background */
+  }
+
+  .navbar-logo img {
+    height: 44px;
+    max-width: 200px;
+  }
+}
+
+/* Tablet (821px to 1080px): Center navigation pill fits comfortably */
+@media (min-width: 821px) and (max-width: 1080px) {
+  .navbar-links {
+    display: flex;
+    gap: 20px;
+    padding: 8px 24px;
+  }
+
+  .nav-item {
+    font-size: 14px;
+  }
+
+  .btn-header-demo {
+    padding: 9px 16px;
+    font-size: 13.5px;
+  }
+}
+
+/* Mobile & Small Tablet (<= 820px): Switch to sleek glass Hamburger Menu */
+@media (max-width: 820px) {
   .navbar-links {
     display: none;
+  }
+
+  .navbar-hamburger-btn {
+    display: flex;
+    border: none !important;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .navbar-hamburger-btn:hover {
+    border: none !important;
+    background: rgba(241, 245, 249, 0.7);
+    box-shadow: none;
+  }
+
+  .navbar-mobile-drawer {
+    display: block;
+  }
+}
+
+/* Phone Screen (<= 767px): Remove Book Demo button from top header bar; keep it inside the menu drawer */
+@media (max-width: 767px) {
+  .navbar-top-demo-link {
+    display: none !important;
+  }
+
+  .navbar-hamburger-btn {
+    margin-left: 0;
+  }
+}
+
+/* Phone Screen Sizing (<= 640px) */
+@media (max-width: 640px) {
+  .app-navbar {
+    top: 18px;
+    padding: 0 16px;
+  }
+
+  .app-navbar.scrolled,
+  .app-navbar.menu-open {
+    top: 0;
+    padding: 12px 16px;
+  }
+
+  .navbar-logo {
+    margin-top: 2px;
+  }
+
+  .navbar-logo img {
+    height: 38px;
+    max-width: 160px;
+  }
+
+  .navbar-mobile-drawer {
+    left: 12px;
+    right: 12px;
+  }
+
+  .navbar-hamburger-btn {
+    width: 38px;
+    height: 38px;
+    padding: 6px;
+    border: none !important;
+    background: transparent;
+    box-shadow: none;
+    margin-top: 2px;
+  }
+
+  .navbar-hamburger-btn:hover {
+    border: none !important;
+    background: transparent;
+    box-shadow: none;
   }
 }

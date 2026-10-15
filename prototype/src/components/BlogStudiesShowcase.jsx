@@ -79,6 +79,17 @@ export const FEATURED_STUDIES = [
     image: `${import.meta.env.BASE_URL}images/blogs/study_bank_merger.jpg`,
     url: 'https://blog.comply2reg.com/blog/post-merger-it-consolidation-capital-adequacy',
   },
+  {
+    id: 'dora-compliance',
+    title: 'DORA Operational Resilience: Surviving ICT Audits & Disruptions',
+    category: 'Operational Risk',
+    tag: 'DORA & EBA',
+    readTime: '5 min read',
+    date: 'Jan 12, 2026',
+    description: 'How digital operational resilience testing is reshaping vendor oversight, cloud contracts, and audit trails.',
+    image: `${import.meta.env.BASE_URL}images/blogs/study_ai_accountability.jpg`,
+    url: 'https://blog.comply2reg.com/blog/dora-operational-resilience-ict-audits',
+  },
 ]
 
 export default function BlogStudiesShowcase() {
@@ -88,8 +99,11 @@ export default function BlogStudiesShowcase() {
   const handleScroll = useCallback((direction) => {
     const el = trackRef.current
     if (!el) return
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
     const cardEl = el.querySelector('.blog-card')
-    const step = cardEl ? cardEl.offsetWidth + 24 : 400
+    const step = isMobile
+      ? el.clientWidth
+      : (cardEl ? cardEl.offsetWidth + 24 : 400)
 
     if (direction === 'right') {
       const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 15

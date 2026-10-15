@@ -13,6 +13,7 @@
   color: var(--color-text-primary);
   user-select: text;
   overflow: hidden;
+  scroll-margin-top: 80px;
 }
 
 .flow-container {
@@ -199,27 +200,115 @@
 
 
 
+/* Desktop Flow Stage (Untouched on Desktop) */
+.flow-desktop-stage {
+  display: block;
+}
+
+/* Flipped Vertical Stage for Mobile & Tablets */
+.flow-mobile-stage {
+  display: none;
+  width: 100%;
+}
+
 /* ---------------------------------------------------------
-   Responsive Adaptations
+   Responsive Adaptations: Flipped on Mobile & Tablets (<= 1080px)
    --------------------------------------------------------- */
-@media (min-width: 1024px) {
+@media (min-width: 1081px) {
   .flow-section {
     padding-top: 72px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1080px) {
   .flow-section {
-    padding: 10px 16px 70px;
+    padding: 56px 20px 72px;
+  }
+
+  .flow-header {
+    margin: 0 auto 20px auto;
+  }
+
+  .flow-title {
+    margin-bottom: 6px;
   }
 
   .flow-stage-card {
-    padding: 12px 10px;
+    padding: 18px 16px;
+    border-radius: 20px;
+  }
+
+  .flow-desktop-stage {
+    display: none !important;
+  }
+
+  .flow-mobile-stage {
+    display: block !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .flow-section {
+    padding: 52px 12px 56px;
+  }
+
+  .flow-header {
+    margin: 0 auto 14px auto;
+  }
+
+  .flow-title {
+    margin-bottom: 4px;
+  }
+
+  .flow-stage-card {
+    padding: 8px 6px 14px;
     border-radius: 16px;
   }
+}
 
+/* ---------------------------------------------------------
+   Mobile & Tablet Unified Flow Diagram (Single Portrait Stage)
+   --------------------------------------------------------- */
+.unified-flow-mobile-svg {
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  overflow: visible;
+}
 
-  .unified-flow-svg {
-    min-height: 420px;
-  }
+.mobile-conduit-line {
+  fill: none;
+  stroke: #94a3b8;
+  stroke-width: 1.4;
+  transition: all 0.4s ease;
+}
+
+.mobile-conduit-line.line-streaming {
+  stroke: #94a3b8;
+  stroke-width: 1.4;
+}
+
+.mobile-conduit-line.line-consent {
+  stroke: #94a3b8;
+  stroke-width: 1.4;
+  stroke-dasharray: 3 3;
+}
+
+.mobile-conduit-line.line-batch {
+  stroke: #94a3b8;
+  stroke-width: 1.4;
+  stroke-dasharray: 4 3;
+}
+
+.mobile-conduit-line.line-digital {
+  stroke: #0070f3;
+  stroke-width: 1.6;
+}
+
+.mobile-conduit-line.line-digital-alt {
+  stroke: #0070f3;
+  stroke-width: 1.4;
+  stroke-dasharray: 4 3;
 }

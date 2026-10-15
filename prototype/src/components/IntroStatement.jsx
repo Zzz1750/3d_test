@@ -3,7 +3,7 @@ import './IntroStatement.css'
 export default function IntroStatement() {
   return (
     <section className="intro-statement-section">
-      {/* AskLia Mascot on the left corner */}
+      {/* AskLia Mascot on the left corner (Visible on desktop, removed on mobile) */}
       <div className="intro-screen-left-img">
         <img
           src={`${import.meta.env.BASE_URL}images/smile1.png`}

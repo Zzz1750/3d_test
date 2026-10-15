@@ -58,8 +58,8 @@
 
 /* Left Content Column: Title, Subtitle, CTAs, Credibility Stats */
 .hero-content-col {
-  flex: 0 0 50%;
-  max-width: 760px;
+  flex: 0 0 48%;
+  max-width: 660px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -71,9 +71,9 @@
   pointer-events: auto;
 }
 
-/* Right 3D Column: Cropped Scene kept strictly to the right side */
+/* Right 3D Column: Cropped Scene kept strictly to the right side on desktop */
 .hero-3d-col {
-  flex: 1 1 54%;
+  flex: 1 1 52%;
   height: 100%;
   position: relative;
   overflow: hidden;
@@ -127,36 +127,108 @@
   opacity: 0.82;
 }
 
-@media (max-width: 968px) {
+/* Tablet & Compact Desktop (<= 1080px): The 3D scene comes down below the content */
+@media (max-width: 1080px) {
   .hero-viewport-section {
     height: auto;
-    min-height: 100vh;
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  .hero-ambient-blueprint {
+    -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 60%, #000 25%, transparent 90%);
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 60%, #000 25%, transparent 90%);
+  }
+
+  .hero-radiant-glow {
+    top: 30%;
+    right: 50%;
+    transform: translateX(50%);
+    width: 620px;
+    height: 620px;
+    opacity: 0.65;
   }
 
   .hero-split-layout {
     flex-direction: column;
     justify-content: flex-start;
+    align-items: stretch;
+    height: auto;
+    padding-bottom: 0;
   }
 
   .hero-content-col {
     flex: 0 0 auto;
-    max-width: 100%;
+    max-width: 800px;
     width: 100%;
-    padding: 100px 24px 32px 24px;
+    margin: 0 auto;
+    height: auto;
+    padding: 184px 32px 28px 32px;
   }
 
   .hero-3d-col {
     flex: 0 0 auto;
     width: 100%;
-    height: 52vh;
-    min-height: 360px;
+    height: 380px;
+    min-height: 320px;
+    position: relative;
+    touch-action: pan-y;
+  }
+
+  .hero-3d-scene-wrap {
+    pointer-events: none !important;
+    touch-action: pan-y !important;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 4%, #000 92%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 4%, #000 92%, transparent 100%);
   }
 
   .hero-bottom-right-tag {
-    bottom: 20px;
-    right: 24px;
-    font-size: clamp(20px, 4vw, 24px);
-    padding: 0;
+    bottom: 18px;
+    right: 28px;
+    font-size: 18px;
+  }
+
+  .regulatory-ticker-bar {
+    position: relative;
+    bottom: auto;
+    left: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-3d-col {
+    height: 480px;
+    min-height: 420px;
+  }
+}
+
+/* Mobile Breakpoint (<= 640px): Compact & tight padding, portrait responsive 3D height */
+@media (max-width: 640px) {
+  .hero-content-col {
+    padding: 152px 20px 20px 20px;
+  }
+
+  .hero-3d-col {
+    height: 460px;
+    min-height: 400px;
+  }
+
+  .hero-bottom-right-tag {
+    bottom: 12px;
+    right: 16px;
+    font-size: 13.5px;
+  }
+}
+
+/* Small Mobile Breakpoint (<= 480px): True portrait 3D stage */
+@media (max-width: 480px) {
+  .hero-content-col {
+    padding: 138px 16px 14px 16px;
+  }
+
+  .hero-3d-col {
+    height: 440px;
+    min-height: 380px;
   }
 }
 

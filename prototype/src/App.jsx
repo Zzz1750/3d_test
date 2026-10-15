@@ -1,8 +1,10 @@
+import { lazy, Suspense } from 'react'
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import HomePage from './pages/HomePage'
 import ProductShowcase from './components/ProductShowcase'
-import TestPage from './pages/TestPage'
+
+const TestPage = lazy(() => import('./pages/TestPage'))
 
 export default function App() {
   return (
@@ -19,7 +21,14 @@ export default function App() {
             </main>
           }
         />
-        <Route path="/test" element={<TestPage />} />
+        <Route
+          path="/test"
+          element={
+            <Suspense fallback={null}>
+              <TestPage />
+            </Suspense>
+          }
+        />
         {/* Fallback to Home for any unrecognized path */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

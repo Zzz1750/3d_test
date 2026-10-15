@@ -41,7 +41,7 @@
 .cta-subtitle {
   margin: 0 0 32px 0;
   font-family: var(--font-sans);
-  font-size: 16.5px;
+  font-size: var(--site-content);
   line-height: 1.6;
   color: #475569;
   font-weight: 400;
@@ -129,6 +129,12 @@
 @media (max-width: 640px) {
   .contact-cta-section {
     padding: 72px 20px 84px;
+  }
+
+  .cta-subtitle {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
   }
 
   .cta-actions {

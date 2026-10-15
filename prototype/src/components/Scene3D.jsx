@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import 'aframe'
 import './Scene3D.css'
 
@@ -325,11 +326,27 @@ if (typeof window !== 'undefined' && window.AFRAME) {
     z: 0
   }
 
+  const getDefaultCameraTarget = () => {
+    if (typeof window === 'undefined') {
+      return { pos: { x: -0.15, y: 0.35, z: 5.688 }, frustum: 4.6 }
+    }
+    if (window.innerWidth <= 480) {
+      return { pos: { x: -0.20, y: 0.32, z: 5.688 }, frustum: 4.35 }
+    }
+    if (window.innerWidth <= 640) {
+      return { pos: { x: -0.20, y: 0.32, z: 5.688 }, frustum: 4.55 }
+    }
+    if (window.innerWidth <= 768) {
+      return { pos: { x: -0.18, y: 0.34, z: 5.688 }, frustum: 4.75 }
+    }
+    if (window.innerWidth <= 1080) {
+      return { pos: { x: -0.18, y: 0.35, z: 5.688 }, frustum: 4.85 }
+    }
+    return { pos: { x: -0.15, y: 0.35, z: 5.688 }, frustum: 4.6 }
+  }
+
   const CAMERA_TARGETS = {
-    default: {
-      pos: { x: -0.15, y: 0.35, z: 5.688 },
-      frustum: 4.6
-    },
+    default: getDefaultCameraTarget(),
     regpulse: {
       pos: { x: -1.05, y: 0.65, z: 5.3 },
       frustum: 1.55
@@ -359,10 +376,25 @@ if (typeof window !== 'undefined' && window.AFRAME) {
   if (!window.AFRAME.components['camera-zoom-controller']) {
     window.AFRAME.registerComponent('camera-zoom-controller', {
       init: function () {
-        this.targetPos = { ...CAMERA_TARGETS.default.pos }
-        this.currentPos = { ...CAMERA_TARGETS.default.pos }
-        this.targetFrustum = CAMERA_TARGETS.default.frustum
-        this.currentFrustum = CAMERA_TARGETS.default.frustum
+        const initialTarget = getDefaultCameraTarget()
+        CAMERA_TARGETS.default = initialTarget
+        this.targetPos = { ...initialTarget.pos }
+        this.currentPos = { ...initialTarget.pos }
+        this.targetFrustum = initialTarget.frustum
+        this.currentFrustum = initialTarget.frustum
+
+        // Immediately apply to camera
+        const cameraEl = this.el.querySelector('#main-camera')
+        const orthoComp = cameraEl && cameraEl.components['ortho-camera']
+        if (orthoComp && orthoComp.orthoCamera) {
+          const aspect = orthoComp.getAspect()
+          const halfSize = this.currentFrustum / 2
+          orthoComp.orthoCamera.left = -halfSize * aspect
+          orthoComp.orthoCamera.right = halfSize * aspect
+          orthoComp.orthoCamera.top = halfSize
+          orthoComp.orthoCamera.bottom = -halfSize
+          orthoComp.orthoCamera.updateProjectionMatrix()
+        }
 
         this.baseRot = { ...BASE_CAMERA_ROTATION }
         this.targetRot = { ...BASE_CAMERA_ROTATION }
@@ -372,6 +404,16 @@ if (typeof window !== 'undefined' && window.AFRAME) {
         this.isZoomingOut = false
         this.cinematicStartTime = null
         this.cinematicDuration = 8000 // 8 seconds inspection window
+
+        this.onResize = () => {
+          const newDefault = getDefaultCameraTarget()
+          CAMERA_TARGETS.default = newDefault
+          if (!this.activeStationId) {
+            this.targetPos = { ...newDefault.pos }
+            this.targetFrustum = newDefault.frustum
+          }
+        }
+        window.addEventListener('resize', this.onResize)
 
         this.onFocusStation = (e) => {
           const id = e.detail && e.detail.stationId
@@ -469,6 +511,7 @@ if (typeof window !== 'undefined' && window.AFRAME) {
       },
       remove: function () {
         window.removeEventListener('city-focus-station', this.onFocusStation)
+        window.removeEventListener('resize', this.onResize)
       }
     })
   }
@@ -479,8 +522,55 @@ export default function Scene3D({
   frustumSize = 4.6,
   modelScale = 1.0,
   modelPosition = "0 0 0",
-  timeScale = 1.0
+  timeScale = 1.0,
+  modelSrc
 }) {
+  const checkIsMobile = () => {
+    if (typeof window === 'undefined') return false
+    const isNarrow = window.innerWidth <= 1080
+    const isMobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+    const isTouch = navigator.maxTouchPoints > 0 && (window.innerWidth <= 1366 || window.innerHeight <= 1080)
+    return isNarrow || isMobileUA || isTouch
+  }
+
+  const [isMobileOrTab, setIsMobileOrTab] = useState(checkIsMobile)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const mediaQuery = window.matchMedia('(max-width: 1080px)')
+    const handleMediaChange = () => {
+      setIsMobileOrTab(checkIsMobile())
+    }
+
+    handleMediaChange()
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleMediaChange)
+    } else {
+      mediaQuery.addListener(handleMediaChange)
+    }
+    window.addEventListener('resize', handleMediaChange)
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleMediaChange)
+      } else {
+        mediaQuery.removeListener(handleMediaChange)
+      }
+      window.removeEventListener('resize', handleMediaChange)
+    }
+  }, [])
+
+  const modelFile = isMobileOrTab ? 'mobile.glb' : 'default.glb'
+  const activeModel = modelSrc || `${import.meta.env.BASE_URL}models/${modelFile}`
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      console.log(`[Scene3D] Screen width: ${window.innerWidth}px. Loading ONLY: ${modelFile}`)
+    }
+  }, [modelFile])
+
   return (
     <a-scene
       embedded
@@ -500,8 +590,9 @@ export default function Scene3D({
       {/* Interactive Hover Reactor Rig */}
       <a-entity id="interactive-3d-rig" hover-3d-reactor>
         <a-entity
+          key={modelFile}
           id="hero-3d-model"
-          gltf-model={`${import.meta.env.BASE_URL}models/default.glb`}
+          gltf-model={activeModel}
           position={modelPosition}
           scale={`${modelScale} ${modelScale} ${modelScale}`}
           world-brightness

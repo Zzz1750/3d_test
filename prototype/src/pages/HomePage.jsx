@@ -27,10 +27,10 @@ export default function HomePage() {
     progressTimer = setInterval(() => {
       setLoadingProgress((prev) => {
         if (prev >= 90) return prev
-        const step = Math.random() * 8 + 4
+        const step = Math.random() * 14 + 10
         return Math.min(Math.round(prev + step), 90)
       })
-    }, 120)
+    }, 60)
 
     const handleReady = () => {
       if (hasLoaded) return
@@ -43,15 +43,15 @@ export default function HomePage() {
         setIsLoaded(true)
         setTimeout(() => {
           setIsOverlayMounted(false)
-        }, 700)
-      }, 400)
+        }, 300)
+      }, 100)
     }
 
     window.addEventListener('glb-model-ready', handleReady)
 
     const fallbackTimer = setTimeout(() => {
       handleReady()
-    }, 6000)
+    }, 3500)
 
     return () => {
       if (progressTimer) clearInterval(progressTimer)

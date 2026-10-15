@@ -120,7 +120,6 @@ const sections = [
   {
     title: "OTHER",
     links: [
-      "Pricing",
       "About us",
       "Documentation",
       "Terms and Conditions",

@@ -239,30 +239,70 @@
   }
 
   .new-footer-bottom-img {
-    max-width: 95vw;
+    width: 100%;
+    max-width: 100%;
   }
 
   .new-footer-container {
-    padding: 44px 20px 32px 20px;
-    gap: 36px;
+    padding: 40px 20px 28px 20px;
+    gap: 32px;
   }
 
   .new-footer-top-section {
     flex-direction: column;
-    gap: 36px;
+    gap: 28px;
   }
 
   .new-footer-company-logo {
-    align-self: flex-end;
-    margin-left: auto;
+    order: -1;
+    align-self: flex-start;
+    margin: 0 0 6px 0;
+    width: 130px;
   }
 
   .new-footer-columns {
-    gap: 32px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 16px;
+    width: 100%;
   }
 
   .new-footer-column {
-    min-width: 140px;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .new-footer-heading {
+    font-size: 12.5px;
+    margin-bottom: 12px;
+    letter-spacing: 0.07em;
+  }
+
+  .new-footer-link {
+    font-size: 13.5px;
+    margin-bottom: 7px;
+    line-height: 1.4;
+  }
+
+  .new-footer-icon-row {
+    margin-top: 2px;
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+
+  .new-footer-email {
+    font-size: 12.5px;
+    word-break: break-all;
+  }
+
+  .new-footer-legal-section {
+    padding-top: 20px;
+    gap: 6px;
+  }
+
+  .new-footer-legal-text {
+    font-size: 11.5px;
+    line-height: 1.55;
   }
 
   .new-footer-bottom-section {
@@ -271,5 +311,41 @@
 
   .new-footer-copyright {
     text-align: left;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .new-footer-container {
+    padding: 32px 16px 24px 16px;
+    gap: 26px;
+  }
+
+  .new-footer-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 12px;
+  }
+
+  .new-footer-heading {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .new-footer-link {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .new-footer-email {
+    font-size: 12px;
+  }
+
+  .new-footer-company-logo {
+    width: 116px;
+  }
+
+  .new-footer-bottom-banner {
+    padding: 0 12px 0;
+    margin-top: 8px;
   }
 }

@@ -20,7 +20,7 @@
   margin: 0;
   padding: 0;
   font-family: var(--font-sans);
-  font-size: var(--site-heading);
+  font-size: clamp(28px, 2.4vw, 36px);
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.025em;
@@ -142,13 +142,53 @@
 
 @media (max-width: 768px) {
   .hero-headline {
-    font-size: 30px;
+    font-size: clamp(26px, 6.2vw, 34px);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
   }
+
+  .hero-subtext {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
   .hero-actions {
     width: 100%;
+    display: flex;
+    gap: 12px;
+    align-items: center;
   }
+
+  .hero-actions > a {
+    flex: 1 1 auto;
+    text-decoration: none;
+  }
+
+  .btn-demo-primary {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14.5px;
+    justify-content: center;
+  }
+
+  .btn-use-cases {
+    flex: 1 1 auto;
+    padding: 12px 20px;
+    font-size: 14.5px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero-actions > a,
   .btn-demo-primary,
-  .btn-how-it-works {
+  .btn-use-cases {
     width: 100%;
   }
 }
